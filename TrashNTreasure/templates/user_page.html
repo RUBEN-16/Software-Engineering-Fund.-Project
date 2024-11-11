@@ -1,5 +1,10 @@
 {% extends "index.html" %}
 {% block title %} Login Page {%endblock%}
 {%block content%}
-<h1>Hi, {{user}}</h1>
+<div>
+    <h1 class="text-success">Hi, {{session["firstName"]}}</h1>
+    <hr>
+    <a href="{{url_for('logout')}}" class="btn btn-primary btn-block">Logout</a>
+</div>
+
 {%endblock%}

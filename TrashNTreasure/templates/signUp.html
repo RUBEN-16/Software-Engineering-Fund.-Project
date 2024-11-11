@@ -1,7 +1,13 @@
 {% extends "index.html" %}
 {% block title %} Login Page {%endblock%}
 {%block content%}
-
+{% with messages = get_flashed_messages(with_categories=true) %}
+{%if messages %}
+    {% for category, message in messages %}
+        <div class="alert alert-{{category}}">{{message}}</div>
+    {%endfor%}
+{%endif%}
+{%endwith%}
 <div class="form-box">
     <div class="register-container" id="register">
         <div class="top">
@@ -16,7 +22,7 @@
             <p><center><input type="submit" value="Register" /></center></p>
         </form>
         <div class="top">
-            <span>Have an account? <a href="login.html">Login</a></span>
+            <span>Have an account? <a href="/login">Login</a></span>
         </div>
     </div>
 </div>
