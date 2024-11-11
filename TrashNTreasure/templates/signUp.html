@@ -1,38 +1,24 @@
-
-
 {% extends "index.html" %}
 {% block title %} Login Page {%endblock%}
 {%block content%}
 
-
 <div class="form-box">
     <div class="register-container" id="register">
         <div class="top">
-            <span>Have an account? <a href="#" onclick="">Login</a></span>
-            <header>Sign Up</header>
+            <header><center><h1>Sign Up</h1></center></header>
         </div>
-        <div class="two_forms">
-            <div class="input-box">
-                <input type="text" class="input-field" placeholder="First Name">
-                <i class="bx bx-user"></i>
-            </div>
-            <div class="input-box">
-                <input type="text" class="input-field" placeholder="Last Name">
-                <i class="bx bx-user"></i>
-            </div>
+
+        <form action="#" method="post">
+            <p><input type="text" name="first_name" placeholder="First Name" ></p>
+            <p><input type="text" name="last_name" placeholder="Last Name" ></p>
+            <p><input type="email" name="email" placeholder="Email" ></p>
+            <p><input type="password" name="password" placeholder="Password" ></p>
+            <p><center><input type="submit" value="Register" /></center></p>
+        </form>
+        <div class="top">
+            <span>Have an account? <a href="login.html">Login</a></span>
         </div>
-        <div class="input-box">
-            <input type="email" class="input_field" placeholder="Email">
-            <i class="bx bx-envelope"></i>
-        </div>
-        <div class="input-box">
-            <input type="password" class="input_field" placeholder="Password">
-            <i class="bx bx-lock-alt"></i>
-        </div>
-        <div class="input-box">
-            <input type="submit" class="submit" placeholder="Register">
-\        </div>
-        
     </div>
 </div>
+
 {%endblock%}
