@@ -6,22 +6,28 @@
     <link rel="stylesheet" href="/static/navi.css">
 </head>
 <body>   
-    <nav class="navbar">
-        <ul>
-            <li><a href="">Home</a></li>
-            <li><a href="">About</a></li>
-            <li><a href="">Products</a></li>
-            <li><a href="">Contact</a></li>
-        </ul>
-    </nav>
+    <div class="navibar">
+        <nav class="navbar">
+            <div>
+                <p>LOGO</p>
+            </div>
+            <div>
+                <ul>
+                    <li><a href="">Home</a></li>
+                    <li><a href="">About</a></li>
+                    <li><a href="">Products</a></li>
+                    <li><a href="">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div>
+            <a class="signup-button" href="/signup">Sign In</a>
+            <a class="login-button" href="/login">Log In</a>
+        </div>
+    </div>
 {%block content%}
 {%endblock%}
 
 </body>
 </html>
 
-<script>
-    $(document).ready(function(){
-        $("form").attr("autocomplete", "off")
-    });
-</script> 

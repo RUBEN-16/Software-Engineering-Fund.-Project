@@ -32,11 +32,4 @@ main{
 }
  
 
-.form-box{
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    height:900px;
-    width: 900px;
-}
 
