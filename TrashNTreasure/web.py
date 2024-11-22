@@ -1,8 +1,9 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 import sqlite3
 
+
 app = Flask(__name__)
-app.secret_key = "Hi"
+app.secret_key = "Strong_Key"
 
 con=sqlite3.connect("database.db")
 con.execute("create table if not exists user(pid integer primary key, firstName text, lastName text, email text, password text)")
@@ -15,6 +16,7 @@ def home():
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
+    con = None  # Initialize con to None
     if request.method == "POST":
         try:
             fname = request.form["first_name"]
@@ -22,32 +24,41 @@ def signup():
             email = request.form["email"]
             password = request.form["password"]
             
-            con=sqlite3.connect("database.db")
-            cur=con.cursor()
-            cur.execute("insert into user(firstName,lastName,email,password)values(?,?,?,?)", (fname,lname,email,password))
+            con=sqlite3.connect("database.db") # Initialize the connection here
+            cur = con.cursor()
+            cur.execute(
+                "INSERT INTO user (firstName, lastName, email, password) VALUES (?, ?, ?, ?)",
+                (fname, lname, email, password),
+            )
             con.commit()
-            flash("Account Saved", "success")
-            print("Redirecting to login page")
+            flash("Account Created Successfully!", "success")
             return redirect(url_for("login"))
-        except:
-            flash("Error in insertion", "danger")
+        except sqlite3.IntegrityError:
+            flash("Email already exists. Please use a different email.", "danger")
+        except Exception as e:
+            flash(f"An error occurred: {e}", "danger")
         finally:
-            con.close()
+            if con:  # Check if con is initialized
+                con.close()
     return render_template("signUp.html")
+
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
         name = request.form["name"]
         password = request.form["password"]
+        
         con=sqlite3.connect("database.db")
         con.row_factory=sqlite3.Row
         cur=con.cursor()
-        cur.execute("select * from user where firstName=? and password=?", (name,password)) #checking 
+        cur.execute("SELECT * FROM user WHERE firstName=?", (name,)) #checking 
         data=cur.fetchone()
         con.close()
+
         if data:
             session["firstName"] = data["firstName"]
+            flash("Login successful!", "success")   
             return redirect(url_for("user"))
         else:
             flash("Invalid email and password", "danger")
@@ -64,7 +75,8 @@ def user():
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for("signup"))
+    flash("You have been logged out.", "info")
+    return redirect(url_for("home"))
 
 if __name__ == "__main__":
     app.run(debug=True)
