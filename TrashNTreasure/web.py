@@ -26,6 +26,13 @@ def signup():
             
             con=sqlite3.connect("database.db") # Initialize the connection here
             cur = con.cursor()
+            
+            cur.execute("SELECT * FROM user WHERE email = ?", (email,))
+            user = cur.fetchone()
+            
+            if user:  # If a record is found
+                flash("Email already exists!", "danger")
+                return redirect(url_for("signup"))
             cur.execute(
                 "INSERT INTO user (firstName, lastName, email, password) VALUES (?, ?, ?, ?)",
                 (fname, lname, email, password),
@@ -33,8 +40,6 @@ def signup():
             con.commit()
             flash("Account Created Successfully!", "success")
             return redirect(url_for("login"))
-        except sqlite3.IntegrityError:
-            flash("Email already exists. Please use a different email.", "danger")
         except Exception as e:
             flash(f"An error occurred: {e}", "danger")
         finally:
@@ -52,19 +57,30 @@ def login():
         con=sqlite3.connect("database.db")
         con.row_factory=sqlite3.Row
         cur=con.cursor()
-        cur.execute("SELECT * FROM user WHERE firstName=?", (name,)) #checking 
+        cur.execute("SELECT * FROM user WHERE firstName = ? and password = ?", (name, password)) #checking 
         data=cur.fetchone()
         con.close()
 
         if data:
-            session["firstName"] = data["firstName"]
-            flash("Login successful!", "success")   
+            session["firstName"] = data["firstName"]  
             return redirect(url_for("user"))
         else:
-            flash("Invalid email and password", "danger")
+            flash("Invalid email or password", "danger")
             return render_template("logIn.html")
         
     return render_template("logIn.html")
+
+@app.route("/aboutus")
+def about_page():
+    return render_template("about.html")
+
+@app.route("/product")
+def product_page():
+    return render_template("product.html")
+
+@app.route("/contact")
+def contact_page():
+    return render_template("contact.html")
 
     
 

@@ -1,13 +1,22 @@
+{% extends "index.html" %}
+{% block title %} SignUp Page {%endblock%}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{%if messages %}
-    {% for category, message in messages %}
-        <div class="alert alert-{{category}}">{{message}}</div>
-    {%endfor%}
-{%endif%}
-{%endwith%}
-<div class="form-box">
-    <div class="register-container" id="register">
+{%block content%}
+<link rel="stylesheet" href="/static/signuP.css">
+<div class="body-signup">
+    <div class="register-container">
+        <div class="msg">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {%if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span>{{ message }}</span>
+                            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+                        </div>
+                    {%endfor%}
+                {%endif%}
+            {%endwith%}
+        </div>
         <div class="top">
             <header><h1>Sign Up</h1></header>
         </div>
@@ -17,11 +26,9 @@
             <p><input type="text" name="last_name" placeholder="Last Name" ></p>
             <p><input type="email" name="email" placeholder="Email" ></p>
             <p><input type="password" name="password" placeholder="Password" ></p>
-            <p><input type="submit" value="Register" /></p>
+            <center><p><input type="submit" value="Register" /></p></center>
         </form>
-        <div class="top">
-            <span>Have an account? <a href="/login">Login</a></span>
-        </div>
     </div>
 </div>
 
+{%endblock%}

@@ -2,29 +2,35 @@
 <html lang="en">
 <head>
     
-    <title>{%block title%}Simple Navigation Bar{%endblock%}</title>
+    <title>{%block title%}Home{%endblock%}</title>
     <link rel="stylesheet" href="/static/navi.css">
 </head>
 <body>   
-    <div class="navibar">
-        <nav class="navbar">
-            <div>
-                <p>LOGO</p>
-            </div>
-            <div>
-                <ul>
-                    <li><a href="">Home</a></li>
-                    <li><a href="">About</a></li>
-                    <li><a href="">Products</a></li>
-                    <li><a href="">Contact</a></li>
-                </ul>
-            </div>
-        </nav>
-        <div>
-            <a class="signup-button" href="/signup">Sign In</a>
-            <a class="login-button" href="/login">Log In</a>
-        </div>
+    <!-- Header Section -->
+  <header class="header">
+    <div class="logo">
+        <a href="/">
+            <img src="/static/logo2.png" alt="LOGO" href="/"/>
+        </a>
     </div>
+    <div class="menu">
+      <ul>
+        <li><a href="/signup">Sign Up</a></li>
+        <li><a href="/login">Log In</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/aboutus">About Us</a></li>
+      <li><a href="/product">Product</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+
 {%block content%}
 {%endblock%}
 
