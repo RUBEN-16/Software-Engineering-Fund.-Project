@@ -1,10 +1,13 @@
-{% extends "index.html" %}
-{% block title %} Hiring Page {%endblock%}
-
-{%block content%}
-<link rel="stylesheet" href="/static/signuP.css">
-<div class="body-signup">
-    <div class="register-container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Member Page</title>
+</head>
+<body>
+    <link rel="stylesheet" href="/static/login_extended.css">
+    <div class="container">
         <div class="msg">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {%if messages %}
@@ -18,18 +21,18 @@
             {%endwith%}
         </div>
         <div class="top">
-            <header><h1>Member</h1></header>
+            <header><h1>Member Hiring</h1></header>
         </div>
 
         <form action="#" method="post">
-            <p><input type="text" name="first_name" placeholder="First Name" ></p>
-            <p><input type="text" name="last_name" placeholder="Last Name" ></p>
-            <p><input type="email" name="email" placeholder="Email" ></p>
-            <p><input type="password" name="password" placeholder="Password" ></p>
-            <center><p><input type="submit" name="action" value="Register" /></p></center>
-            <center><p><input type="submit" name="action" value="Back" /></p></center>
+            <p><input type="text" name="first_name" placeholder="First Name" required></p>
+            <p><input type="text" name="last_name" placeholder="Last Name" required></p>
+            <p><input type="email" name="email" placeholder="Email" required></p>
+            <p><input type="password" name="password" placeholder="Password" required></p>
+            <br>
+            <center><p><input type="submit" name="action" value="Hire" /></p></center>
+            <center><p><input type="submit" name="action" value="Back"formnovalidate/></p></center>
         </form>
     </div>
-</div>
-
-{%endblock%}
+</body>
+</html>

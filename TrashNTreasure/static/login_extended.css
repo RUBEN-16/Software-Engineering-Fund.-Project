@@ -1,18 +1,18 @@
 /* Style the body to act as a flex container */
-.body-signup{
+body{
     margin: 0;
     padding: 0;
-    height: 88.4vh; /* Full viewport height */
+    height: 100vh; /* Full viewport height */
     display: flex; /* Enable flexbox */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
-    background-color: #b9b9b9; /* Optional: Light background */
+    background-color: #d1c9a2; /* Optional: Light background */
 }
 
 /* Style the form box */
-.register-container {
+.container {
     width: 400px;
-    background-color: white;
+    background-color: #fffae2;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 20px; /* Add some spacing inside */
@@ -23,18 +23,18 @@
     justify-content: center; /* Center horizontally */
 }
 /* Specific styling for signup inputs */
-.register-container input[type="text"],
-.register-container input[type="email"],
-.register-container input[type="password"] {
+.container input[type="email"],
+.container input[type="text"],
+.container input[type="password"]{
     width: 94%; /* Full width of the form box */
     padding: 10px;
-    margin: 10px 0;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
 
 /* Style the submit button */
-.register-container input[type="submit"][value="Register"] {
+.container input[type="submit"][value="Login"],
+.container input[type="submit"][value="Hire"] {
     background-color: #ffd000;
     color: rgb(0, 0, 0);
     font-size: 16px;
@@ -44,8 +44,7 @@
     padding: 10px;
     width: 100%; /* Full width of the form box */
 }
-
-.register-container input[type="submit"][value="Back"] {
+.container input[type="submit"][value="Back"] {
     background-color: #6e6e6e;
     color: rgb(0, 0, 0);
     font-size: 16px;
@@ -56,13 +55,15 @@
     width: 100%; /* Full width of the form box */
 }
 
-.register-container input[type="submit"][value="Register"]:hover {
+
+.container input[type="submit"][value="Login"]:hover,
+.container input[type="submit"][value="Hire"]:hover {
     background-color: #997d00; /* Darker blue on hover */
-    color: rgb(255, 255, 255);
+    color: white;
 }
-.register-container input[type="submit"][value="Back"]:hover {
+.container input[type="submit"][value="Back"]:hover {
     background-color: #4d4d4d; /* Darker blue on hover */
-    color: rgb(255, 255, 255);
+    color: white;
 }
 
 .msg{
@@ -71,6 +72,10 @@
 }
 /* General Styling for Flash Messages */
 .alert {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: space-between; /* Align the message text and the close button */
     align-items: center;
@@ -84,16 +89,9 @@
     margin-right: auto;
     text-align: left;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative; /* Allows absolute positioning for the close button */
 }
 
-/* Positioning flash message at the top-center */
-.body-signup .alert {
-    position: absolute;
-    top: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-}
+
 
 /* Success Message */
 .alert-success {

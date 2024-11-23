@@ -102,16 +102,20 @@ def login_admin():
         {"Username": "nasss123", "Password" : "passNasss", "Name" : "Nasreen"}
     ]
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        
-        for admin in admins:
-            if admin["Username"] == username and admin["Password"] == password:
-                session["admin_name"] = admin["Name"] 
-                return redirect(url_for("admin"))
+        action = request.form.get("action")
+        if action == "Login":
+            username = request.form["username"]
+            password = request.form["password"]
             
-        flash("Invalid username and password", "danger")
-        return render_template("adminlogin_page.html")
+            for admin in admins:
+                if admin["Username"] == username and admin["Password"] == password:
+                    session["admin_name"] = admin["Name"] 
+                    return redirect(url_for("admin"))
+                
+            flash("Invalid username and password", "danger")
+            return render_template("adminlogin_page.html")
+        elif action == "Back":
+            return redirect(url_for("home"))
 
     return render_template("adminlogin_page.html")
 
@@ -178,6 +182,10 @@ def about_page():
 def product_page():
     return render_template("product.html")
 
+@app.route("/mockHome")
+def mockHome():
+    return render_template("mockHome.html")
+
 @app.route("/contact")
 def contact_page():
     return render_template("contact.html")
@@ -207,6 +215,12 @@ def logout():
     session.clear()
     flash("You have been logged out.", "info")
     return redirect(url_for("home"))
+
+@app.route("/logout_admin")
+def logout_admin():
+    session.clear()
+    flash("You have been logged out.", "info")
+    return redirect(url_for("login_admin"))
 
 if __name__ == "__main__":
     app.run(debug=True)
