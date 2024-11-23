@@ -72,7 +72,7 @@
 }
 
 /* Positioning flash message at the top-center */
-.body-signup .alert {
+.body-login .alert {
     position: absolute;
     top: 100px;
     left: 50%;
