@@ -5,33 +5,39 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = "Strong_Key"
 
+# Admins database
 con=sqlite3.connect("database_user.db")
-con.execute(
-    """
+con.execute("""
     CREATE TABLE IF NOT EXISTS user (
         pid INTEGER PRIMARY KEY,
         firstName TEXT NOT NULL,
-        lastName TEXT NOT NULL,
+        lastName TEXT NULL,
         email TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL
     )
-    """
-)
+""")
 con.close() 
-
-# con=sqlite3.connect("database_logistics.db")
-# con.execute("create table if not exists admin(pid integer primary key, unique username, password text)")
-# con.close()
+# Logistic members database
+con=sqlite3.connect("database_logistics.db")
+con.execute("""
+    CREATE TABLE IF NOT EXISTS member (
+        pid INTEGER PRIMARY KEY,
+        firstName TEXT NOT NULL,
+        lastName TEXT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    )
+""")
+con.close()
 
 def get_connect_db_user_():
     conn = sqlite3.connect("database_user.db")
     conn.row_factory = sqlite3.Row
     return conn
-
-# def get_connect_db_logistic():
-#     conn = sqlite3.connect("database_admin.db")
-#     conn.row_factory = sqlite3.Row
-#     return conn
+def get_connect_db_logistic():
+    conn = sqlite3.connect("database_logistics.db")
+    conn.row_factory = sqlite3.Row
+    return conn
 
 @app.route("/")
 def home():
@@ -39,7 +45,7 @@ def home():
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
-    con = None  # Initialize con to None
+    con = None 
     if request.method == "POST":
         try:
             fname = request.form["first_name"]
@@ -53,13 +59,10 @@ def signup():
             cur.execute("SELECT * FROM user WHERE email = ?", (email,))
             user = cur.fetchone()
             
-            if user:  # If a record is found
+            if user:  # If a record is found    
                 flash("Email already exists!", "danger")
                 return redirect(url_for("signup"))
-            cur.execute(
-                "INSERT INTO user (firstName, lastName, email, password) VALUES (?, ?, ?, ?)",
-                (fname, lname, email, password),
-            )
+            cur.execute("INSERT INTO user (firstName, lastName, email, password) VALUES (?, ?, ?, ?)",(fname, lname, email, password),)
             con.commit()
             flash("Account Created Successfully!", "success")
             return redirect(url_for("login_user"))
@@ -74,26 +77,25 @@ def signup():
 @app.route("/login", methods=["POST", "GET"])
 def login_user():
     if request.method == "POST":
-        name = request.form["name"]
+        email = request.form["email"]
         password = request.form["password"]
         
         con = get_connect_db_user_()
         cur = con.cursor()
-        cur.execute("SELECT * FROM user WHERE firstName = ? and password = ?", (name, password)) #checking 
+        cur.execute("SELECT * FROM user WHERE email = ? and password = ?", (email, password)) #checking 
         data = cur.fetchone()
         con.close()
 
         if data:
-            session["firstName"] = data["firstName"]  
+            session["user_name"] = data["firstName"]  
             return redirect(url_for("user"))
         else:
             flash("Invalid email or password", "danger")
             return render_template("logIn.html")
         
     return render_template("logIn.html")
-
 @app.route("/loginAdmin", methods=["POST", "GET"])
-def adminLogin():
+def login_admin():
     admins = [
         {"Username": "ruben123", "Password" : "passRuben", "Name" : "Rubeneswaran"},
         {"Username": "thris987", "Password" : "passThris", "Name" : "Thrissha"},
@@ -113,26 +115,60 @@ def adminLogin():
 
     return render_template("adminlogin_page.html")
 
-# @app.route("/logisticlogin", methods=["POST", "GET"])
-# def login_logistic():
-#     if request.method == "POST":
-#         username = request.form["username"]
-#         password = request.form["password"]
-        
-#         con = get_connect_db_logistic()
-#         cur=con.cursor()
-#         cur.execute("SELECT * FROM user WHERE username = ? and password = ?", (username, password)) #checking 
-#         data=cur.fetchone()
-#         con.close()
+@app.route("/addLogistic", methods=["POST", "GET"])
+def adding_logistic():
+    con = None 
+    if request.method == "POST":
+        try:
+            action = request.form.get("action")
+            if action == "Register":
+                fname = request.form["first_name"]
+                lname = request.form["last_name"]
+                email = request.form["email"]
+                password = request.form["password"]
+                
+                con = get_connect_db_logistic() # Initialize the connection here
+                cur = con.cursor()
+                
+                cur.execute("SELECT * FROM member WHERE email = ?", (email,))
+                member = cur.fetchone()
+                
+                if member:  # If a record is found
+                    flash("Email already exists!", "danger")
+                    return redirect(url_for("adding_logistic"))
+                cur.execute("INSERT INTO member (firstName, lastName, email, password) VALUES (?, ?, ?, ?)",(fname, lname, email, password),)
+                con.commit()
+                flash("Account Created Successfully!", "success")
+                return redirect(url_for("adding_logistic"))
+            elif action == "Back":
+                return redirect(url_for("admin"))
+        except Exception as e:
+            flash(f"An error occurred: {e}", "danger")
+        finally:
+            if con:  # Check if con is initialized
+                con.close()
+    return render_template("mem_hiring.html")
 
-#         if data:
-#             session["username"] = data["username"]  
-#             return redirect(url_for("user"))
-#         else:
-#             flash("Invalid username or password", "danger")
-#             return render_template("...html")
+@app.route("/logisticlogin", methods=["POST", "GET"])
+def login_logistic():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
         
-#     return render_template("...html")
+        con = get_connect_db_logistic()
+        cur=con.cursor()
+        cur.execute("SELECT * FROM member WHERE email = ? and password = ?", (email, password)) #checking 
+        data=cur.fetchone()
+        con.close()
+
+        if data:
+            session["member_name"] = data["firstName"]  
+            return redirect(url_for("logistic"))
+        else:
+            flash("Invalid username or password", "danger")
+            return render_template("logisticlogin_page.html")
+        
+    return render_template("logisticlogin_page.html")
 
 @app.route("/aboutus")
 def about_page():
@@ -151,9 +187,8 @@ def admin():
     if "admin_name" in session:
         return render_template("admin_page.html", admin = session["admin_name"])    
     else:
-        # Redirect to login page if the session doesn't have 'Name'
-        flash("Please log in to access the admin page.", "danger")
-        return redirect(url_for("adminLogin"))
+        flash("Please log in to access the admin account.", "danger")
+        return redirect(url_for("login_admin"))
 
 @app.route("/logistic")
 def logistic():
@@ -161,7 +196,11 @@ def logistic():
 
 @app.route("/user")
 def user():
-    return render_template("user_page.html")
+    if "user_name" in session:
+        return render_template("user_page.html", admin = session["user_name"])    
+    else:
+        flash("Please log in to access the user account.", "danger")
+        return redirect(url_for("login"))
     
 @app.route('/logout')
 def logout():

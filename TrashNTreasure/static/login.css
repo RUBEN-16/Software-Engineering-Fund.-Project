@@ -23,6 +23,7 @@
     justify-content: center; /* Center horizontally */
 }
 /* Specific styling for signup inputs */
+.login-container input[type="email"],
 .login-container input[type="text"],
 .login-container input[type="password"]{
     width: 94%; /* Full width of the form box */
@@ -34,8 +35,8 @@
 
 /* Style the submit button */
 .login-container input[type="submit"] {
-    background-color: #007BFF;
-    color: white;
+    background-color: #ffd000;
+    color: rgb(0, 0, 0);
     font-size: 16px;
     border: none;
     border-radius: 5px;
@@ -46,7 +47,8 @@
 
 
 .login-container input[type="submit"]:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #997d00; /* Darker blue on hover */
+    color: white;
 }
 
 .msg{

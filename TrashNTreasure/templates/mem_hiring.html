@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+{% block title %} Hiring Page {%endblock%}
+
+{%block content%}
+<link rel="stylesheet" href="/static/signuP.css">
+<div class="body-signup">
+    <div class="register-container">
+        <div class="msg">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {%if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span>{{ message }}</span>
+                            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+                        </div>
+                    {%endfor%}
+                {%endif%}
+            {%endwith%}
+        </div>
+        <div class="top">
+            <header><h1>Member</h1></header>
+        </div>
+
+        <form action="#" method="post">
+            <p><input type="text" name="first_name" placeholder="First Name" ></p>
+            <p><input type="text" name="last_name" placeholder="Last Name" ></p>
+            <p><input type="email" name="email" placeholder="Email" ></p>
+            <p><input type="password" name="password" placeholder="Password" ></p>
+            <center><p><input type="submit" name="action" value="Register" /></p></center>
+            <center><p><input type="submit" name="action" value="Back" /></p></center>
+        </form>
+    </div>
+</div>
+
+{%endblock%}

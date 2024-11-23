@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logistic Page</title>
+    <title>Admin Page</title>
 </head>
 <body>
-    <div class="top">
-        <header><h1>Logistic</h1></header>
-    </div>
+    <h1>Welcome, {{session["member_name"] }}!</h1>
+    <p>You are now logged in as a logistic member.</p>
+    <hr>
+    <a href="{{url_for('logout')}}" class="btn btn-primary btn-block">Logout</a>
 </body>
 </html>

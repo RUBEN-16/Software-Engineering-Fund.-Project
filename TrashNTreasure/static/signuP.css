@@ -34,9 +34,9 @@
 }
 
 /* Style the submit button */
-.register-container input[type="submit"] {
-    background-color: #007BFF;
-    color: white;
+.register-container input[type="submit"][value="Register"] {
+    background-color: #ffd000;
+    color: rgb(0, 0, 0);
     font-size: 16px;
     border: none;
     border-radius: 5px;
@@ -45,8 +45,24 @@
     width: 100%; /* Full width of the form box */
 }
 
-.register-container input[type="submit"]:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+.register-container input[type="submit"][value="Back"] {
+    background-color: #6e6e6e;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%; /* Full width of the form box */
+}
+
+.register-container input[type="submit"][value="Register"]:hover {
+    background-color: #997d00; /* Darker blue on hover */
+    color: rgb(255, 255, 255);
+}
+.register-container input[type="submit"][value="Back"]:hover {
+    background-color: #4d4d4d; /* Darker blue on hover */
+    color: rgb(255, 255, 255);
 }
 
 .msg{
