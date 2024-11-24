@@ -6,10 +6,10 @@
     <title>Admin Page</title>
 </head>
 <body>
-    <h1>Welcome, {{ admin }}!</h1>
+    <h1>Welcome, {{admin}}!</h1>
     <p>You are now logged in as an administrator.</p>
     <hr>
-    <a href="{{url_for('logout_admin')}}" class="btn btn-primary btn-block">Logout</a>
-    <a href="{{url_for('adding_logistic')}}">ADD MEMBER</a>
+    <a href="{{url_for('admin.logout')}}" class="btn btn-primary btn-block">Logout</a>
+    <a href="{{url_for('admin.adding_logistic')}}">ADD MEMBER</a>
 </body>
 </html>
