@@ -4,11 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
+    <link rel="stylesheet" href="/static/navi_logistic.css">
 </head>
 <body>
-    <h1>Welcome, {{session["member_name"] }}!</h1>
-    <p>You are now logged in as a logistic member.</p>
-    <hr>
-    <a href="{{url_for('logout')}}" class="btn btn-primary btn-block">Logout</a>
+    <header class="header">
+        <div class="logo">
+            <a href="{{url_for("logistic.dashboard")}}">
+                <img src="/static/logo2.png" alt="LOGO"/>
+            </a>
+        </div>
+        
+        <div class="menu">
+            <ul>
+               <li><a href="{{url_for("logistic.dashboard")}}">Back</a></li>      
+            </ul>
+        </div>
+    </header>
+    
+      <!-- Navigation Bar -->
+    <nav class="navbar">
+        <ul>
+          <li><a href="">Home</a></li>
+          <li><a href="">About Us</a></li>
+          <li><a href="">Product</a></li>
+          <li><a href="">Contact</a></li>
+        </ul>
+    </nav>
+
+    {%block content%}
+        <h1>Welcome, {{session["member_name"] }}!</h1>
+        <p>You are now logged in as a logistic member.</p>
+        <hr>
+        <a href="{{url_for('logistic.logout')}}" class="btn btn-primary btn-block">Logout</a>
+    {%endblock%}
 </body>
-</html>
+</html> 

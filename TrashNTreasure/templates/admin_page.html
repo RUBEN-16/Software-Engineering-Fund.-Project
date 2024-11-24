@@ -4,12 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
+    <link rel="stylesheet" href="/static/navi_admin.css">
 </head>
 <body>
-    <h1>Welcome, {{admin}}!</h1>
-    <p>You are now logged in as an administrator.</p>
-    <hr>
-    <a href="{{url_for('admin.logout')}}" class="btn btn-primary btn-block">Logout</a>
-    <a href="{{url_for('admin.adding_logistic')}}">ADD MEMBER</a>
+    <header class="header">
+        <div class="logo">
+            <a href="{{url_for("admin.dashboard")}}">
+                <img src="/static/logo2.png" alt="LOGO"/>
+            </a>
+        </div>
+        
+        <div class="menu">
+            <ul>
+                {% if show_back_button %}
+                    <li><a href="{{url_for("admin.dashboard")}}">Back</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+    
+      <!-- Navigation Bar -->
+    <nav class="navbar">
+        <ul>
+          <li><a href="">Home</a></li>
+          <li><a href="">About Us</a></li>
+          <li><a href="">Product</a></li>
+          <li><a href="">Contact</a></li>
+        </ul>
+    </nav>
+
+    {%block content%}
+        <h1>Welcome, {{admin}}!</h1>
+        <p>You are now logged in as an administrator.</p>
+        <hr>
+        <a href="{{url_for('admin.logout')}}" class="btn btn-primary btn-block">Logout</a>
+        <a href="{{url_for('admin.adding_logistic')}}">ADD MEMBER</a>
+        <a href="{{url_for('admin.manage_users')}}">Manage user</a>
+    {%endblock%}
 </body>
 </html>

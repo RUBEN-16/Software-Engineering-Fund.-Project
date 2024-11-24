@@ -16,8 +16,12 @@
     
     <div class="menu">
       <ul>
-        <li><a href="/signup">Sign Up</a></li>
-        <li><a href="/login">Log In</a></li>
+        {% if not session.get('user_name') %}
+          <li><a href="/signup">Sign Up</a></li>
+          <li><a href="/login">Log In</a></li>
+        {%else%}
+          <li><a href="{{url_for('user.logout')}}">Logout</a></li>
+        {%endif%}
       </ul>
     </div>
   </header>

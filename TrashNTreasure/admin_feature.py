@@ -1,26 +1,8 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash
-import sqlite3
+from user_feature import get_connect_db_user_
+from logistic_feature import get_connect_db_logistic
 
 admin_blueprint = Blueprint("admin", __name__, template_folder="templates")
-
-# Logistic members database
-con=sqlite3.connect("database_logistics.db")
-con.execute("""
-    CREATE TABLE IF NOT EXISTS member (
-        pid INTEGER PRIMARY KEY,
-        firstName TEXT NOT NULL,
-        lastName TEXT NULL,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
-    )
-""")
-con.close()
-
-def get_connect_db_logistic():
-    conn = sqlite3.connect("database_logistics.db")
-    conn.row_factory = sqlite3.Row
-    print("Database connected successfully")
-    return conn
 
 
 @admin_blueprint.route("/login", methods=["POST", "GET"])
@@ -55,15 +37,13 @@ def dashboard():
     else:
         flash("Please log in to access the admin account.", "danger")
         return redirect(url_for("admin.login"))
-    
-@admin_blueprint.route("/logout")
-def logout():
-    session.clear()
-    flash("You have been logged out.", "info")
-    return redirect(url_for("admin.login"))
 
 @admin_blueprint.route("/addLogistic", methods=["POST", "GET"])
 def adding_logistic():
+    if "admin_name" not in session:  # Check if admin is logged in
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
+    
     con = None 
     if request.method == "POST":
         try:
@@ -96,3 +76,59 @@ def adding_logistic():
             if con:  # Check if con is initialized
                 con.close()
     return render_template("mem_hiring.html")
+
+
+@admin_blueprint.route('/manage_users')
+def manage_users():
+    if "admin_name" not in session:  # Check if admin is logged in
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
+    
+    con = get_connect_db_user_()
+    cur = con.cursor()
+    cur.execute("SELECT pid, firstName, lastName, email FROM user")
+    users = cur.fetchall()
+    con.close()
+
+    # Convert users to dictionaries
+    users = [{"id": user[0], "first_name": user[1], "last_name": user[2], "email": user[3]} for user in users]
+    return render_template(
+        'user_management.html', 
+        users=users,
+        show_back_button = True,  # Enable Back button
+        back_url=url_for('admin.dashboard')  # Specify where Back button points
+    )
+ 
+
+@admin_blueprint.route("/remove_user/<id>", methods=["POST", "GET"])
+def delete_user(id):
+    try:
+        
+        con = get_connect_db_user_()
+        cur = con.cursor()
+        cur.execute("SELECT * FROM user WHERE pid = ?", (id,))
+        user = cur.fetchone()
+        if not user:
+            flash("User not found.", "warning")
+            return redirect(url_for("admin.manage_users"))
+        cur.execute("DELETE FROM user WHERE pid = ?", (id,))
+        con.commit()
+        
+        flash("User deleted successfully!", "success")
+        
+    except Exception as e:
+        flash(f"An error occurred: {e}", "danger")
+        
+    finally:
+        if con:
+            con.close()
+            
+    return redirect(url_for("admin.manage_users"))
+
+
+
+@admin_blueprint.route("/logout")
+def logout():
+    session.clear()
+    flash("You have been logged out.", "info")
+    return redirect(url_for("admin.login"))
