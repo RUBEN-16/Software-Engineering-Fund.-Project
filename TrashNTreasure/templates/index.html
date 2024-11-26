@@ -22,7 +22,14 @@
         {%else%}
           <li><a href="{{url_for('user.logout')}}">Logout</a></li>
         {%endif%}
-      </ul>
+        <div class="menu_logo">
+          <a href="/" class="menu-link">MENU</a>
+          <ul class="dropdown-menu">
+            <li><a href="{{url_for("user.user_page")}}">My Account</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="">Help</a></li>
+          </ul>
+        </div>
     </div>
   </header>
 

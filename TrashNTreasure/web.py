@@ -55,7 +55,7 @@ def login():
 
         if data: 
             session["user_name"] = data["firstName"]  
-            return redirect(url_for("user.user_page"))
+            return redirect(url_for("home"))
         else:
             flash("Invalid email or password", "danger")
         
