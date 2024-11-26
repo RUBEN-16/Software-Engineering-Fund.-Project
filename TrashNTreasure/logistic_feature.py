@@ -22,8 +22,6 @@ def get_connect_db_logistic():
     db_path = current_app.root_path + '/database_logistics.db'
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
-    print("Database connected successfully")
-    print(f"Database path: {db_path}")
     return conn
 
 

@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, session, flash
+from flask import Flask, redirect, url_for, render_template, request, session, flash, make_response
 from admin_feature import admin_blueprint
 from user_feature import user_blueprint, get_connect_db_user_
 from logistic_feature import logistic_blueprint, get_connect_db_logistic
@@ -80,6 +80,14 @@ def mockHome():
 @app.route("/contact")
 def contact_page():
     return render_template("contact.html")
+
+@app.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
 
 if __name__ == "__main__":
     app.run(debug=True)
