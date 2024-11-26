@@ -7,12 +7,26 @@
     <link rel="stylesheet" href="/static/navi_admin.css">
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <a href="{{url_for("admin.dashboard")}}">
-                <img src="/static/logo2.png" alt="LOGO"/>
-            </a>
+    <div class="dashboard-container">
+        <!--Side bar-->
+        <aside class="sidebar">
         </div>
+        <header class="header">
+            <div class="logo">
+                <a href="{{url_for("admin.dashboard")}}">
+                    <img src="/static/logo2.png" alt="LOGO"/>
+                </a>
+                <h2>Admin</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="fas fa-users"></i> User Management</a></li>
+                    <li><a href="#"><i class="fas fa-truck"></i> Logistics Management</a></li>
+                    <li><a href="#"><i class="fas fa-boxes"></i> Inventory</a></li>
+                    <li><a href="#"><i class="fas fa-check-circle"></i> Item Validation</a></li>
+            </nav>
+        </aside>
+    
         
         <div class="menu">
             <ul>
