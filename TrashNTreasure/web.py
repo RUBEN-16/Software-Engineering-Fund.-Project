@@ -1,15 +1,20 @@
-from flask import Flask, redirect, url_for, render_template, request, session, flash, make_response
+from flask import Flask, redirect, url_for, render_template, request, session, flash
 from admin_feature import admin_blueprint
 from user_feature import user_blueprint, get_connect_db_user_
 from logistic_feature import logistic_blueprint, get_connect_db_logistic
+from seller_feature import seller_blueprint
+import os
 
 
 app = Flask(__name__)
 app.secret_key = "Strong_Key"
+app.config['SECRET_KEY'] = os.urandom(24)
 
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(user_blueprint, url_prefix="/user")
 app.register_blueprint(logistic_blueprint, url_prefix="/logistic")
+app.register_blueprint(seller_blueprint, url_prefix="/seller")
+
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
@@ -55,6 +60,7 @@ def login():
 
         if data: 
             session["user_name"] = data["firstName"]  
+            session["buyer_id"] = data["pid"]  
             return redirect(url_for("home"))
         else:
             flash("Invalid email or password", "danger")
@@ -77,9 +83,9 @@ def product_page():
 def mockHome():
     return render_template("mockHome.html")
 
-@app.route("/contact")
-def contact_page():
-    return render_template("contact.html")
+@app.route("/donation")
+def donation_page():
+    return render_template("donation.html")
 
 @app.after_request
 def add_header(response):

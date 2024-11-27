@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+{% block title %} Seller Verification {%endblock%}
+{%block content%}
+
+<h2>Seller Verification</h2>
+<form action="{{ url_for('seller.seller_verification') }}" method="POST" enctype="multipart/form-data">
+    {% if session.get('isExist') %}
+        <p>Your registration has been submitted successfully!</p>
+    {% else %}
+        <label for="ic_picture">Upload your IC Picture:</label>
+        <input type="file" name="ic_picture" id="ic_picture" required><br><br>
+
+        <label for="profile_picture">Upload your Profile Picture:</label>
+        <input type="file" name="profile_picture" id="profile_picture" required><br><br>
+
+        <button type="submit">Submit</button>
+    {%endif%}
+</form>
+
+
+
+{%endblock%}

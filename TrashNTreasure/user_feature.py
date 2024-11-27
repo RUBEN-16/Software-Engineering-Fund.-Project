@@ -3,7 +3,7 @@ import sqlite3
 
 user_blueprint = Blueprint("user", __name__, template_folder="templates")
 
-DATABASE_PATH = "TrashNTreasure/database_user.db"
+DATABASE_PATH = "TrashNTreasure/database.db"
 
 # Admins database
 con=sqlite3.connect(DATABASE_PATH)
