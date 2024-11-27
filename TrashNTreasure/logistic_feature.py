@@ -3,9 +3,11 @@ import sqlite3
 
 logistic_blueprint = Blueprint("logistic", __name__, template_folder="templates")
 
+DATABASE_PATH = "TrashNTreasure/database.db"
+
 
 # Logistic members database
-con=sqlite3.connect("TrashNTreasure/database_logistics.db")
+con=sqlite3.connect(DATABASE_PATH)
 con.execute("""
     CREATE TABLE IF NOT EXISTS member (
         pid INTEGER PRIMARY KEY,
@@ -19,11 +21,8 @@ con.close()
 
 
 def get_connect_db_logistic():
-    db_path = current_app.root_path + '/database_logistics.db'
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row
-    print("Database connected successfully")
-    print(f"Database path: {db_path}")
     return conn
 
 
@@ -36,7 +35,7 @@ def login():
         con = get_connect_db_logistic()
         cur=con.cursor()
         cur.execute("SELECT * FROM member WHERE email = ? and password = ?", (email, password)) #checking 
-        data=cur.fetchone()
+        data = cur.fetchone()
         con.close()
 
         if data:

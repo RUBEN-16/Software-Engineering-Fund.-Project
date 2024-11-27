@@ -22,7 +22,17 @@
         {%else%}
           <li><a href="{{url_for('user.logout')}}">Logout</a></li>
         {%endif%}
-      </ul>
+        <div class="menu_logo">
+          <a href="/" class="menu-link">MENU</a>
+          <ul class="dropdown-menu">
+            <li><a href="{{url_for("user.user_page")}}">My Account</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="">Help</a></li>
+            {% if session.get('user_name') %}
+              <li><a href="">Seller?</a></li>
+            {%endif%}
+          </ul>
+        </div>
     </div>
   </header>
 
@@ -32,7 +42,7 @@
       <li><a href="/">Home</a></li>
       <li><a href="/aboutus">About Us</a></li>
       <li><a href="/product">Product</a></li>
-      <li><a href="/contact">Contact</a></li>
+      <li><a href="/donation">Donation</a></li>
     </ul>
   </nav>
 

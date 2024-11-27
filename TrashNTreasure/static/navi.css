@@ -1,77 +1,139 @@
 /* General Reset */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Header Styles */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #333;
-    color: #fff;
-  }
-  
-  .header .logo img {
-    width: 40px;
-    height: auto;
-  }
-  
-  .header .menu ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 15px;
-  }
-  
-  .header .menu ul li {
-    display: inline;
-  }
-  
-  .header .menu ul li a {
-    text-decoration: none;
-    color: white;
-    padding: 5px 10px;
-    transition: background-color 0.3s;
-  }
-  
-  .header .menu ul li a:hover {
-    background-color: #555;
-    border-radius: 5px;
-  }
-  
-  /* Navigation Bar */
-  .navbar {
-    text-align: center;
-    background-color: #444;
-    padding: 10px 0;
-  }
-  
-  .navbar ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-  }
-  
-  .navbar ul li {
-    display: inline;
-    margin: 0 15px;
-  }
-  
-  .navbar ul li a {
-    text-decoration: none;
-    color: white;
-    font-size: 16px;
-    padding: 5px 10px;
-    transition: background-color 0.3s;
-  }
-  
-  .navbar ul li a:hover {
-    background-color: #666;
-    border-radius: 5px;
-  }
-  
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Header Styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+}
+
+.header .logo img {
+  width: 40px;
+  height: auto;
+}
+
+.header .menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 15px;
+}
+
+.header .menu ul li {
+  display: inline;
+}
+
+.header .menu ul li a {
+  text-decoration: none;
+  color: white;
+  padding: 5px 10px;
+  transition: background-color 0.3s;
+}
+
+.header .menu .menu_logo ul li a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  padding: 5px 10px;
+  transition: background-color 0.3s;
+}
+
+.header .menu ul li a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+/* Dropdown Menu Styles */
+.menu_logo {
+  position: relative;
+}
+
+.menu-link {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  padding: 5px 10px;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+/* Hover effect for MENU link */
+.menu-link:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+/* Dropdown menu hidden by default */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  color: black;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 10px 0;
+  width: 200px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  z-index: 100;
+}
+
+/* Styling for dropdown menu items */
+.dropdown-menu li {
+  padding: 10px 15px;
+}
+
+.dropdown-menu li a {
+  text-decoration: none;
+  color: black;
+  display: block;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Show the dropdown menu on hover */
+.menu_logo:hover .dropdown-menu {
+  display: block;
+}
+
+/* Navigation Bar */
+.navbar {
+  text-align: center;
+  background-color: #444;
+  padding: 10px 0;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+.navbar ul li {
+  display: inline;
+  margin: 0 15px;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  padding: 5px 10px;
+  transition: background-color 0.3s;
+}
+
+.navbar ul li a:hover {
+  background-color: #666;
+  border-radius: 5px;
+}
