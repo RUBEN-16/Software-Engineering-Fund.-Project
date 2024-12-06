@@ -16,7 +16,19 @@ con.execute("""
         buyer_id INTEGER NOT NULL,
         ic_picture TEXT NOT NULL,
         profile_picture TEXT NOT NULL,
+        status TEXT DEFAULT 'Pending',
         FOREIGN KEY (buyer_id) REFERENCES user(pid)
+    )
+""")
+con.execute("""
+    CREATE TABLE IF NOT EXISTS sellers (
+        id INTEGER PRIMARY KEY,
+        ic_picture TEXT NOT NULL,
+        profile_picture TEXT NOT NULL,
+        pickupAddress TEXT,
+        FOREIGN KEY (ic_picture) REFERENCES seller_registration(ic_picture),
+        FOREIGN KEY (profile_picture) REFERENCES seller_registration(profile_picture),
+        FOREIGN KEY (id) REFERENCES user(pid)
     )
 """)
 con.close()
@@ -50,7 +62,7 @@ def seller_verification():
         print("notExist")
     
     if request.method == "POST":
-        if session['isExist']:
+        if session['isExist']: # Check whether the user is already applied for seller and the application is in pending...
             return render_template("seller_registration.html")
         
         if 'ic_picture' not in request.files or 'profile_picture' not in request.files:

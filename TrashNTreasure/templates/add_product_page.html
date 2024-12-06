@@ -1,0 +1,33 @@
+<form action="{{ url_for('add_product_page') }}" method="post" enctype="multipart/form-data">
+    <label for="product_name">Product Name:</label><br>
+    <input type="text" id="product_name" name="product_name" required><br><br>
+    
+    <label for="category">Category:</label><br>
+    <input type="text" id="category" name="category" required><br><br>
+    
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description"></textarea><br><br>
+    
+    <label for="price">Price:</label><br>
+    <input type="number" id="price" name="price" step="0.01" required><br><br>
+    
+    <label for="quantity">Quantity:</label><br>
+    <input type="number" id="quantity" name="quantity" required><br><br>
+    
+    <label for="condition">Condition:</label><br>
+    <select id="condition" name="condition" required>
+        <option value="New">New</option>
+        <option value="Used">Used</option>
+    </select><br><br>
+    
+    <label for="seller_id">Seller ID:</label><br>
+    <input type="number" id="seller_id" name="seller_id" value="{{ seller_id }}" readonly><br><br>
+    
+    <label for="image">Product Image:</label><br>
+    <input type="file" id="image" name="image" accept="image/*" required><br><br>
+
+    <label for="video">Product Video:</label><br>
+    <input type="file" id="video" name="video" accept="video/*"><br><br>
+    
+    <button type="submit">Add Product</button>
+</form>

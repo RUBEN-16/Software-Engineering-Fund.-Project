@@ -78,6 +78,30 @@ def adding_logistic():
                 con.close()
     return render_template("mem_hiring.html")
 
+@admin_blueprint.route('/seller_requests', methods=["GET", "POST"])
+def seller_requests():
+    con = get_connect_db_seller_registration()
+    if request.method == "POST":
+        action = request.form.get("action")
+        seller_id = request.form.get("id")
+        if action and seller_id:
+            if action == "approve":
+                con.execute("UPDATE seller_registration SET status = 'Approved' WHERE id = ?", (seller_id,))
+                flash("Seller approved successfully!", "success")
+            elif action == "reject":
+                con.execute("UPDATE seller_registration SET status = 'Rejected' WHERE id = ?", (seller_id,))
+                flash("Seller rejected successfully!", "danger")
+            con.commit()
+        else:
+            flash("Invalid action or seller ID.", "danger")
+    
+    # Fetch all pending seller registrations
+    cur = con.execute("SELECT * FROM seller_registration WHERE status = 'Pending'")
+    pending_requests = cur.fetchall()
+    con.close()
+    return render_template('seller_approval_page.html', pending_requests=pending_requests)
+
+
 # @admin_blueprint.route('/seller_request')
 # def seller_request():
 #     if "admin_name" not in session:  # Check if admin is logged in

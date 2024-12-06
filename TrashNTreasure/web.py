@@ -1,7 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from admin_feature import admin_blueprint
 from user_feature import user_blueprint, get_connect_db_user_
-from logistic_feature import logistic_blueprint, get_connect_db_logistic
+from logistic_feature import logistic_blueprint
 from seller_feature import seller_blueprint
 import os
 
@@ -74,10 +74,6 @@ def home():
 @app.route("/aboutus")
 def about_page():
     return render_template("about.html")
-
-@app.route("/product")
-def product_page():
-    return render_template("product.html")
 
 @app.route("/mockHome")
 def mockHome():

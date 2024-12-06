@@ -1,8 +1,24 @@
 {% extends "index.html" %}
-{% block title %} P Page {%endblock%}
+{% block title %} Product Page {%endblock%}
 {%block content%}
-<div>
-    <h1 class="text-success">Products</h1>
-</div>
+<body>
+    <h1>Product Page</h1>
+    <form method="get" action="{{url_for('user.product_page')}}">
+        <input type="text" name="q" placeholder="Search products" value="{{ query or '' }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Products:</h2>
+    <ul>
+        {% for product in products %}
+        <li>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <p>Price: ${{ product.price }}</p>
+            <p>Category: {{ product.category }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
 
 {%endblock%}

@@ -13,7 +13,9 @@ con.execute("""
         firstName TEXT NOT NULL,
         lastName TEXT NULL,
         email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
+        password TEXT NOT NULL,
+        bnk_card_added INTEGER DEFAULT 0,
+        isSeller INTEGER DEFAULT 0
     )
 """)
 con.close() 
@@ -26,7 +28,7 @@ def get_connect_db_user_():
 @user_blueprint.route("/")
 def user_page():
     if "user_name" in session:
-        return render_template("user_page.html", admin = session["user_name"])    
+        return render_template("user_page.html", user = session["user_name"])    
     else:
         flash("Please log in to access the user account.", "danger")
         return redirect(url_for("login"))
@@ -36,3 +38,8 @@ def logout():
     session.clear()
     flash("You have been logged out.", "info")
     return redirect(url_for("login"))
+
+@user_blueprint.route('/product')
+def product_page():
+        return render_template("product.html")
+    
