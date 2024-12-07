@@ -1,0 +1,60 @@
+{% extends "admin_page.html" %}
+{% block title %}Seller Approval{%endblock%}
+{%block content%}
+    <link rel="stylesheet" href="/static/user_management.css">
+    <script>
+        // Confirmation dialog function
+        function confirmDeletion(event, userName) {
+            const confirmation = confirm(`Are you sure you want to delete ${userName}?`);
+            if (!confirmation) {
+                event.preventDefault(); // Prevent form submission
+            }
+        }
+    </script>
+    <body>
+        <div class="container">
+            <h1>User Management</h1>
+
+            <!-- Display Flash Messages -->
+            <div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Table of Pending Sellers -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for seller in pending_sellers %}
+                    <tr>
+                        <td>{{ seller.id }}</td>
+                        <td>{{ seller.firstName }} {{ seller.lastName }}</td>
+                        <td>{{ seller.email }}</td>
+                        <td>{{ seller.status }}</td>
+                        <td>
+                            <form action="{{ url_for('admin.view_seller', seller_id=seller.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="view-button">View</button>
+                            </form>
+                        
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+{%endblock%}

@@ -7,6 +7,10 @@
     {% if session.get('isExist') %}
         <p>Your registration has been submitted successfully!</p>
     {% else %}
+        <label for="user_id">User ID:</label>
+        <p>{{ user_id }}</p> <!-- Display the user ID for debugging -->
+        <br><br>
+
         <label for="ic_picture">Upload your IC Picture:</label>
         <input type="file" name="ic_picture" id="ic_picture" required><br><br>
 
@@ -14,8 +18,9 @@
         <input type="file" name="profile_picture" id="profile_picture" required><br><br>
 
         <button type="submit">Submit</button>
-    {%endif%}
+    {% endif %}
 </form>
+
 
 
 

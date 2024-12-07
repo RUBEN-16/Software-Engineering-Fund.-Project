@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash
 from user_feature import get_connect_db_user_
 from logistic_feature import get_connect_db_logistic
-from seller_feature import get_connect_db_seller_registration
+from seller_feature import get_connect_db
 
 admin_blueprint = Blueprint("admin", __name__, template_folder="templates")
 
@@ -78,26 +78,6 @@ def adding_logistic():
                 con.close()
     return render_template("mem_hiring.html")
 
-# @admin_blueprint.route('/seller_request')
-# def seller_request():
-#     if "admin_name" not in session:  # Check if admin is logged in
-#         flash("Please log in to access this page.", "danger")
-#         return redirect(url_for("admin.login"))
-    
-#     con = get_connect_db_seller
-#     cur = con.cursor()
-#     cur.execute('SELECT id, buyer_id, ic_picture, profile_picture FROM seller_registration')
-#     sellers = cur.fetchall()
-#     con.close()
-    
-#     sellers = [{"id": seller[0], "first_name": seller[1], "last_name": seller[2], "email": seller[3]} for seller in sellers]
-#     return render_template(
-#         'seller_request.html',
-#         sellers = sellers,
-#         isBack = True,
-#         back_url = url_for('admin.dashboard')
-#     )
-    
     
 @admin_blueprint.route('/manage_users')
 def manage_users():
@@ -145,8 +125,77 @@ def delete_user(id):
             
     return redirect(url_for("admin.manage_users"))
 
+@admin_blueprint.route("/seller_approval")
+def seller_approval():
+    if "admin_name" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
 
-    
+    con = get_connect_db()
+    cur = con.cursor()
+    cur.execute("""
+        SELECT sr.id, u.firstName, u.lastName, u.email 
+        FROM seller_registration sr 
+        JOIN user u ON sr.id = u.pid 
+        WHERE sr.status = 'Pending'
+    """)
+    pending_sellers = cur.fetchall()
+    con.close()
+
+    return render_template("seller_approval.html", pending_sellers=pending_sellers)
+
+@admin_blueprint.route("/view_seller/<int:seller_id>", methods=["POST"])
+def view_seller(seller_id):
+    if "admin_name" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
+
+    con = get_connect_db()
+    cur = con.cursor()
+    cur.execute("""
+        SELECT sr.*, u.firstName, u.lastName, u.email 
+        FROM seller_registration sr 
+        JOIN user u ON sr.id = u.pid 
+        WHERE sr.id = ?
+    """, (seller_id,))
+    seller_details = cur.fetchone()
+    con.close()
+
+    if not seller_details:
+        flash("Seller not found.", "danger")
+        return redirect(url_for("admin.seller_approval"))
+
+    return render_template("seller_details.html", seller_details=seller_details)
+
+@admin_blueprint.route("/approve_seller/<int:seller_id>", methods=["POST"])
+def approve_seller(seller_id):
+    try:
+        con = get_connect_db()
+        cur = con.cursor()
+        cur.execute("UPDATE seller_registration SET status = 'Approved' WHERE id = ?", (seller_id,))
+        con.commit()
+        flash("Seller application approved!", "success")
+    except Exception as e:
+        flash(f"An error occurred: {e}", "danger")
+    finally:
+        con.close()
+
+    return redirect(url_for("admin.seller_approval"))
+
+@admin_blueprint.route("/reject_seller/<int:seller_id>", methods=["POST"])
+def reject_seller(seller_id):
+    try:
+        con = get_connect_db()
+        cur = con.cursor()
+        cur.execute("UPDATE seller_registration SET status = 'Rejected' WHERE id = ?", (seller_id,))
+        con.commit()
+        flash("Seller application rejected.", "info")
+    except Exception as e:
+        flash(f"An error occurred: {e}", "danger")
+    finally:
+        con.close()
+
+    return redirect(url_for("admin.seller_approval"))
 
 @admin_blueprint.route("/logout")
 def logout():

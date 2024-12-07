@@ -13,7 +13,10 @@ con.execute("""
         firstName TEXT NOT NULL,
         lastName TEXT NULL,
         email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
+        password TEXT NOT NULL,
+        isSeller INTEGER DEFAULT 0,
+        haveBankCard INTEGER DEFAULT 0,
+        phone_number TEXT
     )
 """)
 con.close() 
