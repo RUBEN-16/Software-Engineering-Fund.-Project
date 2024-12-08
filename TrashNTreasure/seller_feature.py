@@ -1,36 +1,11 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash, current_app
+from db import get_connect_db
 import sqlite3
 import os
 
 seller_blueprint = Blueprint("seller", __name__, template_folder="templates")
 UPLOAD_FOLDER = 'TrashNTreasure/static/uploads/'
-DATABASE_PATH = 'TrashNTreasure/database.db'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-con=sqlite3.connect(DATABASE_PATH)
-con.execute("""
-    CREATE TABLE IF NOT EXISTS seller_registration (
-        id INTEGER NOT NULL,
-        ic_picture TEXT NOT NULL,
-        profile_picture TEXT NOT NULL,
-        status TEXT DEFAULT 'Pending',
-        FOREIGN KEY (id) REFERENCES user(pid) ON DELETE CASCADE ON UPDATE CASCADE
-    )
-""")
-con.execute("""
-    CREATE TABLE IF NOT EXISTS sellers (
-        id INTEGER NOT NULL,
-        name TEXT NOT NULL,
-        email TEXT UNIQUE NOT NULL,
-        phone_number TEXT   
-    )
-""")
-con.close()
-
-def get_connect_db():
-    conn = sqlite3.connect(DATABASE_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn 
 
 @seller_blueprint.route('/seller_verification', methods=["POST", "GET"])
 def seller_verification():

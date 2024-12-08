@@ -1,8 +1,6 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash
-from user_feature import get_connect_db_user_
-from logistic_feature import get_connect_db_logistic
-from seller_feature import get_connect_db
-
+from db import get_connect_db
+from db import seller_database
 admin_blueprint = Blueprint("admin", __name__, template_folder="templates")
 
 
@@ -57,7 +55,7 @@ def adding_logistic():
                 
                 
                 
-                con = get_connect_db_logistic() # Initialize the connection here
+                con = get_connect_db() # Initialize the connection here
                 cur = con.cursor()
                 cur.execute("SELECT * FROM member WHERE email = ?", (email,))
                 member = cur.fetchone()
@@ -85,7 +83,7 @@ def manage_users():
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("admin.login"))
     
-    con = get_connect_db_user_()
+    con = get_connect_db()
     cur = con.cursor()
     cur.execute("SELECT pid, firstName, lastName, email FROM user")
     users = cur.fetchall()
@@ -104,7 +102,7 @@ def manage_users():
 @admin_blueprint.route("/remove_user/<id>", methods=["POST", "GET"])
 def delete_user(id):
     try:
-        con = get_connect_db_user_()
+        con = get_connect_db()
         cur = con.cursor()
         cur.execute("SELECT * FROM user WHERE pid = ?", (id,))
         user = cur.fetchone()
@@ -173,6 +171,12 @@ def approve_seller(seller_id):
         con = get_connect_db()
         cur = con.cursor()
         cur.execute("UPDATE seller_registration SET status = 'Approved' WHERE id = ?", (seller_id,))
+        con.commit()
+        
+        cur.execute("UPDATE user SET isSeller = 1 WHERE pid = ?", (seller_id,))
+        con.commit()
+        
+        seller_database(seller_id)
         con.commit()
         flash("Seller application approved!", "success")
     except Exception as e:

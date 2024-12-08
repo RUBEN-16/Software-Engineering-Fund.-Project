@@ -1,30 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash, current_app
-import sqlite3
+from db import get_connect_db
 
 logistic_blueprint = Blueprint("logistic", __name__, template_folder="templates")
-
-DATABASE_PATH = "TrashNTreasure/database.db"
-
-
-# Logistic members database
-con=sqlite3.connect(DATABASE_PATH)
-con.execute("""
-    CREATE TABLE IF NOT EXISTS member (
-        pid INTEGER PRIMARY KEY,
-        firstName TEXT NOT NULL,
-        lastName TEXT NULL,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
-    )
-""")
-con.close()
-
-
-def get_connect_db_logistic():
-    conn = sqlite3.connect(DATABASE_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
-
 
 @logistic_blueprint.route("/logisticlogin", methods=["POST", "GET"])
 def login():
@@ -32,7 +9,7 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
         
-        con = get_connect_db_logistic()
+        con = get_connect_db()
         cur=con.cursor()
         cur.execute("SELECT * FROM member WHERE email = ? and password = ?", (email, password)) #checking 
         data = cur.fetchone()

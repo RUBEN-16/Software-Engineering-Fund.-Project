@@ -1,10 +1,10 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from admin_feature import admin_blueprint
-from user_feature import user_blueprint, get_connect_db_user_
-from logistic_feature import logistic_blueprint, get_connect_db_logistic
+from user_feature import user_blueprint
+from logistic_feature import logistic_blueprint
 from seller_feature import seller_blueprint
+from db import get_connect_db
 import os
-
 
 app = Flask(__name__)
 app.secret_key = "Strong_Key"
@@ -15,6 +15,9 @@ app.register_blueprint(user_blueprint, url_prefix="/user")
 app.register_blueprint(logistic_blueprint, url_prefix="/logistic")
 app.register_blueprint(seller_blueprint, url_prefix="/seller")
 
+# def user_trigger():
+#     con = get_connect_db()
+#     con.execute("")
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
@@ -26,7 +29,7 @@ def signup():
             email = request.form["email"]
             password = request.form["password"]
             
-            con = get_connect_db_user_() # Initialize the connection here
+            con = get_connect_db() # Initialize the connection here
             cur = con.cursor()
             
             cur.execute("SELECT * FROM user WHERE email = ?", (email,))
@@ -52,7 +55,7 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
         
-        con = get_connect_db_user_()
+        con = get_connect_db()
         cur = con.cursor()
         cur.execute("SELECT * FROM user WHERE email = ? and password = ?", (email, password)) #checking 
         data = cur.fetchone()
