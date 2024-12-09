@@ -10,7 +10,7 @@ con=sqlite3.connect(DATABASE_PATH)
 # Admins database
 con.execute("""
     CREATE TABLE IF NOT EXISTS user (
-        pid INTEGER PRIMARY KEY,
+        pid INTEGER PRIMARY KEY AUTOINCREMENT,
         firstName TEXT NOT NULL,
         lastName TEXT NULL,
         email TEXT UNIQUE NOT NULL,
@@ -24,7 +24,7 @@ con.execute("""
 # Logistic members database
 con.execute("""
     CREATE TABLE IF NOT EXISTS member (
-        pid INTEGER PRIMARY KEY,
+        pid INTEGER PRIMARY KEY AUTOINCREMENT,
         firstName TEXT NOT NULL,
         lastName TEXT NULL,
         email TEXT UNIQUE NOT NULL,
@@ -39,7 +39,7 @@ con.execute("""
         ic_picture TEXT NOT NULL,
         profile_picture TEXT NOT NULL,
         status TEXT DEFAULT 'Pending',
-        FOREIGN KEY (id) REFERENCES user(pid) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (id) REFERENCES user(pid) ON DELETE CASCADE
     )
 """)
 
@@ -48,18 +48,37 @@ con.execute("""
     CREATE TABLE IF NOT EXISTS sellers (
         id INTEGER NOT NULL,
         name TEXT NOT NULL,
-        email TEXT UNIQUE NOT NULL
+        email TEXT UNIQUE NOT NULL,
+        FOREIGN KEY (id) REFERENCES user(pid) ON DELETE CASCADE ON UPDATE CASCADE
     )
 """)
 
+# Product database
+con.execute("""
+    CREATE TABLE IF NOT EXISTS products (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        description TEXT,
+        price REAL NOT NULL,
+        quantity INTEGER NOT NULL,
+        condition TEXT NOT NULL,
+        seller_id INTEGER NOT NULL,
+        image_path TEXT,
+        video_path TEXT,
+        FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE
+    )
+    """)
+
 con.close()
 
+# Database connection
 def get_connect_db():
     conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row
     return conn 
 
-
+# Save the approved seller in the sellers database
 def seller_database(ID):
     con = get_connect_db()
     cur = con.cursor()

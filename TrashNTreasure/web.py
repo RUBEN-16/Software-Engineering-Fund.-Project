@@ -84,7 +84,6 @@ def product_page():
         cur = con.cursor()
         seller = cur.execute("SELECT * FROM user WHERE pid = ?", (user_id,)).fetchone()
         isSeller = seller["isSeller"]
-        print("isSeller: ", isSeller)
         con.commit()
         con.close()
     return render_template("product.html", isSeller=isSeller)
