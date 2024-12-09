@@ -3,21 +3,18 @@ from admin_feature import admin_blueprint
 from user_feature import user_blueprint
 from logistic_feature import logistic_blueprint
 from seller_feature import seller_blueprint
+from products import product_blueprint
 from db import get_connect_db
 import os
 
 app = Flask(__name__)
-app.secret_key = "Strong_Key"
-app.config['SECRET_KEY'] = os.urandom(24)
+app.secret_key = "Strong_Key_Secret_Key"
 
 app.register_blueprint(admin_blueprint, url_prefix="/admin")
 app.register_blueprint(user_blueprint, url_prefix="/user")
 app.register_blueprint(logistic_blueprint, url_prefix="/logistic")
 app.register_blueprint(seller_blueprint, url_prefix="/seller")
-
-# def user_trigger():
-#     con = get_connect_db()
-#     con.execute("")
+app.register_blueprint(product_blueprint, url_prefix="/product")
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
@@ -80,7 +77,17 @@ def about_page():
 
 @app.route("/product")
 def product_page():
-    return render_template("product.html")
+    isSeller = False
+    user_id = session.get("buyer_id")
+    if user_id:
+        con = get_connect_db()
+        cur = con.cursor()
+        seller = cur.execute("SELECT * FROM user WHERE pid = ?", (user_id,)).fetchone()
+        isSeller = seller["isSeller"]
+        print("isSeller: ", isSeller)
+        con.commit()
+        con.close()
+    return render_template("product.html", isSeller=isSeller)
 
 @app.route("/mockHome")
 def mockHome():

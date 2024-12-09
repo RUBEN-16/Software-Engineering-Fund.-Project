@@ -1,6 +1,5 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash, current_app
 from db import get_connect_db
-import sqlite3
 import os
 
 seller_blueprint = Blueprint("seller", __name__, template_folder="templates")

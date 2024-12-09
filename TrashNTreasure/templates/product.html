@@ -4,5 +4,7 @@
 <div>
     <h1 class="text-success">Product</h1>
 </div>
-
+{% if isSeller %}
+    <a href="{{url_for("product.add_product")}}">Add product</a>
+{% endif %}
 {%endblock%}
