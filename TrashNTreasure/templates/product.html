@@ -7,4 +7,33 @@
 {% if isSeller %}
     <a href="{{url_for("product.add_product")}}">Add product</a>
 {% endif %}
+<form action="{{ url_for('product.search_product') }}" method="get">
+    <input type="text" name="query" placeholder="Search products..." required>
+    <button type="submit">Search</button>
+</form>
+{% if search_query %}
+    <h3>Search Results for "{{ search_query }}"</h3>
+{% else %}
+    <h3>All Products</h3>
+{% endif %}
+
+<ul>
+    {% for product in products %}
+        <li>
+            <h4>{{ product.name }}</h4>
+            <p>Category: {{ product.category }}</p>
+            <p>Price: ${{ product.price }}</p>
+            <p>Quantity: {{ product.quantity }}</p>
+            <p>Condition: {{ product.condition }}</p>
+            {% if product.image_path %}
+                <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.name }}">
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+{% if not products %}
+    <p>No products available.</p>
+{% endif %}
+
 {%endblock%}

@@ -77,4 +77,37 @@ def add_product():
     return render_template("add_product.html", seller_id=seller_id)
 
 
+@product_blueprint.route('/search', methods=["GET"])
+def search_product():
+    query = request.args.get("query", "").strip()  # Get the search query from the URL
+    
+    if not query:
+        flash("Please enter a search term.", "warning")
+        return redirect(url_for("product_page"))
+    
+    try:
+        con = get_connect_db()
+        cur = con.cursor()
+
+        # Search for products matching the query in name or category
+        cur.execute("""
+            SELECT * FROM products 
+            WHERE name LIKE ? OR category LIKE ?
+        """, (f"%{query}%", f"%{query}%"))
+        
+        products = cur.fetchall()
+
+        if not products:
+            flash("No products found matching your search.", "info")
+        
+        return render_template("product.html", products=products, search_query=query)
+    except Exception as e:
+        flash(f"An error occurred: {e}", "danger")
+    finally:
+        if con:
+            con.close()
+
+    return redirect(url_for("product_page"))
+
+
         

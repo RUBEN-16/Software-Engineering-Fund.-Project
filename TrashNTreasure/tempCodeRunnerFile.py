@@ -1,1 +1,1 @@
-add_product_page
+product_page
