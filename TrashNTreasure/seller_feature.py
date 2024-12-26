@@ -18,7 +18,7 @@ def seller_verification():
         return redirect(url_for('login'))
 
     con = get_connect_db()
-    cur = con.cursor()
+    cur = con.cursor() 
     user_exist = cur.execute('SELECT * FROM seller_registration WHERE id = ?', (buyer_id,)).fetchone()
     con.close()
     
@@ -44,8 +44,14 @@ def seller_verification():
             flash("Both IC and profile pictures must have valid filenames.", "danger")
             return redirect(url_for('seller.seller_verification'))
         
-        ic_filename = os.path.join(UPLOAD_FOLDER, ic_picture.filename)
-        profile_filename = os.path.join(UPLOAD_FOLDER, profile_picture.filename)
+        # Create a folder for the seller based on their buyer_id
+        seller_folder = os.path.join(UPLOAD_FOLDER, f'seller_{buyer_id}')
+        os.makedirs(seller_folder, exist_ok=True)
+        
+        ic_filename = os.path.join(seller_folder, ic_picture.filename)
+        profile_filename = os.path.join(seller_folder, profile_picture.filename)
+        ic_filename_db = f'/static/uploads/seller_{buyer_id}/{ic_picture.filename}'
+        profile_filename_db = f'/static/uploads/seller_{buyer_id}/{profile_picture.filename}'
             
         try:
             ic_picture.save(ic_filename)
@@ -59,7 +65,7 @@ def seller_verification():
             con.execute("""
                 INSERT INTO seller_registration (id, ic_picture, profile_picture)
                 VALUES (?, ?, ?)
-            """, (buyer_id, ic_filename, profile_filename))
+            """, (buyer_id, ic_filename_db, profile_filename_db))
             con.commit()
             con.close()
                         

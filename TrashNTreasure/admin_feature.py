@@ -92,8 +92,8 @@ def inventory():
     
     return render_template("inventory.html")
     
-@admin_blueprint.route('/manage_users')
-def manage_users():
+@admin_blueprint.route('/user_management')
+def user_management():
     if "admin_name" not in session:  # Check if admin is logged in
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("admin.login"))
@@ -113,6 +113,24 @@ def manage_users():
         back_url=url_for('admin.dashboard')  # Specify where Back button points
     )
  
+@admin_blueprint.route("/view_user/<id>", methods=["POST", "GET"])
+def view_user(id):
+    try:
+        con = get_connect_db()
+        cur = con.cursor()
+        cur.execute("SELECT * FROM user WHERE pid = ?", (id,))
+        user = cur.fetchone()
+        if not user:
+            flash("User not found.", "warning")
+            return redirect(url_for("admin.user_management"))
+        con.commit()        
+    except Exception as e:
+        flash(f"An error occurred: {e}", "danger")
+    finally:
+        if con:
+            con.close()
+            
+    return render_template("user_view.html", user=user)
 
 @admin_blueprint.route("/remove_user/<id>", methods=["POST", "GET"])
 def delete_user(id):
@@ -123,7 +141,7 @@ def delete_user(id):
         user = cur.fetchone()
         if not user:
             flash("User not found.", "warning")
-            return redirect(url_for("admin.manage_users"))
+            return redirect(url_for("admin.user_management"))
         cur.execute("DELETE FROM user WHERE pid = ?", (id,))
         con.commit()
         
@@ -136,7 +154,7 @@ def delete_user(id):
         if con:
             con.close()
             
-    return redirect(url_for("admin.manage_users"))
+    return redirect(url_for("admin.user_management"))
 
 @admin_blueprint.route("/seller_approval")
 def seller_approval():
@@ -175,20 +193,10 @@ def view_seller(seller_id):
     con.close()
 
     if not seller_details:
-        flash("Seller not found.", "danger")
+        flash("Seller not found.", "danger") 
         return redirect(url_for("admin.seller_approval"))
 
-    return render_template("seller_details.html", seller_details=seller_details)
-
-@admin_blueprint.route("/user_management")
-def user_management():
-    if "admin_name" not in session:
-        flash("Please log in to access this page.", "danger")
-        return redirect(url_for("admin.login"))
-    
-    return render_template("user_management.html")
-        
-    
+    return render_template("seller_details.html", seller_details=seller_details)  
 
 @admin_blueprint.route("/approve_seller/<int:seller_id>", methods=["POST"])
 def approve_seller(seller_id):

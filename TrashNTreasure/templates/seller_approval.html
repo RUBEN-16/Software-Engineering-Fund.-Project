@@ -1,19 +1,9 @@
 {% extends "admin_page.html" %}
-{% block title %}Seller Approval{%endblock%}
 {%block content%}
-    <link rel="stylesheet" href="/static/user_management.css">
-    <script>
-        // Confirmation dialog function
-        function confirmDeletion(event, userName) {
-            const confirmation = confirm(`Are you sure you want to delete ${userName}?`);
-            if (!confirmation) {
-                event.preventDefault(); // Prevent form submission
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="/static/seller_approval.css">
     <body>
         <div class="container">
-            <h1>User Management</h1>
+            <h1>Seller Approval</h1>
 
             <!-- Display Flash Messages -->
             <div>
@@ -49,7 +39,6 @@
                             <form action="{{ url_for('admin.view_seller', seller_id=seller.id) }}" method="POST" style="display:inline;">
                                 <button type="submit" class="view-button">View</button>
                             </form>
-                        
                         </td>
                     </tr>
                     {% endfor %}
