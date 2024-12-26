@@ -8,40 +8,40 @@ body {
     line-height: 1.6;
 }
 
-/* Header styles */
-header {
+/* Header styles */ 
+.hdr {
     text-align: center;
     padding: 20px;
     background-color: #333;
     color: #fff; 
 }
 
-header h1 {
+.hdr h1 {
     font-size: 2.5em;
 }
 
 /* Navigation styles */
-nav {
+.logis-mng {
     margin: 20px 0;
     text-align: center;
 }
 
-nav ul {
+.logis-mng ul {
     list-style-type: none;
 }
 
-nav ul li {
+.logis-mng ul li {
     display: inline;
     margin: 0 15px;
 }
 
-nav ul li a {
+.logis-mng ul li a {
     text-decoration: none;
     color: #333;
     font-size: 1.2em;
 }
 
-nav ul li a:hover {
+.logis-mng ul li a:hover {
     color: #007BFF;
 }
 
