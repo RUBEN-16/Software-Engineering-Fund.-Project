@@ -1,0 +1,50 @@
+{% extends "admin_page.html" %}
+{% block title %}Logistic Management{%endblock%}
+{%block content%}
+<link rel="stylesheet" href="/static/logistic_management.css">
+    <body>
+        <header>
+            <h1>Logistic Management System</h1>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#hire">Hire Member</a></li>
+                <li><a href="#fire">Fire Member</a></li>
+                <li><a href="#report">Reporting & Analysis</a></li>
+            </ul>
+        </nav>
+
+        <section id="hire">
+            <h2>Hire New Member</h2>
+            <form action="#">
+                <label for="name">Member Name:</label>
+                <input type="text" id="name" name="name" required><br>
+                <label for="position">Position:</label>
+                <input type="text" id="position" name="position" required><br>
+                <button type="submit">Hire Member</button>
+            </form>
+        </section>
+
+        <section id="fire">
+            <h2>Fire Member</h2>
+            <form action="#">
+                <label for="name">Member Name:</label>
+                <input type="text" id="name" name="name" required><br>
+                <button type="submit">Fire Member</button>
+            </form>
+        </section>
+
+        <section id="report">
+            <h2>Reporting & Analysis</h2>
+            <p>Generate various reports and analyze member performance.</p>
+            <button>Generate Report</button>
+        </section>
+
+        <footer>
+            <button class="return-btn" onclick="window.location.href='admin_page.html'">Return to Admin Page</button>
+            <p></p>
+            <p>&copy; 2024 Trash N Treasure Logistic Management System</p>
+        </footer>
+    </body>
+{%endblock%}

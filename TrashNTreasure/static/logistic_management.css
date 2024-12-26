@@ -1,0 +1,131 @@
+/* Body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('../T&T/logistic.png');  /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+    color: rgb(103, 98, 98);
+    line-height: 1.6;
+}
+
+/* Header styles */
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: #fff; 
+}
+
+header h1 {
+    font-size: 2.5em;
+}
+
+/* Navigation styles */
+nav {
+    margin: 20px 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.2em;
+}
+
+nav ul li a:hover {
+    color: #007BFF;
+}
+
+/* Container for centering the sections */
+.container {
+    width: 80%; /* Set the width of the container */
+    max-width: 900px; /* Maximum width for larger screens */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+/* Section styles */
+section {
+    background-color: #fff;
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.2em;
+}
+
+form button:hover {
+    background-color: #218838;
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #777;
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.9em;
+    color: #777;
+    padding: 20px 0;
+    background-color: #fff;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+}
+
+footer .return-btn {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    font-size: 1.2em;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 30px;  /* Space between the button and the copyright */
+}
+
+footer .return-btn:hover {
+    background-color: #2980b9;
+}
+
+footer p {
+    margin-bottom: 20px;  /* Space between the copyright and the button */
+}

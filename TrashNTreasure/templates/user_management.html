@@ -12,52 +12,61 @@
         }
     </script>
     <body>
+
         <div class="container">
-            <h1>User Management</h1>
+            <header>
+                <h1>User Management System</h1>
+            </header>
 
-            <!-- Display Flash Messages -->
-            <div>
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-            </div>
+            <nav>
+                <ul>
+                    <li><a href="#personal-details">View Personal Details</a></li>
+                    <li><a href="#transactions">View Transactions</a></li>
+                    <li><a href="#change-password">Change Password</a></li>
+                    <li><a href="#remove-user">Remove User</a></li>
+                </ul>
+            </nav>
 
-            <!-- Table of Users -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.first_name }} {{ user.last_name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>
-                            <!-- Delete User Form -->
-                            <form action="{{ url_for('admin.delete_user', id=user.id) }}" method="POST">
-                                <input type="hidden" name="id" value="{{ user.id }}">
-                                <button type="submit" class="delete-button" onclick="confirmDeletion(event, '{{ user.first_name }} {{ user.last_name }}')">Delete</button>
-                            </form>
-                            <form action="">
-                                <button type="submit" class="delete-button">Edit</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <section id="personal-details">
+                <h2>Personal Details</h2>
+                <p><strong>Name:</strong> John Doe</p>
+                <p><strong>Email:</strong> john.doe@example.com</p>
+                <p><strong>Account Status:</strong> Active</p>
+            </section>
+
+            <section id="transactions">
+                <h2>User Transactions</h2>
+                <ul>
+                    <li>Transaction 1: $100</li>
+                    <li>Transaction 2: $50</li>
+                    <li>Transaction 3: $200</li>
+                </ul>
+            </section>
+
+            <section id="change-password">
+                <h2>Change Password</h2>
+                <form>
+                    <label for="current-password">Current Password:</label>
+                    <input type="password" id="current-password" name="current-password">
+                    <label for="new-password">New Password:</label>
+                    <input type="password" id="new-password" name="new-password">
+                    <label for="confirm-password">Confirm New Password:</label>
+                    <input type="password" id="confirm-password" name="confirm-password">
+                    <button type="submit">Change Password</button>
+                </form>
+            </section>
+
+            <section id="remove-user">
+                <h2>Remove User</h2>
+                <button>Remove Account</button>
+            </section>
+
+            <footer>
+                <button class="return-btn" onclick="window.location.href='admin_page.html'">Return to Admin Page</button>
+                <p></p>
+                <p>&copy; 2024 Trash N Treasure User Management System</p>
+            </footer>
         </div>
+
     </body>
 {%endblock%}

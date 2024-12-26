@@ -76,6 +76,21 @@ def adding_logistic():
                 con.close()
     return render_template("mem_hiring.html")
 
+@admin_blueprint.route("/logistic_management")
+def logistic_management():
+    if "admin_name" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
+    
+    return render_template("logistic_management.html")
+
+@admin_blueprint.route("/inventory") 
+def inventory():
+    if "admin_name" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
+    
+    return render_template("inventory.html")
     
 @admin_blueprint.route('/manage_users')
 def manage_users():
@@ -149,7 +164,7 @@ def view_seller(seller_id):
         return redirect(url_for("admin.login"))
 
     con = get_connect_db()
-    cur = con.cursor()
+    cur = con.cursor() 
     cur.execute("""
         SELECT sr.*, u.firstName, u.lastName, u.email 
         FROM seller_registration sr 
@@ -164,6 +179,16 @@ def view_seller(seller_id):
         return redirect(url_for("admin.seller_approval"))
 
     return render_template("seller_details.html", seller_details=seller_details)
+
+@admin_blueprint.route("/user_management")
+def user_management():
+    if "admin_name" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
+    
+    return render_template("user_management.html")
+        
+    
 
 @admin_blueprint.route("/approve_seller/<int:seller_id>", methods=["POST"])
 def approve_seller(seller_id):
@@ -206,3 +231,4 @@ def logout():
     session.clear()
     flash("You have been logged out.", "info")
     return redirect(url_for("admin.login"))
+
