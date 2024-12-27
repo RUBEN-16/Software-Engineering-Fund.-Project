@@ -3,7 +3,15 @@
 {%block content%}
 
 <link rel="stylesheet" href="/static/inventory.css">
-
+<script>
+  // Confirmation dialog function
+  function confirmDeletion(event, name) {
+      const confirmation = confirm(`Are you sure you want to delete ${name}?`);
+      if (!confirmation) {
+          event.preventDefault(); // Prevent form submission
+      }
+  }
+</script>
 <body>
   <div class="container">
     <!-- Header -->
@@ -23,17 +31,38 @@
     <!-- Add Item Section -->
     <section id="add-item" class="content-section">
       <h2>Add Item</h2>
-      <form>
-        <label for="item-name">Item Name:</label>
-        <input type="text" id="item-name" required>
+      <form action="{{url_for("product.add_product")}}" method="post" enctype="multipart/form-data">
+        <label for="product_name">Product Name:</label><br>
+        <input type="text" id="product_name" name="product_name" required><br><br>
         
-        <label for="item-quantity">Quantity:</label>
-        <input type="number" id="item-quantity" required>
+        <label for="category">Category:</label><br>
+        <input type="text" id="category" name="category" required><br><br>
+        
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description"></textarea><br><br>
+        
+        <label for="price">Price:</label><br>
+        <input type="number" id="price" name="price" step="0.01" required><br><br>
+        
+        <label for="quantity">Quantity:</label><br>
+        <input type="number" id="quantity" name="quantity" required><br><br>
+        
+        <label for="condition">Condition:</label><br>
+        <select id="condition" name="condition" required>
+            <option value="New">New</option>
+            <option value="Used">Used</option>
+        </select><br><br>
+        
+        <label for="admin_id">Admin ID:</label><br>
+        <input type="text" id="admin_id" name="admin_id" value="{{ session["admin_id"] }}" readonly><br><br>
+        
+        <label for="image">Product Image:</label><br>
+        <input type="file" id="image" name="image" accept="image/*" required><br><br>
 
-        <label for="item-price">Price:</label>
-        <input type="number" id="item-price" required>
-
-        <button type="submit">Add Item</button>
+        <label for="video">Product Video:</label><br>
+        <input type="file" id="video" name="video" accept="video/*"><br><br>
+        
+        <button type="submit">Add Product</button>
       </form>
     </section>
 
@@ -45,15 +74,19 @@
           <tr>
             <th>Item Name</th>
             <th>Quantity</th>
+            <th>Condition</th>
             <th>Price</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Sample Item</td>
-            <td>5</td>
-            <td>$50</td>
-          </tr>
+          {% for product in products %}
+              <tr>
+                  <td>{{ product.name }}</td>
+                  <td>{{ product.quantity }}</td>
+                  <td>{{ product.condition }}</td>
+                  <td>RM {{ product.price }}</td>
+              </tr>
+          {% endfor %}
         </tbody>
       </table>
     </section>
@@ -61,11 +94,7 @@
     <!-- Remove Item Section -->
     <section id="remove-item" class="content-section">
       <h2>Remove Item</h2>
-      <form>
-        <label for="remove-item-name">Item Name:</label>
-        <input type="text" id="remove-item-name" required>
-        <button type="submit">Remove Item</button>
-      </form>
+      
     </section>
 
     <footer>

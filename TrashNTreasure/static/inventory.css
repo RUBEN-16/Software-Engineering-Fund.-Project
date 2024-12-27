@@ -1,20 +1,19 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-image: url('../T&T/IM_background.png');  /* Replace with your image path */
+    background-image: url('../static/images/IM_background.png');  /* Replace with your image path */
     background-size: cover;
     background-position: center;
     color: #333;
-    line-height: 1.6;
+    line-height: 1.6; 
   }
   
   .container {
-    width: 90%;
-    max-width: 900px;
+    max-width: 1500px;
     margin: 20px auto;
+    background: rgb(255, 255, 255);
     padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
   .hdr {

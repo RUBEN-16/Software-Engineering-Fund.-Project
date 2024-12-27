@@ -63,7 +63,7 @@ con.execute("""
         price REAL NOT NULL,
         quantity INTEGER NOT NULL,
         condition TEXT NOT NULL,
-        seller_id INTEGER NOT NULL,
+        seller_id TEXT NOT NULL,
         image_path TEXT,
         video_path TEXT,
         FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE

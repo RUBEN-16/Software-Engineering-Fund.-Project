@@ -9,28 +9,28 @@
         
         <nav class="logis-mng">
             <ul>
-                <li><a href="#hire">Hire Member</a></li>
-                <li><a href="#fire">Fire Member</a></li>
-                <li><a href="#report">Reporting & Analysis</a></li>
+                <li><a href="{{url_for("admin.member_list")}}">Members</a></li>
+                <li><a href="/admin/logistic_management#hire">Hire Member</a></li>
+                <li><a href="/admin/logistic_management#fire">Fire Member</a></li>
+                <li><a href="/admin/logistic_management#report">Reporting & Analysis</a></li>
             </ul>
         </nav>
-
+        {%block nested%}
         <section id="hire">
             <h2>Hire New Member</h2>
-            <form action="#">
-                <label for="name">Member Name:</label>
-                <input type="text" id="name" name="name" required><br>
-                <label for="position">Position:</label>
-                <input type="text" id="position" name="position" required><br>
-                <button type="submit">Hire Member</button>
+            <form action="{{url_for('admin.adding_logistic')}}" method="post">
+                <input type="text" id="name" name="first_name" placeholder="Member First Name" required><br>
+                <input type="text" id="name" name="last_name" placeholder="Member Last Name" required><br>
+                <input type="text" id="position" name="email" placeholder="Email" required><br>
+                <input type="text" id="position" name="password" placeholder="Password" required><br>
+                <button type="submit" name="action" value="Hire">Hire Member</button>
             </form>
         </section>
 
         <section id="fire">
             <h2>Fire Member</h2>
             <form action="#">
-                <label for="name">Member Name:</label>
-                <input type="text" id="name" name="name" required><br>
+                <input type="number" id="name" name="name" placeholder="Member ID" required><br>
                 <button type="submit">Fire Member</button>
             </form>
         </section>
@@ -47,4 +47,6 @@
             <p>&copy; 2024 Trash N Treasure Logistic Management System</p>
         </footer>
     </body>
+    {%endblock%}
+    
 {%endblock%}

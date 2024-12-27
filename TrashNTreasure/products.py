@@ -17,9 +17,14 @@ def allowed_file(filename):
 @product_blueprint.route('/add_product', methods=["GET", "POST"])
 def add_product():
     seller_id = session.get("buyer_id")
-    if not seller_id:
-        flash("You must be logged in to add a product", "danger")
-        return redirect(url_for("login"))
+    admin_id = session.get("admin_name")
+    
+    if not seller_id and not admin_id:
+        flash("You must be logged in as a seller or admin to add a product.", "danger")
+        if not seller_id:
+            return redirect(url_for("login"))
+        else:
+            return redirect(url_for("admin.login"))
     
     if request.method == "POST":
         try:
@@ -30,7 +35,6 @@ def add_product():
             price = float(request.form["price"])
             quantity = int(request.form["quantity"])
             condition = request.form["condition"]
-            seller_id = int(request.form["seller_id"])
 
             # Initialize file paths
             image_path = None
@@ -59,23 +63,53 @@ def add_product():
             # Insert data into the database
             con = get_connect_db()
             cur = con.cursor()
-            cur.execute(
-                """INSERT INTO products 
-                (name, category, description, price, quantity, condition, seller_id, image_path, video_path)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (product_name, category, description, price, quantity, condition, seller_id, image_path, video_path),
-            )
+            if seller_id:
+                cur.execute(
+                    """INSERT INTO products 
+                    (name, category, description, price, quantity, condition, seller_id, image_path, video_path)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (product_name, category, description, price, quantity, condition, seller_id, image_path, video_path),
+                )
+            elif admin_id:
+                cur.execute(
+                    """INSERT INTO products 
+                    (name, category, description, price, quantity, condition, seller_id, image_path, video_path)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (product_name, category, description, price, quantity, condition, session["admin_id"], image_path, video_path),
+                )
             con.commit()
             flash("Product added successfully!", "success")
             return redirect(url_for("product.add_product"))
         except Exception as e:
             flash(f"An error occurred: {e}", "danger")
-        finally:
-            if con:
-                con.close()
-
-    return render_template("add_product.html", seller_id=seller_id)
-
+    if seller_id:
+        return render_template("add_product.html", seller_id=seller_id)
+    elif admin_id:
+        return render_template("inventory.html", admin_id=admin_id)
+    
+@product_blueprint.route("/remove_item/<id>", methods=["POST", "GET"])
+def delete_item(id):
+    try:
+        con = get_connect_db()
+        cur = con.cursor()
+        cur.execute("SELECT * FROM product WHERE id = ?", (id,))
+        user = cur.fetchone()
+        if not user:
+            flash("Product not found.", "warning")
+            return redirect(url_for("admin.inventory"))
+        cur.execute("DELETE FROM product WHERE id = ?", (id,))
+        con.commit()
+        
+        flash("Product deleted successfully!", "success")
+        
+    except Exception as e:
+        flash(f"An error occurred: {e}", "danger")
+        
+    finally:
+        if con:
+            con.close()
+            
+    return redirect(url_for("admin.inventory"))
 
 @product_blueprint.route('/search', methods=["GET"])
 def search_product():
