@@ -9,14 +9,44 @@
         
         <nav class="logis-mng">
             <ul>
-                <li><a href="{{url_for("admin.member_list")}}">Members</a></li>
-                <li><a href="/admin/logistic_management#hire">Hire Member</a></li>
-                <li><a href="/admin/logistic_management#fire">Fire Member</a></li>
-                <li><a href="/admin/logistic_management#report">Reporting & Analysis</a></li>
+                <li><a href="#list">Members</a></li>
+                <li><a href="#hire">Hire Member</a></li>
+                <li><a href="#fire">Fire Member</a></li>
+                <li><a href="#report">Reporting & Analysis</a></li>
             </ul>
         </nav>
         {%block nested%}
-        <section id="hire">
+        <section id="list" class="content-section">
+            <h1 class="hdr2">User Management</h1>
+            <!-- Table of Members -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td>{{ member.id }}</td>
+                        <td>{{ member.first_name }} {{ member.last_name }}</td>
+                        <td>{{ member.email }}</td>
+                        <td>
+                            <!-- Delete member Form -->
+                            <form action="#">
+                                <button type="submit" >View</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section id="hire" class="content-section">
             <h2>Hire New Member</h2>
             <form action="{{url_for('admin.adding_logistic')}}" method="post">
                 <input type="text" id="name" name="first_name" placeholder="Member First Name" required><br>
@@ -27,7 +57,7 @@
             </form>
         </section>
 
-        <section id="fire">
+        <section id="fire" class="content-section">
             <h2>Fire Member</h2>
             <form action="#">
                 <input type="number" id="name" name="name" placeholder="Member ID" required><br>
@@ -35,7 +65,7 @@
             </form>
         </section>
 
-        <section id="report">
+        <section id="report" class="content-section">
             <h2>Reporting & Analysis</h2>
             <p>Generate various reports and analyze member performance.</p>
             <button>Generate Report</button>

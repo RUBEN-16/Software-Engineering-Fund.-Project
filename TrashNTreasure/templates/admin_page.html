@@ -9,7 +9,7 @@
 <body>
     <div class="dashboard-container"> 
         <!--Side bar-->
-        <aside class="sidebar">
+        <aside class="sidebar"> 
             <div class="logo">
                 <a href="{{url_for("admin.dashboard")}}">
                     <img src="/static/images/logo2.png" alt="LOGO"/>
@@ -43,7 +43,7 @@
                                         <span>{{ message }}</span>
                                         <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
                                     </div>
-                                {%endfor%}
+                                {%endfor%} 
                             {%endif%}
                         {%endwith%}
                     </div>
@@ -95,9 +95,9 @@
         <section class="quick-links">
             <h2>Quick Links</h2>
             <ul>
-                <li><a href="user_management.html">Manage Users</a></li>
-                <li><a href="add_product.html">Add Inventory Items</a></li>
-                <li><a href="adminlogin_page.html">Review Item Requests</a></li>
+                <li><a href="{{url_for("admin.user_management")}}">Manage Users</a></li>
+                <li><a href="{{url_for("admin.inventory")}}#add-item">Add Inventory Items</a></li>
+                <li><a href="{{url_for('admin.seller_approval')}}">Review Seller Requests</a></li>
             </ul>
         </section>
     {%endblock%}

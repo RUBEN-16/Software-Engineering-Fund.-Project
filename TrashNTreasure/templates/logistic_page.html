@@ -3,39 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
-    <link rel="stylesheet" href="/static/navi_logistic.css">
+    <title>Logistics Dashboard</title>
+    <link rel="stylesheet" href="/static/logistic_page.css">
 </head>
-<body>
-    <header class="header">
-        <div class="logo">
-            <a href="{{url_for("logistic.dashboard")}}">
-                <img src="/static/logo2.png" alt="LOGO"/>
-            </a>
-        </div>
+<div class="msg">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {%if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <span>{{ message }}</span>
+                    <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+                </div>
+            {%endfor%}
+        {%endif%}
+    {%endwith%}
+</div>
+<body> 
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../static/images/logo2.png" alt="Logo">
+            </div>
+            <h2>Logistics</h2>
+            <nav>
+                <ul>
+                    <li><a href="{{url_for("logistic.dashboard")}}">Dashboard</a></li>
+                    <li><a href="{{url_for("logistic.pickup_management")}}">Pickup Management</a></li>
+                    <li><a href="{{url_for("logistic.delivery_management")}}">Delivery Management</a></li>
+                    <li><a href="{{url_for("logistic.order_management")}}">Order Management</a></li>
+                    <li><a href="{{url_for("logistic.logistics_reports")}}">Reports</a></li>
+                </ul>
+            </nav>
+        </aside>
         
-        <div class="menu">
-            <ul>
-               <li><a href="{{url_for("logistic.dashboard")}}">Back</a></li>      
-            </ul>
-        </div>
-    </header>
-    
-      <!-- Navigation Bar -->
-    <nav class="navbar">
-        <ul>
-          <li><a href="">Home</a></li>
-          <li><a href="">About Us</a></li>
-          <li><a href="">Product</a></li>
-          <li><a href="">Contact</a></li>
-        </ul>
-    </nav>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1>Dashboard</h1>
+                <div class="profile">
+                    <span>Welcome, {{session["member_name"]}}</span>
+                    <div class="profile-img">
+                        <img src="/static/images/profile.png" alt="Profile">
+                            <div class="profile-dropdown">
+                                <ul>
+                                    <li><a href="{{url_for('logistic.logout')}}">Log Out</a></li>
+                                    <li><a href="signUp.html">Sign Out</a></li>
+                                    <li><a href="#">Change Password</a></li>
+                                </ul>
+                            </div>
+                    </div>
+                </div>
+            </header>
+        {%block content%}
+            <!-- Dashboard Cards -->
+            <section class="dashboard-cards">
+                <div class="card email">
+                    <img src="../static/images/email.jpg" alt="Email">
+                    <p>Email</p>
+                    <div class="email-dropdown">
+                        <ul>
+                            <li><a href="#">New Email</a></li>
+                            <li><a href="#">Sent Email</a></li>
+                            <li><a href="#">Draft</a></li>
+                        </ul>
+                    </div>
+                </div>
 
-    {%block content%}
-        <h1>Welcome, {{session["member_name"] }}!</h1>
-        <p>You are now logged in as a logistic member.</p>
-        <hr>
-        <a href="{{url_for('logistic.logout')}}" class="btn btn-primary btn-block">Logout</a>
-    {%endblock%}
+                <div class="card">
+                    <img src="../static/images/pending.jpg" alt="Pending">
+                    <p>Pending Orders</p>
+                </div>
+                <div class="card notification">
+                    <img src="../static/images/notification.jpg" alt="Notification">
+                    <p>New Notifications</p>
+                    <div class="notification-dropdown">
+                        <ul>
+                            <li><a href="#">New Delivery</a></li>
+                            <li><a href="#">Pending Pickup</a></li>
+                            <li><a href="#">New Reports</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Links -->
+            <section class="quick-links">
+                <h2>Quick Links</h2>
+                <ul>
+                    <li><a href="../logistic/logistics_reports.html">Generate Reports</a></li>
+                    <li><a href="../logistic/pickup_management.html">Manage Pickups</a></li>
+                    <li><a href="../logistic/delivery_management.html">Manage Deliveries</a></li>
+                    <li><a href="../logistic/order_management.html">Manage Orders</a></li>
+                </ul>
+            </section>
+        {%endblock%}
+        </main>
+        
+    </div>
 </body>
-</html> 
+</html>

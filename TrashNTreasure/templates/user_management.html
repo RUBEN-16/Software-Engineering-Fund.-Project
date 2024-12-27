@@ -11,50 +11,86 @@
             }
         }
     </script>
+    <!-- Display Flash Messages -->
+    <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
     <body>
-
         <div class="container">
             <h1 class="hdr">User Management</h1>
 
-            <!-- Display Flash Messages -->
-            <div>
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">
-                                {{ message }}
-                            </div>
+            <!-- Navigation --> 
+            <nav class="user-type">
+                <ul>
+                <li><a href="#buyer">Buyer</a></li>
+                <li><a href="#seller">Seller</a></li>
+                </ul>
+            </nav>
+            <!-- Table of Users --> 
+            <section id="buyer" class="content-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Buyer ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <!-- Delete User Form -->
+                                <form action="{{ url_for('admin.view_user', id=user.id) }}">
+                                    <button type="submit" class="delete-button">View</button>
+                                </form>
+                            </td>
+                        </tr>
                         {% endfor %}
-                    {% endif %}
-                {% endwith %}
-            </div>
+                    </tbody>
+                </table>
+            </section>
 
-            <!-- Table of Users -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.first_name }} {{ user.last_name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>
-                            <!-- Delete User Form -->
-                            <form action="{{ url_for('admin.view_user', id=user.id) }}">
-                                <button type="submit" class="delete-button">View</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <section id="seller" class="content-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Seller ID</th>
+                            <th>Buyer ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in sellers %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.name}}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <!-- Delete User Form -->
+                                <form action="{{ url_for('admin.view_user', id=user.id) }}">
+                                    <button type="submit" class="delete-button">View</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
         </div>
 
     </body>

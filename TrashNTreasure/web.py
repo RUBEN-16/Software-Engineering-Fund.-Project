@@ -31,7 +31,7 @@ def signup():
             
             cur.execute("SELECT * FROM user WHERE email = ?", (email,))
             user = cur.fetchone()
-            
+             
             if user:  # If a record is found    
                 flash("Email already exists!", "danger")
                 return redirect(url_for("signup"))
@@ -91,10 +91,6 @@ def product_page():
 @app.route("/mockHome")
 def mockHome():
     return render_template("mockHome.html")
-
-@app.route("/donation")
-def donation_page():
-    return render_template("donation.html")
 
 @app.after_request
 def add_header(response):

@@ -17,7 +17,7 @@ def seller_verification():
         flash("You need to log in to proceed.", "danger")
         return redirect(url_for('login'))
 
-    con = get_connect_db()
+    con = get_connect_db() 
     cur = con.cursor() 
     user_exist = cur.execute('SELECT * FROM seller_registration WHERE id = ?', (buyer_id,)).fetchone()
     con.close()
@@ -77,4 +77,12 @@ def seller_verification():
     
     return render_template('seller_verification.html', user_id=buyer_id)
 
-        
+    
+@seller_blueprint.route("/seller?")
+def wanna_be_seller():
+    return redirect(url_for("seller.seller_verification"))
+
+
+# @seller_blueprint.route("/")
+# def courier_request():
+    

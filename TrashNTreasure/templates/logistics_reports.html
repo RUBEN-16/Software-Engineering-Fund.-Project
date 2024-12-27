@@ -1,0 +1,62 @@
+{%extends "logistic_page.html"%}
+{%block content%}
+<link rel="stylesheet" href="../static/logistics_report.css">
+
+<section id="report-filters">
+    <h2>Generate Report</h2>
+    <form>
+        <label for="date-range">Date Range:</label>
+        <input type="date" id="start-date" name="start-date">
+        <input type="date" id="end-date" name="end-date">
+        
+        <label for="courier">Courier:</label>
+        <select id="courier" name="courier">
+            <option value="courier1">Courier 1</option>
+            <option value="courier2">Courier 2</option>
+            <option value="courier3">Courier 3</option>
+        </select>
+        
+        <label for="order-type">Order Type:</label>
+        <select id="order-type" name="order-type">
+            <option value="pickup">Pickup</option>
+            <option value="delivery">Delivery</option>
+        </select>
+        
+        <button type="submit">Generate Report</button>
+    </form>
+</section>
+
+<section id="report-output">
+    <h2>Report Summary</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Courier</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>#1001</td>
+                <td>Courier 1</td>
+                <td>Delivered</td>
+                <td>2024-12-15</td>
+            </tr>
+            <tr>
+                <td>#1002</td>
+                <td>Courier 2</td>
+                <td>In Transit</td>
+                <td>2024-12-16</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="export-btn">Export Report</button>
+</section>
+
+<footer>
+    <button class="return-btn" onclick="window.location.href='../logistic/logistics_dashboard.html'">Return to Dashboard</button>
+    <p>&copy; 2024 Trash N Treasure Logistics Reports</p>
+</footer>
+{%endblock%}

@@ -56,7 +56,7 @@ body {
   
   .invntry-mng ul li a:hover {
     background-color: #45a049;
-  }
+  } 
   
   /* Content Sections */
   .content-section {
@@ -72,6 +72,10 @@ body {
     display: block; /* Show the section when targeted */
   }
   
+  .content-section h2 {
+    text-align: center;  
+  }
+  
   form {
     display: flex;
     flex-direction: column;
@@ -82,7 +86,7 @@ body {
     font-size: 1.1em;
   }
   
-  form input {
+  form input, select, textarea {
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;

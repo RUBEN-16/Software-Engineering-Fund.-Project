@@ -1,0 +1,49 @@
+{%extends "logistic_page.html"%}
+{%block content%}
+<link rel="stylesheet" href="../static/order_management.css">
+
+<section id="all-orders">
+    <h2>All Orders</h2>
+    <ul>
+        <li>Order ID: 12345 - Seller: John Doe - Buyer: Jane Doe - Status: Pending</li>
+        <li>Order ID: 67890 - Seller: Mark Smith - Buyer: Sarah Lee - Status: Approved</li>
+        <li>Order ID: 11223 - Seller: Rachel Green - Buyer: Monica Bell - Status: Cancelled</li>
+    </ul>
+</section>
+
+<section id="order-details">
+    <h2>Order Details</h2>
+    <ul>
+        <li>Order ID: 12345 - Product: Wooden Chair - Quantity: 2 - Total: $150</li>
+        <li>Order ID: 67890 - Product: Ceramic Vase - Quantity: 1 - Total: $50</li>
+    </ul>
+</section>
+
+<section id="approve-reject">
+    <h2>Approve or Reject Orders</h2>
+    <form>
+        <label for="order-id">Order ID:</label>
+        <input type="text" id="order-id" name="order-id" required>
+        <label for="action">Action:</label>
+        <select id="action" name="action">
+            <option value="approve">Approve</option>
+            <option value="reject">Reject</option>
+        </select>
+        <button type="submit">Submit Action</button>
+    </form>
+</section>
+
+<section id="cancel-order">
+    <h2>Cancel Orders</h2>
+    <form>
+        <label for="cancel-order-id">Order ID:</label>
+        <input type="text" id="cancel-order-id" name="cancel-order-id" required>
+        <button type="submit">Cancel Order</button>
+    </form>
+</section>
+
+<footer>
+    <button class="return-btn" onclick="window.location.href='logistics_dashboard.html'">Return to Dashboard</button>
+    <p>&copy; 2024 Trash N Treasure Order Management System</p>
+</footer>
+{%endblock%}

@@ -14,49 +14,7 @@
         </script>
         <body>
 
-            <div class="container">
-                <h1 class="hdr2">User Management</h1>
-
-                <!-- Display Flash Messages -->
-                <div>
-                    {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                                <div class="alert alert-{{ category }}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
-                </div>
-
-                <!-- Table of Members -->
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for member in members %}
-                        <tr>
-                            <td>{{ member.id }}</td>
-                            <td>{{ member.first_name }} {{ member.last_name }}</td>
-                            <td>{{ member.email }}</td>
-                            <td>
-                                <!-- Delete member Form -->
-                                <form action="#">
-                                    <button type="submit" >View</button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            
 
         </body>
     {%endblock%}

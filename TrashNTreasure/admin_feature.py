@@ -77,11 +77,18 @@ def adding_logistic():
 
 @admin_blueprint.route("/logistic_management")
 def logistic_management():
-    if "admin_id" not in session:
+    if "admin_id" not in session:  # Check if admin is logged in
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("admin.login"))
     
-    return render_template("logistic_management.html")
+    con = get_connect_db()
+    cur = con.cursor()
+    cur.execute("SELECT pid, firstName, lastName, email FROM member")
+    members = cur.fetchall()
+    con.close()
+    members = [{"id": member[0], "first_name": member[1], "last_name": member[2], "email": member[3]} for member in members]
+
+    return render_template("logistic_management.html", members=members,)
 
 @admin_blueprint.route("/inventory") 
 def inventory():
@@ -91,7 +98,7 @@ def inventory():
     
     con = get_connect_db()
     cur = con.cursor()
-    cur.execute("SELECT id, name, quantity, condition, price FROM products")
+    cur.execute("SELECT name, quantity, condition, price, id FROM products")
     products = cur.fetchall()
     con.close()
 
@@ -108,34 +115,17 @@ def user_management():
     
     con = get_connect_db()
     cur = con.cursor()
-    cur.execute("SELECT pid, firstName, lastName, email FROM user")
-    users = cur.fetchall()
+    users = cur.execute("SELECT pid, firstName, lastName, email FROM user").fetchall()
+    sellers = cur.execute("SELECT id, name, email FROM sellers").fetchall()
     con.close()
 
     # Convert users to dictionaries
     users = [{"id": user[0], "first_name": user[1], "last_name": user[2], "email": user[3]} for user in users]
+    sellers = [{"id": seller[0], "name": seller[1], "email": seller[2]} for seller in sellers]
     return render_template(
         'user_management.html', 
         users=users,
-    )
-    
-@admin_blueprint.route('/member_list')
-def member_list():
-    if "admin_id" not in session:  # Check if admin is logged in
-        flash("Please log in to access this page.", "danger")
-        return redirect(url_for("admin.login"))
-    
-    con = get_connect_db()
-    cur = con.cursor()
-    cur.execute("SELECT pid, firstName, lastName, email FROM member")
-    members = cur.fetchall()
-    con.close()
-
-    # Convert members to dictionaries
-    members = [{"id": member[0], "first_name": member[1], "last_name": member[2], "email": member[3]} for member in members]
-    return render_template(
-        'logistics_members.html', 
-        members=members,
+        sellers=sellers
     )
  
 @admin_blueprint.route("/view_user/<id>", methods=["POST", "GET"])

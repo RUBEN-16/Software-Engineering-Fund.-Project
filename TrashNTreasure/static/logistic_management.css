@@ -10,7 +10,7 @@ body {
 
 /* Header styles */ 
 .hdr {
-    text-align: center;
+    text-align: center; 
     padding: 20px;
     background-color: #333;
     color: #fff; 
@@ -20,30 +20,38 @@ body {
     font-size: 2.5em;
 }
 
-/* Navigation styles */
-.logis-mng {
-    margin: 20px 0;
+  /* Navigation */
+  .logis-mng {
+    margin-bottom: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .logis-mng ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    background-color: #4CAF50;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .logis-mng ul li {
+    flex: 1;
+  }
+  
+  .logis-mng ul li a {
+    display: block;
     text-align: center;
-}
-
-.logis-mng ul {
-    list-style-type: none;
-}
-
-.logis-mng ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-.logis-mng ul li a {
+    padding: 10px 15px;
+    color: white;
     text-decoration: none;
-    color: #333;
     font-size: 1.2em;
-}
-
-.logis-mng ul li a:hover {
-    color: #007BFF;
-}
+    transition: background-color 0.3s;
+  }
+  
+  .logis-mng ul li a:hover {
+    background-color: #45a049;
+  } 
 
 /* Container for centering the sections */
 .container {
@@ -51,6 +59,20 @@ body {
     max-width: 900px; /* Maximum width for larger screens */
     margin: 0 auto; /* Center the container horizontally */
 }
+
+/* Content Sections */
+.content-section {
+    display: none; /* Hide all sections by default */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+  }
+  
+  .content-section:target {
+    display: block; /* Show the section when targeted */
+  }
 
 /* Section styles */
 section {
@@ -128,4 +150,27 @@ footer .return-btn:hover {
 
 footer p {
     margin-bottom: 20px;  /* Space between the copyright and the button */
+}
+
+.hdr2 {  
+    font-size: 30px;
+    text-align: center;
+    color: #000000;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+    color: #333;
 }
