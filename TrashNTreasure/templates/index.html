@@ -1,71 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-      
-      <title>{%block title%}Home{%endblock%}</title>
-      <link rel="stylesheet" href="/static/navi.css">
-  </head>
-  <div class="msg">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {%if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                    <span>{{ message }}</span>
-                    <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-                </div>
-            {%endfor%}
-        {%endif%}
-    {%endwith%}
-</div>
-  <body>   
-      <!-- Header Section -->
-    <header class="header">
-      <div class="logo">
-          <a href="/">
-              <img src="/static/images/logo2.png" alt="LOGO" href="/"/>
-          </a>
-      </div>
-      <!-- Navigation Bar -->
-    <nav class="navbar">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/aboutus">About Us</a></li>
-        <li><a href="/product">Product</a></li>
-        <li><a href="{{url_for("seller.wanna_be_seller")}}">Seller?</a></li>
-      </ul>
-    </nav>
-      <div class="menu">
-        <ul>
-          {% if not session.get('user_name') %}
-            <div class="login">
-              <li><a href="/login">Log In</a></li>
-            </div>
-          {%else%}
-            <div class="cart">
-              <p>$0.00</p>
-              <img src="../static/images/cart.png" alt="Profile">
-            </div>
-            
-          {%endif%}
-          <div class="menu_logo">
-            <a a href="/" class="menu-link">
-              <img src="../static/images/menu_logo.png" alt="Profile">
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+        
+        <title>{%block title%}Home{%endblock%}</title>
+        <link rel="stylesheet" href="/static/navi.css">
+    </head>
+    <body>   
+        <!-- Header Section -->
+      <header class="header">
+        <div class="logo">
+            <a href="/">
+                <img src="/static/images/logo2.png" alt="LOGO" href="/"/>
             </a>
-            <ul class="dropdown-menu">
-              <li><a href="{{url_for("user.user_page")}}">My Account</a></li>
-              <li><a href="/contact">Contact</a></li>
-              <li><a href="">Help</a></li>
-              {% if session.get('user_name') %}
-                <li><a href="{{url_for('user.logout')}}">Logout</a></li>  
-              {%endif%}
-            </ul>
-          </div>
-      </div>
-    </header>
+        </div> 
+        <!-- Navigation Bar -->
+      <nav class="navbar">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/aboutus">About Us</a></li>
+          <li><a href="/product">Product</a></li>
+          <li><a href="{{url_for("seller.wanna_be_seller")}}">Seller?</a></li>
+        </ul>
+      </nav>
+        <div class="menu">
+          <ul>
+            {% if not session.get('user_name') %}
+              <div class="login">
+                <li><a href="/login">Log In</a></li>
+              </div>
+            {%else%}
+              <div class="cart">
+                <p>$0.00</p>
+                <img src="../static/images/cart.png" alt="Profile">
+              </div>
+              
+            {%endif%}
+            <div class="menu_logo">
+              <a a href="/" class="menu-link">
+                <img src="../static/images/menu_logo.png" alt="Profile">
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{{url_for("user.user_page")}}">My Account</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="">Help</a></li>
+                {% if session.get('user_name') %}
+                  <li><a href="{{url_for('user.logout')}}">Logout</a></li>  
+                {%endif%}
+              </ul>
+            </div>
+        </div>
+      </header>
 
-  {%block content%}
-  {%endblock%}
+    {%block content%}
+    {%endblock%}
 
-  </body>
-</html>
+    </body>
+  </html>
 

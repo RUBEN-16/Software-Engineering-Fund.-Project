@@ -5,7 +5,7 @@ body {
 }
 
 /* Header Styles */
-.header {
+.header { 
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -91,13 +91,11 @@ body {
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 100%;
+  top: 50px;
   right: 0;
   background-color: #fff;
   color: black;
   border: 1px solid #ccc;
-  list-style: none;
-  padding: 10px 0;
   width: 120px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.1);
   z-index: 100; 
@@ -173,3 +171,4 @@ body {
   color: white; /* Ensure color is consistent */
   border-radius: 5px;
 }
+ 
