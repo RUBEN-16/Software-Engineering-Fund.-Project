@@ -36,6 +36,9 @@ con.execute("""
 con.execute("""
     CREATE TABLE IF NOT EXISTS seller_registration (
         id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        phone_number TEXT NOT NULL,
         ic_picture TEXT NOT NULL,
         profile_picture TEXT NOT NULL,
         status TEXT DEFAULT 'Pending',
@@ -49,6 +52,7 @@ con.execute("""
         id INTEGER NOT NULL,
         name TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
+        phone_number TEXT NOT NULL,
         FOREIGN KEY (id) REFERENCES user(pid) ON DELETE CASCADE ON UPDATE CASCADE
     )
 """)
@@ -83,20 +87,44 @@ def seller_database(ID):
     con = get_connect_db()
     cur = con.cursor()
     try:
-        selling_user = cur.execute("SELECT * FROM user WHERE pid = ?", (ID,)).fetchone()
-        con.commit()
-        if not selling_user:
+        # Fetch user and seller registration details
+        selling_user_data = cur.execute("SELECT * FROM user WHERE pid = ?", (ID,)).fetchone()
+        selling_registered_data = cur.execute("SELECT * FROM seller_registration WHERE id = ?", (ID,)).fetchone()
+        
+        # Check if the user and registration data exist
+        if not selling_user_data:
             flash(f"No eligible user found for seller creation with ID {ID}", "danger")
             return
-        name = selling_user["firstName"] + selling_user["lastName"]
-        email = selling_user["email"]
-        cur.execute("INSERT INTO sellers (id, name, email) VALUES (?, ?, ?)",(ID, name, email))
+        if not selling_registered_data:
+            flash(f"No registration data found for seller with ID {ID}", "danger")
+            return
+
+        # Extract relevant details from seller_registration
+        name = selling_registered_data["name"]
+        email = selling_registered_data["email"]
+        phone_number = selling_registered_data["phone_number"]
+
+        # Insert into sellers table
+        cur.execute(
+            "INSERT INTO sellers (id, name, email, phone_number) VALUES (?, ?, ?, ?)",
+            (ID, name, email, phone_number)
+        )
+        
+        # Update the user's phone number in the user table (if necessary)
+        cur.execute(
+            "UPDATE user SET phone_number = ? WHERE pid = ?",
+            (phone_number, ID)
+        )
+
+        # Commit changes to the database
         con.commit()
+        flash(f"Seller with ID {ID} has been successfully added to the database.", "success")
     except Exception as e:
         flash(f"An error occurred while creating seller: {e}", "danger")
     finally:
         if con:
             con.close()
+
 
 
 

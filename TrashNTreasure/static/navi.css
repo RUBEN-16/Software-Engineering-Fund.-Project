@@ -15,7 +15,7 @@ body {
 }
 
 .header .logo img {
-  width: 40px;
+  width: 60px;
   height: auto;
 }
 
@@ -53,15 +53,15 @@ body {
 /* Dropdown Menu Styles */
 .menu_logo {
   position: relative;
+  cursor: pointer;
 }
 
 .menu-link {
-  text-decoration: none;
   color: white;
-  font-size: 16px;
   padding: 5px 10px;
   display: inline-block;
   transition: background-color 0.3s;
+  size: 10px;
 }
 
 /* Hover effect for MENU link */
@@ -70,20 +70,46 @@ body {
   border-radius: 5px;
 }
 
+.menu img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.cart {
+  display: flex;
+  width: 120px;
+  margin-top: 4px;
+}
+
+.cart img {
+  width: 60px;
+  height: 40px;
+}
+
 /* Dropdown menu hidden by default */
 .dropdown-menu {
   display: none;
   position: absolute;
   top: 100%;
-  left: 0;
+  right: 0;
   background-color: #fff;
   color: black;
   border: 1px solid #ccc;
   list-style: none;
   padding: 10px 0;
-  width: 200px;
+  width: 120px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  z-index: 100;
+  z-index: 100; 
+  border-radius: 5px;
+}
+
+.login {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  padding-top: 15px;
+  transition: background-color 0.3s;
 }
 
 /* Styling for dropdown menu items */
@@ -106,11 +132,14 @@ body {
   display: block;
 }
 
+
+
 /* Navigation Bar */
 .navbar {
   text-align: center;
-  background-color: #444;
+  background-color: #333;
   padding: 10px 0;
+  padding-right: 300px;
 }
 
 .navbar ul {
@@ -128,12 +157,19 @@ body {
 .navbar ul li a {
   text-decoration: none;
   color: white;
-  font-size: 16px;
-  padding: 5px 10px;
+  font-size: 17px;
+  padding: 15px 30px;
   transition: background-color 0.3s;
 }
 
 .navbar ul li a:hover {
   background-color: #666;
+  border-radius: 5px;
+}
+
+/* Active state */
+.navbar ul li a.active {
+  background-color: #666; /* Same as hover */
+  color: white; /* Ensure color is consistent */
   border-radius: 5px;
 }

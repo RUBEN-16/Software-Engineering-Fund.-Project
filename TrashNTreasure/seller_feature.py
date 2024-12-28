@@ -12,14 +12,14 @@ def seller_verification():
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("login"))
     
-    buyer_id = session.get('buyer_id')
-    if not buyer_id:
+    id = session.get('buyer_id')
+    if not id:
         flash("You need to log in to proceed.", "danger")
         return redirect(url_for('login'))
 
     con = get_connect_db() 
     cur = con.cursor() 
-    user_exist = cur.execute('SELECT * FROM seller_registration WHERE id = ?', (buyer_id,)).fetchone()
+    user_exist = cur.execute('SELECT * FROM seller_registration WHERE id = ?', (id,)).fetchone()
     con.close()
     
     if user_exist:
@@ -33,6 +33,10 @@ def seller_verification():
         if session['isExist']:
             return render_template("seller_registration.html")
         
+        name = request.form.get("name")
+        email = request.form.get("email")
+        phone_number = request.form.get("phone-number")
+        
         if 'ic_picture' not in request.files or 'profile_picture' not in request.files:
             flash("Both IC and profile pictures are required.", "danger")
             return redirect(url_for('seller.seller_verification'))
@@ -44,14 +48,14 @@ def seller_verification():
             flash("Both IC and profile pictures must have valid filenames.", "danger")
             return redirect(url_for('seller.seller_verification'))
         
-        # Create a folder for the seller based on their buyer_id
-        seller_folder = os.path.join(UPLOAD_FOLDER, f'seller_{buyer_id}')
+        # Create a folder for the seller based on their id
+        seller_folder = os.path.join(UPLOAD_FOLDER, f'seller_{id}')
         os.makedirs(seller_folder, exist_ok=True)
         
         ic_filename = os.path.join(seller_folder, ic_picture.filename)
         profile_filename = os.path.join(seller_folder, profile_picture.filename)
-        ic_filename_db = f'/static/uploads/seller_{buyer_id}/{ic_picture.filename}'
-        profile_filename_db = f'/static/uploads/seller_{buyer_id}/{profile_picture.filename}'
+        ic_filename_db = f'/static/uploads/seller_{id}/{ic_picture.filename}'
+        profile_filename_db = f'/static/uploads/seller_{id}/{profile_picture.filename}'
             
         try:
             ic_picture.save(ic_filename)
@@ -63,9 +67,9 @@ def seller_verification():
         if os.path.exists(ic_filename) and os.path.exists(profile_filename):
             con = get_connect_db()
             con.execute("""
-                INSERT INTO seller_registration (id, ic_picture, profile_picture)
-                VALUES (?, ?, ?)
-            """, (buyer_id, ic_filename_db, profile_filename_db))
+                INSERT INTO seller_registration (id, name, email, phone_number, ic_picture, profile_picture)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (id, name, email, phone_number, ic_filename_db, profile_filename_db))
             con.commit()
             con.close()
                         
@@ -75,7 +79,7 @@ def seller_verification():
             flash("File paths are invalid. Please try again.", "danger")
             return redirect(url_for('seller.seller_verification'))
     
-    return render_template('seller_verification.html', user_id=buyer_id)
+    return render_template('seller_verification.html')
 
     
 @seller_blueprint.route("/seller?")

@@ -18,33 +18,47 @@ app.register_blueprint(product_blueprint, url_prefix="/product")
 
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
-    con = None 
     if request.method == "POST":
         try:
-            fname = request.form["first_name"]
-            lname = request.form["last_name"]
-            email = request.form["email"]
-            password = request.form["password"]
+            # Get user input from the form
+            fname = request.form.get("first_name")
+            lname = request.form.get("last_name")
+            email = request.form.get("email")
+            password = request.form.get("password")
+            confirm_password = request.form.get("confirm_password")
             
-            con = get_connect_db() # Initialize the connection here
-            cur = con.cursor()
-            
-            cur.execute("SELECT * FROM user WHERE email = ?", (email,))
-            user = cur.fetchone()
-             
-            if user:  # If a record is found    
-                flash("Email already exists!", "danger")
+            if password != confirm_password:
+                print(f'{password} != {confirm_password}')
+                flash("Password confirmation does not match.", "danger")
                 return redirect(url_for("signup"))
-            cur.execute("INSERT INTO user (firstName, lastName, email, password) VALUES (?, ?, ?, ?)",(fname, lname, email, password),)
-            con.commit()
-            flash("Account Created Successfully!", "success")
-            return redirect(url_for("login"))
+            
+            # Connect to the database
+            with get_connect_db() as con:
+                cur = con.cursor()
+                
+                # Check if the email already exists
+                cur.execute("SELECT * FROM user WHERE email = ?", (email,))
+                user = cur.fetchone()
+                if user:
+                    flash("Email already exists. Please log in or use a different email.", "danger")
+                    return redirect(url_for("signup"))
+                
+                # Insert the new user into the database
+                cur.execute(
+                    "INSERT INTO user (firstName, lastName, email, password) VALUES (?, ?, ?, ?)",
+                    (fname, lname, email, password),
+                )
+                con.commit()
+                flash("Account created successfully! You can now log in.", "success")
+                return redirect(url_for("login"))
+        
         except Exception as e:
             flash(f"An error occurred: {e}", "danger")
-        finally:
-            if con:  # Check if con is initialized
-                con.close()
+            return redirect(url_for("signup"))
+
+    # Render the sign-up page
     return render_template("signUp.html")
+
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -59,7 +73,8 @@ def login():
         con.close()
 
         if data: 
-            session["user_name"] = data["firstName"]  
+            session["user_name"] = data["firstName"] + " " + data["lastName"] 
+            session["email"] = data["email"]
             session["buyer_id"] = data["pid"]  
             return redirect(url_for("home"))
         else:
@@ -71,7 +86,7 @@ def login():
 def home():
     return render_template("index.html")
 
-@app.route("/aboutus")
+@app.route("/aboutus") 
 def about_page():
     return render_template("about.html")
 
