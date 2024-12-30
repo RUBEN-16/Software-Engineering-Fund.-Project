@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+{% block title %} C Page {%endblock%}
+{%block content%}
+<link rel="stylesheet" href="/static/product_details.css"/>
+
+<section class="product-details">
+    <div class="product-info">
+      <img id="product-image" src="{{product.image_path }}" alt="Product Image" />
+      <div id="product-description">
+        <h2 id="product-name">{{product.name}}</h2>
+        <p id="product-stats">It's a {{product.condition}} product</p>
+        <div id="product-rating">⭐⭐⭐⭐☆ (4.2)</div>
+        <p id="product-price"><s>$1{{product.price}}</s> <span>${{product.price}}</span></p>
+        <p id="product-description-text">{{product.description}}</p>
+
+        <div class="add-to-cart">
+          <button id="add-to-cart-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+      <div class="footer-content">
+        <p>&copy; 2024 Trash and Treasure. All Rights Reserved.</p>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </footer>
+
+
+{%endblock%}

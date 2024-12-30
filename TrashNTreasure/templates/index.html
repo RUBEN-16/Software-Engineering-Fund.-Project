@@ -35,18 +35,18 @@
               </div>
               
             {%endif%}
-            <div class="menu_logo">
-              <a a href="/" class="menu-link">
-                <img src="../static/images/menu_logo.png" alt="Profile">
-              </a>
-              <ul class="dropdown-menu">
-                <li><a href="{{url_for("user.user_page")}}">My Account</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="">Help</a></li>
+            <div class="dropdown-btn" id="dropdown-btn">
+              <div class="dropdown-icon"></div>
+              <div class="dropdown-icon"></div>
+              <div class="dropdown-icon"></div>
+              <div class="dropdown-links" id="dropdown-links">
+                <a href="{{url_for("user.user_page")}}">My Account</a>
+                <a href="/contact">Contact</a>
+                <a href="">Help</a>
                 {% if session.get('user_name') %}
-                  <li><a href="{{url_for('user.logout')}}">Logout</a></li>  
+                  <a href="{{url_for('user.logout')}}">Logout</a>  
                 {%endif%}
-              </ul>
+              </div>
             </div>
         </div>
       </header>

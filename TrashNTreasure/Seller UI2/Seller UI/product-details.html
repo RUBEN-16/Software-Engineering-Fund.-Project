@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details - Trash and Treasure</title>
+    <link rel="stylesheet" href="product-details.css" />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header>
+        <div class="navbar">
+          <img src="../Seller UI/logo2 copy.png" alt="Logo" class="logo" />
+          <ul class="nav-links">
+            <li><a href="../Seller UI/home.html">Home</a></li>
+            <li><a href="../Seller UI/product.html">Products</a></li>
+            <li><a href="../Seller UI/about_us.html">About Us</a></li>
+          </ul>
+          <a href="../Seller UI/login_signup.html" class="login-btn">Login</a>
+          <div class="menu-btn" id="menu-btn">
+            <div class="menu-icon"></div>
+            <div class="menu-icon"></div>
+            <div class="menu-icon"></div>
+            <div class="menu-links" id="menu-links">
+              <a href="../Seller UI/profile.html">Profile</a>
+              <a href="about_us.html#contact" class="contact-us-btn">Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+    <!-- Product Details Section -->
+    
+    <section class="product-details">
+      <div class="product-info">
+        <img id="product-image" src="image1.jpg" alt="Product Image" />
+        <div id="product-description">
+          <h2 id="product-name">Product Name</h2>
+          <p id="product-stats">Bought by X+ people</p>
+          <div id="product-rating">⭐⭐⭐⭐☆ (4.2)</div>
+          <p id="product-price"><s>$300.00</s> <span>$250.00</span></p>
+          <p id="product-description-text">Detailed description goes here...</p>
+
+          <div class="add-to-cart">
+            <button id="add-to-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+          <p>&copy; 2024 Trash and Treasure. All Rights Reserved.</p>
+          <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+      </footer>
+
+    <script>
+      // Fetch the product ID from the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('product');
+
+      // Product data 
+      const products = {
+        phone: {
+          name: "Aquous Flip Phone (Pink)",
+          stats: "Bought by 150+ people",
+          rating: 4.2,
+          oldPrice: 300.00,
+          price: 250.00,
+          description: "A stylish flip phone with modern features.",
+          image: "../Seller UI/phone.jpg"
+        },
+        laptop: {
+          name: "MacBook Laptop (Silver)",
+          stats: "Bought by 300+ people", 
+          rating: 4.8,
+          oldPrice: 1200.00,
+          price: 1100.00,
+          description: "A high-performance laptop with cutting-edge features.",
+          image: "../Seller UI/laptop.jpg"
+        },
+        headphones: {
+          name: "Baseus Wireless Headphones (Green)",
+          stats: "Bought by 200+ people",
+          rating: 4.4,
+          oldPrice: 100.00,
+          price: 80.00,
+          description: "Comfortable wireless headphones with excellent sound quality.",
+          image: "../Seller UI/headphones.jpg"
+        },
+        tshirt: {
+          name: "Graphic T-Shirt (Olive Green)",
+          stats: "Bought by 500+ people",
+          rating: 4.5,
+          oldPrice: 20.00,
+          price: 15.00,
+          description: "A stylish and comfortable graphic t-shirt.",
+          image: "../Seller UI/tshirt.png"
+        },
+        jeans: {
+          name: "High-Waist Jeans (Navy Blue)",
+          stats: "Bought by 250+ people",
+          rating: 4.7,
+          oldPrice: 50.00,
+          price: 40.00,
+          description: "Trendy high-waist jeans in a beautiful navy blue color.",
+          image: "../Seller UI/jeans.jpg"
+        },
+        heels: {
+          name: "Heels (Black)",
+          stats: "Bought by 180+ people",
+          rating: 4.3,
+          oldPrice: 100.00,
+          price: 85.00,
+          description: "Elegant black heels suitable for various occasions.",
+          image: "../Seller UI/heels.jpg"
+        },
+        jacket: {
+          name: "Denim Jacket",
+          stats: "Bought by 220+ people",
+          rating: 4.4,
+          oldPrice: 100.00,
+          price: 85.00,
+          description: "A classic denim jacket for everyday wear.",
+          image: "../Seller UI/jacket.jpg"
+        }
+      };
+
+      // Fetch the product details based on the product ID
+      const product = products[productId];
+
+      // Update the page with the product details
+      if (product) {
+        document.getElementById("product-image").src = product.image;
+        document.getElementById("product-name").textContent = product.name;
+        document.getElementById("product-stats").textContent = product.stats;
+        document.getElementById("product-rating").textContent = `⭐⭐⭐⭐☆ (${product.rating})`;
+        document.getElementById("product-price").innerHTML = `<s>$${product.oldPrice}</s> <span>$${product.price}</span>`;
+        document.getElementById("product-description-text").textContent = product.description;
+      } else {
+        document.getElementById("product-description").innerHTML = "<p>Product not found.</p>";
+      }
+    </script>
+  </body>
+</html>

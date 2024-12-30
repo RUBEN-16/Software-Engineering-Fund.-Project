@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    <div class="navbar">
+        <img src="../Seller UI/logo2 copy.png" alt="Logo" class="logo">
+        <ul class="nav-links">
+            <li><a href="../Seller UI/home.html" >Home</a></li>
+            <li><a href="../Seller UI/product.html">Products</a></li>
+            <li><a href="../Seller UI/about_us.html">About Us</a></li>
+            <li><a href="approved.html" class="active">Seller</a></li>
+        </ul>
+        <div class="nav-icons">
+            <a href="../Seller UI/e-wallet.html" class="icon" data-tooltip="E-wallet">
+                <img src="../Seller UI/wallet.png" alt="E-wallet">
+            </a>
+            <a href="../Seller UI/cart.html" class="icon" data-tooltip="Cart">
+                <img src="../Seller UI/cart.jpg" alt="Cart">
+            </a>
+            <a href="../Seller UI/profile.html" class="icon" data-tooltip="Profile">
+                <img src="../Seller UI/profile.jpg" alt="Profile">
+            </a>
+        </div>
+        <div class="menu-btn" id="menu-btn">
+            <div class="menu-icon"></div>
+            <div class="menu-icon"></div>
+            <div class="menu-icon"></div>
+            <div class="menu-links" id="menu-links">
+              <a href="about_us.html#contact" class="contact-us-btn">Contact Us</a>
+            </div>
+            </div>
+    </div>
+
+    <div class="profile-content">
+        <h1>Your Profile</h1>
+        <form>
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" placeholder="example@example.com" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Your Phone Number">
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>

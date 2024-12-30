@@ -1,0 +1,266 @@
+html, body {
+    height: 100%; 
+    margin: 0; 
+    padding: 0;
+    display: flex;
+  flex-direction: column;
+  }
+
+/* Navbar Styling */
+.navbar {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    background-color: #2d2d2d;
+    padding: 10px 20px;
+    height: 70px;
+}
+
+.navbar .logo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 40px; 
+}
+
+.navbar .nav-links {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 20px;
+    flex-grow: 1; 
+    justify-content: center;
+}
+
+.navbar .nav-links a {
+    text-decoration: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar .nav-links a:hover {
+    background-color: #2f4f4f;
+}
+
+/* Login button */
+.navbar .login-btn,
+.navbar .menu-btn {
+    margin-left: auto; 
+}
+
+.navbar .login-btn {
+    background-color: #73c436;
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-right: 45px; 
+}
+
+.navbar .login-btn:hover {
+    background-color: #58942a;
+    transform: translateY(-2px);
+}
+
+/* Menu button */
+.menu-btn {
+    position: relative;
+    cursor: pointer;
+}
+
+.menu-icon {
+    width: 30px;
+    height: 4px;
+    background-color: white;
+    margin: 5px 0;
+}
+
+.menu-links {
+    display: none;
+    position: absolute;
+    background-color: #73c436;
+    top: 30px;
+    right: 0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-links a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.menu-links a:hover {
+    color: #ffcc80;
+}
+
+.menu-btn:hover .menu-links {
+    display: inline-block;
+}
+
+.menu-links.show {
+    display: list-item;
+}
+
+.product-info {
+    display: flex;
+    gap: 30px;
+}
+
+#product-image {
+    max-width: 400px;
+    height: auto;
+    border-radius: 8px;
+    margin-left: 100px; 
+    margin-right: 20px; 
+}
+
+
+#product-description {
+    max-width: 600px;
+    color: #555;
+}
+
+#product-name {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2d2d2d;
+    margin-bottom: 15px;
+}
+
+#product-stats {
+    font-size: 1.1rem;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+#product-rating {
+    font-size: 1.3rem;
+    color: #ffcc00;
+    margin: 15px 0;
+}
+
+#product-price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #e60000;
+    margin: 15px 0;
+}
+
+#product-price s {
+    color: #888;
+    font-size: 1.2rem;
+    font-weight: normal;
+}
+
+#product-description-text {
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+/* Hover Options */
+.hover-options {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.hover-options input {
+    width: 60px;
+    padding: 10px;
+    font-size: 1.1rem;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+.hover-options button {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.hover-options button:hover {
+    background-color: #218838;
+}
+
+/* Add to Cart Button */
+.add-to-cart {
+    margin-top: 0px;
+    margin-right: 50%;
+}
+
+/* Add to Cart Button */
+.add-to-cart {
+    margin-top: 20px; 
+}
+
+#add-to-cart-btn {
+    background-color: #ff9900; 
+    color: white;
+    padding: 12px 30px; 
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: auto; 
+    max-width: 200px; 
+    display: block;
+    margin: 0 auto; 
+}
+
+#add-to-cart-btn:hover {
+    background-color: #e68a00; 
+    transform: translateY(-2px); 
+}
+
+
+footer {
+    background-color: #2d2d2d;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+    position: relative;
+}
+
+.footer-content p {
+    margin: 0;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #ffcc80;
+}
