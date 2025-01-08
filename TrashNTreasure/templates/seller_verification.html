@@ -1,27 +1,136 @@
 {% extends "index.html" %}
 {% block title %} Seller Verification {%endblock%}
 {%block content%}
+<link rel="stylesheet" href="../static/seller_verification.css">
 
-<h2>Seller Verification</h2>
-<form action="{{ url_for('seller.seller_verification') }}" method="POST" enctype="multipart/form-data">
-    {% if session.get('isExist') %}
-        <p>Your registration has been submitted successfully!</p>
-    {% else %}
-        <label for="user_id">User ID:</label>
-        <p>{{ user_id }}</p> <!-- Display the user ID for debugging -->
-        <br><br>
+<div class="content">
+    <!-- Hero Section --> 
+    <section class="hero">
+        <div class="msg">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {%if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span>{{ message }}</span>
+                            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+                        </div>
+                    {%endfor%}
+                {%endif%}
+            {%endwith%}
+        </div> 
+        <h1>Become a Seller</h1>
+        <p>Join our platform to start your selling journey and grow your business with ease.</p>
+    </section>
 
-        <label for="ic_picture">Upload your IC Picture:</label>
-        <input type="file" name="ic_picture" id="ic_picture" required><br><br>
+    <!-- Seller Request Form -->
+    <div class="become-seller">
+        <section class="form-container"> 
+            {% if session.get('isExist') %}
+                <p>Your registration has been submitted successfully!</p>
+            {% else %}
+            <h2>Seller Request Form</h2>
+            <form action="{{ url_for('seller.seller_verification') }}" method="POST" enctype="multipart/form-data">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" value="{{session["user_name"]}}" required>
+                
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" value="{{session["email"]}}" required>
+                
+                <label for="phone-number">Phone Number:</label>
+                <input type="text" id="phone-number" name="phone-number" placeholder="Your Phone Number" required>
 
-        <label for="profile_picture">Upload your Profile Picture:</label>
-        <input type="file" name="profile_picture" id="profile_picture" required><br><br>
+                <label for="description">Selling Product Description:</label>
+                <textarea id="description" name="description" rows="5" placeholder="Tell us about your products..." required></textarea>
 
-        <button type="submit">Submit</button>
-    {% endif %}
-</form>
+                <label for="ic_picture">Upload Photo Copy of Your Identification Card (Compulsory):</label>
+                <input type="file" id="ic_picture" name="ic_picture" accept=".pdf, .doc, .jpg, .png">
 
+                <label for="profile_picture">Upload Your Profile Picture (Compulsory):</label>
+                <input type="file" id="profile_picture" name="profile_picture" accept=".pdf, .doc, .jpg, .png"><br><br><br>
 
+                <button type="submit">Submit Request</button>
+            </form>
+            {%endif%}
+        </section>
+
+        <div class="seller-info">               
+            <!-- Benefits Section -->
+            <section class="benefits">
+                <div class="section-header">
+                    <h2>Why Sell With Us?</h2>
+                    <p>Discover the advantages of joining our platform as a seller.</p>
+                </div>
+                <div class="benefits-content">
+                    <div class="benefit-item">
+                        <img src="../static/images/customer-satisfaction.png" alt="Customers">
+                        <p>Access to millions of potential customers worldwide.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <img src="../static/images/tools.png" alt="Tools">
+                        <p>Easy-to-use tools for managing your products and orders.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <img src="../static/images/payment.png" alt="Payments">
+                        <p>Secure and reliable payment processing.</p>
+                    </div>
+                    <div class="benefit-item">
+                        <img src="../static/images/support.png" alt="Support">
+                        <p>Dedicated seller support team available 24/7.</p>
+                    </div>
+                </div>
+            </section>
+                
+                <!-- Guidelines Section -->
+            <section class="guidelines">
+                <div class="section-header">
+                    <h2>Guidelines for Becoming a Seller</h2>
+                    <p>Follow these simple steps to start your selling journey with us.</p>
+                </div>
+                <div class="guidelines-content">
+                    <div class="guideline-item">
+                        <span>1</span>
+                        <p>Complete the seller request form with accurate details.</p>
+                    </div>
+                    <div class="guideline-item">
+                        <span>2</span>
+                        <p>Upload necessary business documents if required.</p>
+                    </div>
+                    <div class="guideline-item">
+                        <span>3</span>
+                        <p>Wait for approval from our team (usually within 48 hours).</p>
+                    </div>
+                    <div class="guideline-item">
+                        <span>4</span>
+                        <p>Start adding your products to the platform and grow your business.</p>
+                    </div>
+                </div>
+            </section>
+                
+                <!-- FAQ Section -->
+            <section class="faq">
+                <div class="section-header">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Your top queries answered.</p>
+                </div>
+                <div class="faq-slider">
+                    <div class="faq-slide">
+                        <h3>How long does the approval process take?</h3>
+                        <p>It usually takes 24-48 hours for our team to review your application.</p>
+                    </div>
+                    <div class="faq-slide">
+                        <h3>What documents are required?</h3>
+                        <p>You may need to provide business registration certificates, tax identification, and proof of identity.</p>
+                    </div>
+                    <div class="faq-slide">
+                        <h3>Is there a fee for selling on the platform?</h3>
+                        <p>There is no registration fee. A small commission is charged on each sale.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+</div>
 
 
 {%endblock%}

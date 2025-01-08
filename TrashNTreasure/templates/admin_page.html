@@ -3,57 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/static/navi_admin.css">
 </head>
 <body>
-    <div class="dashboard-container">
+    <div class="dashboard-container"> 
         <!--Side bar-->
-        <aside class="sidebar">
-        </div>
-        <header class="header">
+        <aside class="sidebar"> 
             <div class="logo">
                 <a href="{{url_for("admin.dashboard")}}">
-                    <img src="/static/logo2.png" alt="LOGO"/>
+                    <img src="/static/images/logo2.png" alt="LOGO"/>
                 </a>
-                <h2>Admin</h2>
             </div>
+            <h2>Admin</h2>
             <nav>
                 <ul>
-                    <li><a href="#"><i class="fas fa-users"></i> User Management</a></li>
-                    <li><a href="#"><i class="fas fa-truck"></i> Logistics Management</a></li>
-                    <li><a href="#"><i class="fas fa-boxes"></i> Inventory</a></li>
-                    <li><a href="{{url_for('admin.seller_approval')}}"><i class="fas fa-check-circle"></i> Seller Approval</a></li>
+                    <li><a href="{{url_for("admin.user_management")}}">User Management</a></li>
+                    <li><a href="{{url_for("admin.logistic_management")}}">Logistics Management</a></li>
+                    <li><a href="{{url_for("admin.inventory")}}">Inventory</a></li>
+                    <li><a href="{{url_for('admin.seller_approval')}}">Seller Approval</a></li>
+                </ul>
             </nav>
         </aside>
-    
-        
-        <div class="menu">
-            <ul>
-                {% if show_back_button %}
-                    <li><a href="{{url_for("admin.dashboard")}}">Back</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </header>
-    
-      <!-- Navigation Bar -->
-    <nav class="navbar">
-        <ul>
-          <li><a href="">Home</a></li>
-          <li><a href="">About Us</a></li>
-          <li><a href="">Product</a></li>
-          <li><a href="">Contact</a></li>
-        </ul>
-    </nav>
+        <!-- Main Content -->
+        <main class="main-content">
+
+            
+
+            <!-- Header --> 
+            <header class="header">
+                <h1>Dashboard</h1>
+                <div class="profile">
+                    <span>Welcome, {{session["admin_name"]}}</span>
+                    <div class="msg">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {%if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }}">
+                                        <span>{{ message }}</span>
+                                        <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+                                    </div>
+                                {%endfor%} 
+                            {%endif%}
+                        {%endwith%}
+                    </div>
+                    <div class="profile-img">
+                        <img src="/static/images/profile.png" alt="Profile">
+                            <div class="profile-dropdown">
+                                <ul>
+                                    <li><a href="{{url_for('admin.logout')}}">Log Out</a></li>
+                                    <li><a href="signUp.html">Sign Out</a></li>
+                                    <li><a href="#">Change Password</a></li>
+                                </ul>
+                            </div>
+                    </div>
+                </div>
+            </header>
 
     {%block content%}
-        <h1>Welcome, {{admin}}!</h1>
-        <p>You are now logged in as an administrator.</p>
-        <hr>
-        <a href="{{url_for('admin.logout')}}" class="btn btn-primary btn-block">Logout</a>
-        <a href="{{url_for('admin.adding_logistic')}}">ADD MEMBER</a>
-        <a href="{{url_for('admin.manage_users')}}">Manage user</a>
+        <section class="dashboard-cards">
+            <div class="card email">
+                <img src="/static/images/email.jpg" alt="Email">
+                <p>Email</p>
+                <div class="email-dropdown">
+                    <ul>
+                        <li><a href="#">New Email</a></li>
+                        <li><a href="#">Sent Email</a></li>
+                        <li><a href="#">Draft</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="/static/images/pending.jpg" alt="Pending">
+                <p>Pending Requests</p>
+            </div>
+            <div class="card notification">
+                <img src="/static/images/notification.jpg" alt="Notification">
+                <p>New Notifications</p>
+                <div class="notification-dropdown">
+                    <ul>
+                        <li><a href="#">New Messages</a></li>
+                        <li><a href="#">Request Approval</a></li>
+                        <li><a href="#">System Update</a></li>
+                    </ul>
+            </div>
+            </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="quick-links">
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="{{url_for("admin.user_management")}}">Manage Users</a></li>
+                <li><a href="{{url_for("admin.inventory")}}#add-item">Add Inventory Items</a></li>
+                <li><a href="{{url_for('admin.seller_approval')}}">Review Seller Requests</a></li>
+            </ul>
+        </section>
     {%endblock%}
 </body>
 </html>

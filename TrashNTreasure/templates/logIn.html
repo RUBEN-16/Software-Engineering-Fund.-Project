@@ -16,7 +16,7 @@
                     {%endfor%}
                 {%endif%}
             {%endwith%}
-        </div>
+        </div> 
         
         <form action="/login" method='post'>
             <div class="top">
@@ -29,6 +29,7 @@
                 <input type="password" name="password" placeholder="Password" required>
             </div>
             <br>
+            <p>Don’t have an account? <a href="{{url_for("signup")}}" class="register-link">Register</a></p>
             <div class="form-group">
                 <input type="submit" name="submit" value="Login" required>
             </div>

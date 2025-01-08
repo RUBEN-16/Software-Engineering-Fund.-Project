@@ -17,15 +17,16 @@
                 {%endif%}
             {%endwith%}
         </div>
-        <div class="top">
+        <div class="top"> 
             <header><h1>Sign Up</h1></header>
         </div>
 
-        <form action="#" method="post">
+        <form action="/signup" method="POST">
             <p><input type="text" name="first_name" placeholder="First Name" required></p>
             <p><input type="text" name="last_name" placeholder="Last Name" ></p>
             <p><input type="email" name="email" placeholder="Email" required></p>
             <p><input type="password" name="password" placeholder="Password" required></p>
+            <p><input type="password" name="confirm_password"placeholder="Confirm Password" required></p>
             <center><p><input type="submit" value="Register" /></p></center>
         </form>
     </div>

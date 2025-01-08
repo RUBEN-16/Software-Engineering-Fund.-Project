@@ -19,6 +19,7 @@ def login():
             
             for admin in admins:
                 if admin["Username"] == username and admin["Password"] == password:
+                    session["admin_id"] = admin["Username"] 
                     session["admin_name"] = admin["Name"] 
                     return redirect(url_for("admin.dashboard"))
                 
@@ -31,7 +32,7 @@ def login():
 
 @admin_blueprint.route("/")
 def dashboard():
-    if "admin_name" in session:
+    if "admin_id" in session:
         return render_template("admin_page.html", admin = session["admin_name"])    
     else:
         flash("Please log in to access the admin account.", "danger")
@@ -39,7 +40,7 @@ def dashboard():
 
 @admin_blueprint.route("/addLogistic", methods=["POST", "GET"])
 def adding_logistic():
-    if "admin_name" not in session:  # Check if admin is logged in
+    if "admin_id" not in session:  # Check if admin is logged in
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("admin.login"))
     
@@ -52,8 +53,6 @@ def adding_logistic():
                 lname = request.form["last_name"]
                 email = request.form["email"]
                 password = request.form["password"]
-                
-                
                 
                 con = get_connect_db() # Initialize the connection here
                 cur = con.cursor()
@@ -74,30 +73,79 @@ def adding_logistic():
         finally:
             if con:  # Check if con is initialized
                 con.close()
-    return render_template("mem_hiring.html")
+    return render_template("logistic_management.html")
 
-    
-@admin_blueprint.route('/manage_users')
-def manage_users():
-    if "admin_name" not in session:  # Check if admin is logged in
+@admin_blueprint.route("/logistic_management")
+def logistic_management():
+    if "admin_id" not in session:  # Check if admin is logged in
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("admin.login"))
     
     con = get_connect_db()
     cur = con.cursor()
-    cur.execute("SELECT pid, firstName, lastName, email FROM user")
-    users = cur.fetchall()
+    cur.execute("SELECT pid, firstName, lastName, email FROM member")
+    members = cur.fetchall()
+    con.close()
+    members = [{"id": member[0], "first_name": member[1], "last_name": member[2], "email": member[3]} for member in members]
+
+    return render_template("logistic_management.html", members=members,)
+
+@admin_blueprint.route("/inventory") 
+def inventory():
+    if "admin_id" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
+    
+    con = get_connect_db()
+    cur = con.cursor()
+    cur.execute("SELECT name, quantity, condition, price, id FROM products")
+    products = cur.fetchall()
+    con.close()
+
+    # Convert products to dictionaries
+    products = [{"name": product[0], "quantity": product[1], "condition": product[2], "price": product[3], "id": product[4]} for product in products]
+    return render_template('inventory.html', products=products,)
+    
+    
+@admin_blueprint.route('/product_management')
+def user_management():
+    if "admin_id" not in session:  # Check if admin is logged in
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
+    
+    con = get_connect_db()
+    cur = con.cursor()
+    users = cur.execute("SELECT pid, firstName, lastName, email FROM user").fetchall()
+    sellers = cur.execute("SELECT id, name, email FROM sellers").fetchall()
     con.close()
 
     # Convert users to dictionaries
     users = [{"id": user[0], "first_name": user[1], "last_name": user[2], "email": user[3]} for user in users]
+    sellers = [{"id": seller[0], "name": seller[1], "email": seller[2]} for seller in sellers]
     return render_template(
         'user_management.html', 
         users=users,
-        show_back_button = True,  # Enable Back button
-        back_url=url_for('admin.dashboard')  # Specify where Back button points
+        sellers=sellers
     )
  
+@admin_blueprint.route("/view_user/<id>", methods=["POST", "GET"])
+def view_user(id):
+    try:
+        con = get_connect_db()
+        cur = con.cursor()
+        cur.execute("SELECT * FROM user WHERE pid = ?", (id,))
+        user = cur.fetchone()
+        if not user:
+            flash("User not found.", "warning")
+            return redirect(url_for("admin.user_management"))
+        con.commit()        
+    except Exception as e:
+        flash(f"An error occurred: {e}", "danger")
+    finally:
+        if con:
+            con.close()
+            
+    return render_template("user_view.html", user=user)
 
 @admin_blueprint.route("/remove_user/<id>", methods=["POST", "GET"])
 def delete_user(id):
@@ -108,7 +156,7 @@ def delete_user(id):
         user = cur.fetchone()
         if not user:
             flash("User not found.", "warning")
-            return redirect(url_for("admin.manage_users"))
+            return redirect(url_for("admin.user_management"))
         cur.execute("DELETE FROM user WHERE pid = ?", (id,))
         con.commit()
         
@@ -121,11 +169,11 @@ def delete_user(id):
         if con:
             con.close()
             
-    return redirect(url_for("admin.manage_users"))
+    return redirect(url_for("admin.user_management"))
 
 @admin_blueprint.route("/seller_approval")
 def seller_approval():
-    if "admin_name" not in session:
+    if "admin_id" not in session:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("admin.login"))
 
@@ -144,12 +192,12 @@ def seller_approval():
 
 @admin_blueprint.route("/view_seller/<int:seller_id>", methods=["POST"])
 def view_seller(seller_id):
-    if "admin_name" not in session:
+    if "admin_id" not in session:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("admin.login"))
 
     con = get_connect_db()
-    cur = con.cursor()
+    cur = con.cursor() 
     cur.execute("""
         SELECT sr.*, u.firstName, u.lastName, u.email 
         FROM seller_registration sr 
@@ -160,10 +208,10 @@ def view_seller(seller_id):
     con.close()
 
     if not seller_details:
-        flash("Seller not found.", "danger")
+        flash("Seller not found.", "danger") 
         return redirect(url_for("admin.seller_approval"))
 
-    return render_template("seller_details.html", seller_details=seller_details)
+    return render_template("seller_details.html", seller_details=seller_details)  
 
 @admin_blueprint.route("/approve_seller/<int:seller_id>", methods=["POST"])
 def approve_seller(seller_id):
@@ -206,3 +254,4 @@ def logout():
     session.clear()
     flash("You have been logged out.", "info")
     return redirect(url_for("admin.login"))
+

@@ -1,0 +1,176 @@
+/* Body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('../static/images/logistic.png');  /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+    color: rgb(103, 98, 98);
+    line-height: 1.6;
+}
+
+/* Header styles */ 
+.hdr {
+    text-align: center; 
+    padding: 20px;
+    background-color: #333;
+    color: #fff; 
+}
+
+.hdr h1 {
+    font-size: 2.5em;
+}
+
+  /* Navigation */
+  .logis-mng {
+    margin-bottom: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .logis-mng ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    background-color: #4CAF50;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .logis-mng ul li {
+    flex: 1;
+  }
+  
+  .logis-mng ul li a {
+    display: block;
+    text-align: center;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: background-color 0.3s;
+  }
+  
+  .logis-mng ul li a:hover {
+    background-color: #45a049;
+  } 
+
+/* Container for centering the sections */
+.container {
+    width: 80%; /* Set the width of the container */
+    max-width: 900px; /* Maximum width for larger screens */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+/* Content Sections */
+.content-section {
+    display: none; /* Hide all sections by default */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+  }
+  
+  .content-section:target {
+    display: block; /* Show the section when targeted */
+  }
+
+/* Section styles */
+section {
+    background-color: #fff;
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.2em;
+}
+
+form button:hover {
+    background-color: #218838;
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #777;
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.9em;
+    color: #777;
+    padding: 20px 0;
+    background-color: #fff;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+}
+
+footer .return-btn {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    font-size: 1.2em;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 30px;  /* Space between the button and the copyright */
+}
+
+footer .return-btn:hover {
+    background-color: #2980b9;
+}
+
+footer p {
+    margin-bottom: 20px;  /* Space between the copyright and the button */
+}
+
+.hdr2 {  
+    font-size: 30px;
+    text-align: center;
+    color: #000000;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+    color: #333;
+}

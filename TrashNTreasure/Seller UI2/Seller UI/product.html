@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products - Trash and Treasure</title>
+    <link rel="stylesheet" href="product.css" />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header>
+      <div class="navbar">
+        <img src="../Seller UI/logo2 copy.png" alt="Logo" class="logo" />
+        <ul class="nav-links">
+          <li><a href="../Seller UI/home.html">Home</a></li>
+          <li><a href="../Seller UI/product.html">Products</a></li>
+          <li><a href="../Seller UI/about_us.html">About Us</a></li>
+        </ul>
+        <a href="../Seller UI/login_signup.html" class="login-btn">Login</a>
+        <div class="menu-btn" id="menu-btn">
+          <div class="menu-icon"></div>
+          <div class="menu-icon"></div>
+          <div class="menu-icon"></div>
+          <div class="menu-links" id="menu-links">
+            <a href="../Seller UI/profile.html">Profile</a>
+            <a href="about_us.html#contact" class="contact-us-btn">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </header> 
+
+    <!-- Category Section -->
+    <section class="category-section">
+      <div class="category-dropdown">
+        <label for="categories">Filter by Category:</label>
+        <select id="categories">
+          <option value="all">All</option>
+          <option value="electronics">Electronics</option>
+          <option value="fashion">Fashion</option>
+        </select>
+         <!-- Search Box -->
+    <div class="search-box">
+        <input type="text" id="search" placeholder="Search products..." />
+        <button class="search-btn">
+          <img src="../Seller UI/search-icon.png" alt="Search" />
+        </button>
+      </div>
+      </div>
+    </section>
+
+    <!-- Product Grid Section -->
+<section class="product-grid" id="product-grid">
+    <!-- Electronics -->
+    <div class="product-item" data-category="electronics">
+      <a href="product-details.html?product=phone">
+        <img src="../Seller UI/phone.jpg" alt="Flip-Phone" />
+        <p>Aquous Flip Phone (Pink)</p>
+      </a>
+      <p class="stats">Bought by 150+ people</p>
+      <div class="rating">
+        <span>⭐⭐⭐⭐☆</span> (4.2)
+      </div>
+      <p><s>$300.00</s> <span>$250.00</span></p>
+      <!-- Hover Options -->
+      <div class="hover-options">
+        <input type="number" value="1" min="1" />
+        <button>Add to Cart</button>
+      </div>
+    </div>
+  
+    <div class="product-item" data-category="electronics">
+      <a href="product-details.html?product=laptop">
+        <img src="../Seller UI/laptop.jpg" alt="Laptop" />
+        <p>MacBook Laptop (Silver)</p>
+      </a>
+      <p class="stats">Bought by 300+ people</p>
+      <div class="rating">
+        <span>⭐⭐⭐⭐⭐</span> (4.8)
+      </div>
+      <p><s>$1200.00</s> <span>$1100.00</span></p>
+      <div class="hover-options">
+        <input type="number" value="1" min="1" />
+        <button>Add to Cart</button>
+      </div>
+    </div>
+  
+    <div class="product-item" data-category="electronics">
+      <a href="product-details.html?product=headphones">
+        <img src="../Seller UI/headphones.jpg" alt="Headphones" />
+        <p>Baseus Wireless Headphones (Green)</p>
+      </a>
+      <p class="stats">Bought by 200+ people</p>
+      <div class="rating">
+        <span>⭐⭐⭐⭐☆</span> (4.4)
+      </div>
+      <p><s>$100.00</s> <span>$80.00</span></p>
+      <div class="hover-options">
+        <input type="number" value="1" min="1" />
+        <button>Add to Cart</button>
+      </div>
+    </div>
+  
+    <!-- No items available message -->
+<div id="no-items-message" style="display: none; text-align: center; font-size: 1.5rem; color: #ff4040;">
+    <p>No items available</p>
+  </div>
+
+    <!-- Fashion -->
+    <div class="product-item" data-category="fashion">
+      <a href="product-details.html?product=tshirt">
+        <img src="../Seller UI/tshirt.png" alt="Graphic T-Shirt" />
+        <p>Graphic T-Shirt (Olive Green)</p>
+      </a>
+      <p class="stats">Bought by 500+ people</p>
+      <div class="rating">
+        <span>⭐⭐⭐⭐☆</span> (4.5)
+      </div>
+      <p><s>$20.00</s> <span>$15.00</span></p>
+      <div class="hover-options">
+        <input type="number" value="1" min="1" />
+        <button>Add to Cart</button>
+      </div>
+    </div>
+  
+    <div class="product-item" data-category="fashion">
+      <a href="product-details.html?product=jeans">
+        <img src="../Seller UI/jeans.jpg" alt="Navy Blue Jeans" />
+        <p>High-Waist Jeans (Navy Blue)</p>
+      </a>
+      <p class="stats">Bought by 250+ people</p>
+      <div class="rating">
+        <span>⭐⭐⭐⭐⭐</span> (4.7)
+      </div>
+      <p><s>$50.00</s> <span>$40.00</span></p>
+      <div class="hover-options">
+        <input type="number" value="1" min="1" />
+        <button>Add to Cart</button>
+      </div>
+    </div>
+  
+    <div class="product-item" data-category="fashion">
+      <a href="product-details.html?product=heels">
+        <img src="../Seller UI/heels.jpg" alt="Black Heels" />
+        <p>Heels (Black)</p>
+      </a>
+      <p class="stats">Bought by 180+ people</p>
+      <div class="rating">
+        <span>⭐⭐⭐⭐☆</span> (4.3)
+      </div>
+      <p><s>$100.00</s> <span>$85.00</span></p>
+      <div class="hover-options">
+        <input type="number" value="1" min="1" />
+        <button>Add to Cart</button>
+      </div>
+    </div>
+  
+    <div class="product-item" data-category="fashion">
+      <a href="product-details.html?product=jacket">
+        <img src="../Seller UI/jacket.jpg" alt="Denim Jacket" />
+        <p>Denim Jacket</p>
+      </a>
+      <p class="stats">Bought by 220+ people</p>
+      <div class="rating">
+        <span>⭐⭐⭐⭐☆</span> (4.4)
+      </div>
+      <p><s>$100.00</s> <span>$85.00</span></p>
+      <div class="hover-options">
+        <input type="number" value="1" min="1" />
+        <button>Add to Cart</button>
+      </div>
+    </div>
+  </section>  
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2024 Trash and Treasure. All Rights Reserved.</p>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <script>
+      const categoriesDropdown = document.getElementById("categories");
+const productGrid = document.getElementById("product-grid");
+const productItems = productGrid.getElementsByClassName("product-item");
+const noItemsMessage = document.getElementById('no-items-message');
+
+// Function to handle the search
+function handleSearch() {
+    const query = document.getElementById('search').value.toLowerCase();
+    const selectedCategory = document.getElementById('categories').value;
+    const productItems = document.querySelectorAll('.product-item');
+    let itemFound = false;
+
+    // Hide the "No items available" message by default
+    noItemsMessage.style.display = 'none';
+
+    // Loop through all product items
+    productItems.forEach(item => {
+        const productName = item.querySelector('p').textContent.toLowerCase();
+        const productCategory = item.getAttribute('data-category');
+
+        if (
+            productName.includes(query) &&
+            (selectedCategory === 'all' || productCategory === selectedCategory)
+        ) {
+            item.style.display = 'block'; // Show matching item
+            itemFound = true; // If a match is found
+        } else {
+            item.style.display = 'none'; // Hide non-matching item
+        }
+    });
+
+    // Show "No items available" message if no item matches
+    if (!itemFound) {
+        noItemsMessage.style.display = 'block';
+    }
+}
+
+// Event listener for the search button click
+document.querySelector('.search-btn').addEventListener('click', handleSearch);
+
+// Event listener for pressing the Enter key inside the search input
+document.getElementById('search').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        handleSearch(); // Trigger the search when Enter is pressed
+    }
+});
+
+// Event listener for category change
+categoriesDropdown.addEventListener("change", function () {
+    // Reset the "No items available" message every time the category changes
+    noItemsMessage.style.display = 'none';
+
+    const selectedCategory = this.value;
+
+    for (let item of productItems) {
+        if (
+            selectedCategory === "all" ||
+            item.getAttribute("data-category") === selectedCategory
+        ) {
+            item.style.display = "block";
+        } else {
+            item.style.display = "none";
+        }
+    }
+
+    // Re-run the search to check if there are any matching items
+    handleSearch();
+});
+  document.addEventListener("DOMContentLoaded", () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    document.querySelectorAll(".product-item").forEach((productItem) => {
+      productItem.querySelector("button").addEventListener("click", () => {
+        const product = {
+          id: productItem.querySelector("img").alt,
+          name: productItem.querySelector("p").textContent,
+          price: parseFloat(
+            productItem.querySelector("p span").textContent.replace("$", "")
+          ),
+          quantity: parseInt(
+            productItem.querySelector("input").value
+          ),
+          image: productItem.querySelector("img").src,
+        };
+
+        // Check if the product already exists in the cart
+        const existingProduct = cart.find((item) => item.id === product.id);
+        if (existingProduct) {
+          existingProduct.quantity += product.quantity;
+        } else {
+          cart.push(product);
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(`${product.name} added to cart!`);
+      });
+    });
+  });
+    </script>
+  </body>
+</html>

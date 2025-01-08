@@ -1,0 +1,36 @@
+{%extends "logistic_page.html"%}
+{%block content%}
+<link rel="stylesheet" href="../static/pickup_manage.css">
+    <section id="requests">
+        <h2>Manage Pickup Requests</h2>
+        <form action="#">
+            <label for="request-id">Request ID:</label>
+            <input type="text" id="request-id" name="request-id" required><br>
+            <label for="details">Request Details:</label>
+            <textarea id="details" name="details" rows="4" required></textarea><br>
+            <button type="submit">Approve Request</button>
+        </form>
+    </section> 
+
+    <section id="assign">
+        <h2>Assign Courier</h2>
+        <form action="#">
+            <label for="courier">Courier Name:</label>
+            <input type="text" id="courier" name="courier" required><br>
+            <label for="pickup-id">Pickup ID:</label>
+            <input type="text" id="pickup-id" name="pickup-id" required><br>
+            <button type="submit">Assign</button>
+        </form>
+    </section>
+
+    <section id="tracking">
+        <h2>Tracking & Status</h2>
+        <p>View real-time updates on the status of pickups.</p>
+        <button>View Tracking</button>
+    </section>
+
+    <footer>
+        <button class="return-btn" onclick="window.location.href='../logistic/logistics_dashboard.html'">Return to Dashboard</button>
+        <p>&copy; 2024 Trash N Treasure Logistics Reports</p>
+    </footer>
+{%endblock%}

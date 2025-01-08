@@ -1,39 +1,79 @@
 {% extends "index.html" %}
 {% block title %} C Page {%endblock%}
 {%block content%}
-<div>
-    <h1 class="text-success">Product</h1>
-</div>
-{% if isSeller %}
-    <a href="{{url_for("product.add_product")}}">Add product</a>
-{% endif %}
-<form action="{{ url_for('product.search_product') }}" method="get">
-    <input type="text" name="query" placeholder="Search products..." required>
-    <button type="submit">Search</button>
-</form>
-{% if search_query %}
-    <h3>Search Results for "{{ search_query }}"</h3>
-{% else %}
-    <h3>All Products</h3>
-{% endif %}
+    <!-- Category Section -->
+    <link rel="stylesheet" href="/static/product.css"/>
+    <section class="category-section">
+      <div class="category-dropdown">
+        <label for="categories">Filter by Category:</label>
+        <select id="categories" onchange="filterByCategory()">
+          <option value="all">Category</option>
+          <option value="all">All</option>
+          <option value="Home Decor">Home Decor</option>
+          <option value="Furniture">Furniture</option>
+          <option value="Desk Accessories">Desk Accessories</option>
+          <option value="Clothing/Wear">Clothing/Wear</option>
+        </select>
+         <!-- Search Box -->
+    <div class="search-box">
+        <form action="{{ url_for('product.search_product') }}" method="get">
+            <input type="text" name="query" placeholder="Search products..." required>
+        </form>        
+        <button class="search-btn">
+          <img src="../static/images/search-icon.png" alt="Search" />
+        </button>
+      </div>
+      </div>
+    </section>
+    <div>
+      {% if search_query %}
+        <h3>Search Results for "{{ search_query }}"</h3>
+      {% endif %}
+    </div>
+    
 
-<ul>
+    <!-- Product Grid Section -->
+<section class="product-grid" id="product-grid">
     {% for product in products %}
-        <li>
-            <h4>{{ product.name }}</h4>
-            <p>Category: {{ product.category }}</p>
-            <p>Price: ${{ product.price }}</p>
-            <p>Quantity: {{ product.quantity }}</p>
-            <p>Condition: {{ product.condition }}</p>
-            {% if product.image_path %}
-                <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.name }}">
-            {% endif %}
-        </li>
+      <div class="product-item">
+        <img src="{{ product.image_path }}" alt="{{ product.name }}" />
+        <a href="{{url_for("product.item_detail", id=product.id)}}">{{ product.name }}</a>
+        <p>Quantity: {{ product.quantity }}</p>
+        <p>Condition: {{ product.condition }}</p>
+        <div class="rating">
+          <span>⭐⭐⭐⭐☆</span> (4.4)
+        </div>
+        <p><s>RM1{{ product.price }}</s> <span>RM{{ product.price }}</span></p>
+        <div class="hover-options">
+          <input type="number" value="1" min="1" />
+          <button>Add to Cart</button>
+        </div>
+      </div>
     {% endfor %}
-</ul>
 
-{% if not products %}
-    <p>No products available.</p>
-{% endif %}
+    {% if not products %}
+      <p>No products available.</p>
+    {% endif %}
+</ul>
+  </section>  
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2024 Trash and Treasure. All Rights Reserved.</p>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <script>
+       // Function to filter products by category
+        function filterByCategory() {
+            const selectedCategory = document.getElementById("categories").value;
+            window.location.href = "{{ url_for('product.filter_product') }}?category=" + selectedCategory;
+        }
+    </script>
 
 {%endblock%}

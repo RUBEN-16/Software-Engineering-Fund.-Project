@@ -1,0 +1,98 @@
+{% extends "admin_page.html" %}
+{% block title %}Logistic Management{%endblock%}
+{%block content%}
+
+<link rel="stylesheet" href="/static/inventory.css">
+<script>
+  // Confirmation dialog function
+  function confirmDeletion(event, name) {
+      const confirmation = confirm(`Are you sure you want to delete ${name}?`);
+      if (!confirmation) {
+          event.preventDefault(); // Prevent form submission
+      }
+  }
+</script>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1 class="hdr">Inventory Management</h1>
+    </header>
+
+    <!-- Navigation --> 
+    <nav class="invntry-mng">
+      <ul>
+        <li><a href="#add-item">Add Item</a></li>
+        <li><a href="#inventory-tracking">Inventory Tracking</a></li>
+        <li><a href="#remove-item">Remove Item</a></li>
+      </ul>
+    </nav>
+
+    <!-- Add Item Section -->
+    <section id="add-item" class="content-section">
+      <h2>Add Item</h2>
+      <form action="{{url_for("product.add_product")}}" method="post" enctype="multipart/form-data">
+        <label for="product_name">Product Name:</label>
+        <input type="text" id="product_name" name="product_name" required>
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+        <label for="condition">Condition:</label>
+        <select id="condition" name="condition" required>
+            <option value="New">New</option>
+            <option value="Used">Used</option>
+        </select>
+        <label for="admin_id">Admin ID:</label>
+        <input type="text" id="admin_id" name="admin_id" value="{{ session["admin_id"] }}" readonly>
+        <label for="image">Product Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+        <label for="video">Product Video:</label>
+        <input type="file" id="video" name="video" accept="video/*"><br>  
+        <button type="submit">Add Product</button>
+      </form>
+    </section>
+
+    <!-- Inventory Tracking Section -->
+    <section id="inventory-tracking" class="content-section">
+      <h2>Inventory Tracking</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Condition</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+              <tr>
+                  <td>{{ product.name }}</td>
+                  <td>{{ product.quantity }}</td>
+                  <td>{{ product.condition }}</td>
+                  <td>RM {{ product.price }}</td>
+              </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Remove Item Section -->
+    <section id="remove-item" class="content-section">
+      <h2>Remove Item</h2>
+      
+    </section>
+
+    <footer>
+        <button class="return-btn" onclick="window.location.href='admin_page.html'">Return to Admin Page</button>
+        <p></p>
+        <p>&copy; 2024 Trash N Treasure Inventory System</p>
+    </footer>
+  </div>
+</body>
+{%endblock%}

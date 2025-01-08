@@ -1,0 +1,148 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1, h2 {
+    color: #2c3e50;
+}
+
+/* Header Styles */
+header {
+    background-color: #292eb9;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header .container-about {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: #fff;    
+}
+
+.container-about nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.container-about nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.container-about nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+.container-about nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Unique Styling for the Home Link */
+.home-link {
+    color: #2e3324; /* Highlight color */
+    font-size: 1.2rem; /* Slightly larger font size */
+    font-weight: 700; /* Bold font weight */
+    text-transform: uppercase; /* Make the text uppercase */
+    padding: 0.5rem 1rem; /* Add padding for a button-like look */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #00ffe1f6; /* Matching background color */
+    transition: all 0.3s ease-in-out; /* Smooth transition for hover effect */
+}
+
+.home-link:hover {
+    color: #ffffff; /* On hover, text turns to the background color */
+    background-color: #458a00; /* Background turns to highlight color */
+    transform: scale(1.1); /* Slightly increase the size */
+}
+
+/* For Active Link (when on the home page) */
+.home-link.active {
+    color: white; /* Keep text color white */
+    background-color: #05abf2; /* Highlight color for active state */
+    font-size: 1.6rem; /* Slightly larger font size for emphasis */
+}
+
+
+/* Section Styles */
+.section {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.section .container-about {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.section p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #292eb9;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+}
+
+.about-image {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+}
+
+.mission-icon, .contact-icon {
+    text-align: center;
+    font-size: 4rem; /* Make the icon large */
+    color: #3b8b9d;
+    margin-top: 1.5rem;
+    position: relative; /* Position the image inside the icon container-about */
+}
+
+.icon-image {
+    width: 600px; /* Adjust the image size */
+    height: 400px;
+    margin-left: 10px; /* Space between icon and image */
+    vertical-align: middle; /* Align image with icon */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    .container-about nav ul li {
+        display: block;
+        margin: 10px 0;
+    }
+
+    .section {
+        padding: 30px 15px;
+    }
+}

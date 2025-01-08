@@ -17,6 +17,7 @@ def login():
 
         if data:
             session["member_name"] = data["firstName"]  
+            session["member_id"] = data["pid"]  
             return redirect(url_for("logistic.dashboard"))
         else:
             flash("Invalid username or password", "danger")
@@ -26,12 +27,44 @@ def login():
 
 
 @logistic_blueprint.route("/")
-def dashboard():
-    if "member_name" in session:
+def dashboard():    
+    if "member_id" in session:
         return render_template("logistic_page.html")
     else:
         flash("Please log in to access the admin account.", "danger")
         return redirect(url_for("logistic.login"))
+    
+@logistic_blueprint.route("/pickup_manage")
+def pickup_management():
+    if "member_id" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("logistic.login"))
+    
+    return render_template("pickup_management.html")
+
+@logistic_blueprint.route("/delivery_manage")
+def delivery_management():
+    if "member_id" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("logistic.login"))
+    
+    return render_template("delivery_management.html")
+
+@logistic_blueprint.route("/order_manage")
+def order_management():
+    if "member_id" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("logistic.login"))
+    
+    return render_template("order_management.html")
+
+@logistic_blueprint.route("/report")
+def logistics_reports():
+    if "member_id" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("logistic.login"))
+    
+    return render_template("logistics_reports.html")
 
 @logistic_blueprint.route("/logout")
 def logout():

@@ -5,7 +5,7 @@ body {
 }
 
 /* Header Styles */
-.header {
+.header { 
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,7 +15,7 @@ body {
 }
 
 .header .logo img {
-  width: 40px;
+  width: 60px;
   height: auto;
 }
 
@@ -34,7 +34,7 @@ body {
 .header .menu ul li a {
   text-decoration: none;
   color: white;
-  padding: 5px 10px;
+  padding: 15px 30px;
   transition: background-color 0.3s;
 }
 
@@ -50,67 +50,90 @@ body {
   border-radius: 5px;
 }
 
-/* Dropdown Menu Styles */
-.menu_logo {
-  position: relative;
-}
-
-.menu-link {
-  text-decoration: none;
-  color: white;
-  font-size: 16px;
-  padding: 5px 10px;
-  display: inline-block;
-  transition: background-color 0.3s;
-}
-
 /* Hover effect for MENU link */
-.menu-link:hover {
+.dropdown-icon:hover {
   background-color: #555;
   border-radius: 5px;
 }
 
-/* Dropdown menu hidden by default */
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  color: black;
-  border: 1px solid #ccc;
-  list-style: none;
-  padding: 10px 0;
-  width: 200px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-  z-index: 100;
+.menu img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 
-/* Styling for dropdown menu items */
-.dropdown-menu li {
+.cart {
+  display: flex;
+  width: 120px;
+  margin-top: 4px;
+}
+
+.cart img {
+  width: 60px;
+  height: 40px;
+}
+
+.login {
+  text-decoration: none;
+  color: white;
+  font-size: 17px;
+  padding: 15px 40px;
+  transition: background-color 0.3s;
+}
+
+/* Menu button */
+.dropdown-btn {
+  position: relative;
+  cursor: pointer;
+  margin: 8px 10px;
+}
+
+.dropdown-icon {
+  width: 30px;
+  height: 4px;
+  background-color: white;
+  margin: 5px 0;
+}
+
+.dropdown-links {
+  display: none;
+  position: absolute;
+  background-color: #73c436;
+  top: 30px;
+  width: 120px;
+  right: 0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100; 
+}
+
+.dropdown-links a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
   padding: 10px 15px;
 }
 
-.dropdown-menu li a {
-  text-decoration: none;
-  color: black;
-  display: block;
+.dropdown-links a:hover {
+  color: #ffcc80;
 }
 
-.dropdown-menu li a:hover {
-  background-color: #f1f1f1;
+.dropdown-btn:hover .dropdown-links {
+  display: inline-block;
 }
 
-/* Show the dropdown menu on hover */
-.menu_logo:hover .dropdown-menu {
-  display: block;
+.dropdown-links.show {
+  display: list-item;
 }
 
 /* Navigation Bar */
 .navbar {
   text-align: center;
-  background-color: #444;
+  background-color: #333;
   padding: 10px 0;
+  padding-right: 300px;
 }
 
 .navbar ul {
@@ -128,8 +151,8 @@ body {
 .navbar ul li a {
   text-decoration: none;
   color: white;
-  font-size: 16px;
-  padding: 5px 10px;
+  font-size: 17px;
+  padding: 15px 30px;
   transition: background-color 0.3s;
 }
 
@@ -137,3 +160,11 @@ body {
   background-color: #666;
   border-radius: 5px;
 }
+
+/* Active state */
+.navbar ul li a.active {
+  background-color: #666; /* Same as hover */
+  color: white; /* Ensure color is consistent */
+  border-radius: 5px;
+}
+ 

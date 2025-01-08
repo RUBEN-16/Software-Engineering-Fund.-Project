@@ -1,0 +1,21 @@
+{% extends "logistic_management.html" %}
+{% block title %}Logistic Management{%endblock%}
+
+    {%block nested%}
+    <link rel="stylesheet" href="/static/logistic_member.css">
+        <script>
+            // Confirmation dialog function
+            function confirmDeletion(event, userName) {
+                const confirmation = confirm(`Are you sure you want to delete ${userName}?`);
+                if (!confirmation) {
+                    event.preventDefault(); // Prevent form submission
+                }
+            }
+        </script>
+        <body>
+
+            
+
+        </body>
+    {%endblock%}
+
