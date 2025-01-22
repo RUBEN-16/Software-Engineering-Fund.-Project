@@ -92,22 +92,11 @@ def about_page():
 
 @app.route("/product")
 def product_page():
-    # isSeller = False
-    # user_id = session.get("buyer_id")
-    # if user_id:
-    #     con = get_connect_db()
-    #     cur = con.cursor()
-    #     seller = cur.execute("SELECT * FROM user WHERE pid = ?", (user_id,)).fetchone()
-    #     isSeller = seller["isSeller"]
-    #     con.commit()
-    #     con.close()
-    # return render_template("product.html", isSeller=isSeller)
     con = get_connect_db()
     cur = con.cursor()
     products = cur.execute("SELECT * FROM products").fetchall()
     
     return render_template("product.html", products=products)
-
 
 @app.route("/mockHome")
 def mockHome():

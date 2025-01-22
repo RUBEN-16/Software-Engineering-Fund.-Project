@@ -15,13 +15,14 @@ def seller_verification():
     id = session.get('buyer_id')
     if not id:
         flash("You need to log in to proceed.", "danger")
-        return redirect(url_for('login'))
+        return redirect(url_for('login')) 
 
     con = get_connect_db() 
     cur = con.cursor() 
     user_exist = cur.execute('SELECT * FROM seller_registration WHERE id = ?', (id,)).fetchone()
-    con.close()
-    
+    cur.execute('SELECT isSeller FROM user WHERE pid = ?', (id,))
+    result = cur.fetchone()
+    seller_status = result['isSeller'] if result else None
     if user_exist:
         session['isExist'] = True
         print("isExist")
@@ -29,6 +30,7 @@ def seller_verification():
         session['isExist'] = False
         print("notExist")
     
+    con.close()
     if request.method == "POST":
         if session['isExist']:
             return render_template("seller_registration.html")
@@ -79,7 +81,7 @@ def seller_verification():
             flash("File paths are invalid. Please try again.", "danger")
             return redirect(url_for('seller.seller_verification'))
     
-    return render_template('seller_verification.html')
+    return render_template('seller_verification.html', seller_status=seller_status)
 
     
 @seller_blueprint.route("/seller?")
@@ -87,6 +89,12 @@ def wanna_be_seller():
     return redirect(url_for("seller.seller_verification"))
 
 
-# @seller_blueprint.route("/")
-# def courier_request():
+
+@seller_blueprint.route("/your-product")
+def your_product_page():
+    id = session.get('buyer_id')
+    con = get_connect_db()
+    cur = con.cursor()
+    products = cur.execute("SELECT * FROM products WHERE seller_id = ?", (id, )).fetchall()
     
+    return render_template("seller_product.html", products=products)
