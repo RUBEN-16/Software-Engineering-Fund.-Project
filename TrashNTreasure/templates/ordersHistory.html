@@ -1,0 +1,42 @@
+{% extends "index.html" %}
+{% block title %}My History{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="/static/orderHistory.css">
+    
+    <div class="order-history-content">
+        <h1>Your Order History</h1>
+        <form method="POST">
+            <div class="filters">
+                <label for="dateFilter">Filter by Date:</label>
+                <input type="date" id="dateFilter" name="dateFilter" value="{{ date_filter }}">
+                <button type="submit" class="action-btn">Filter</button>
+            </div>
+          </form>
+      <div class="orders-container">
+        {% if orders %}
+            {% for order in orders %}
+                <div class="order-item" data-status="{{ order["delivery_status"] }}">
+                        <div class="order-details">
+                            <h3 class="order-id">Order ID: {{ order["id"] }}</h3>
+                         <div class="order-info-row">
+                               <p class="order-date">Date: {{ order["date"] }}</p>
+                                 <p class="order-total">Total Amount: RM{{ order["total_amount"] }}</p>
+                         </div>
+                        <div class="order-products">
+                             <h4>Product</h4>
+                                 <p>{{order["products"]["product_name"]}} (qty: {{order["products"]["quantity"]}})</p>
+                        </div>
+                        
+                        <span class="delivery-status" data-status="{{ order["delivery_status"] }}">Status: {{ order["delivery_status"] }}</span>
+                    </div>
+                    <div class="order-actions">
+                        <a href="#" class="action-btn">View</a>
+                    </div>
+                </div>
+            {% endfor %}
+       {% else %}
+          <p>No order history found.</p>
+         {% endif %}
+       </div>
+    </div>
+{% endblock %}

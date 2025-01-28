@@ -70,9 +70,9 @@ body {
     margin-bottom: 20px;
   }
   
-  .content-section:target {
-    display: block; /* Show the section when targeted */
-  }
+.content-section:target {
+display: block; /* Show the section when targeted */
+}
 
 /* Section styles */
 section {

@@ -1,0 +1,56 @@
+{% extends "index.html" %}
+{% block title %} Shopping Cart {% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="../static/cart.css">
+<div class="msg">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+<div class="cart-content">
+    <h1>Your Shopping Cart</h1>
+    <form method="post" action="{{ url_for('user.proceed_to_payment') }}">
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Image</th>
+            <th>Price (per quantity)</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+        {% if added_products %}
+            {% for product in added_products %}
+                <tr data-product-id="{{ product.product_id }}" data-cart-id="{{product.id}}">
+                    <td>{{ product.product_name }}</td>
+                    <td><img src="{{ product.product_image_path }}" alt="{{ product.product_name }}" /></td>
+                    <td>RM{{ product.price }}</td>
+                    <td>
+                        <input type="number" name="quantity_{{ product.id }}" value="{{ product.quantity }}" min="1" max="{{product.max_quantity}}">
+                    <td>
+                       <button class="remove-btn" >Remove</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center;">Your cart is empty.</td>
+            </tr>
+        {% endif %}
+    </table>
+
+    <div class="cart-summary">
+        <p>Total Price: RM<span id="total-price">{{ total_price }}</span></p>
+        <button class="checkout-btn" id="checkout-btn" type="submit">Proceed to Checkout</button>
+    </div>
+    </form>
+</div>
+
+{% endblock %}

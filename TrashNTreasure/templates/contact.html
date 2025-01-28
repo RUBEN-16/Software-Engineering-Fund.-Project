@@ -1,0 +1,102 @@
+{% extends "index.html" %}
+{% block title %} C Page {%endblock%}
+{%block content%}
+    <link rel="stylesheet" href="/static/contact.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<body>
+    <main>
+      <section class="help-contact-page">
+        <div class="container">
+            <h1>Help & Contact</h1>
+
+            <div class="contact-info">
+                <h2>Contact Information</h2>
+                <p><strong>Email:</strong> <a href="mailto:support@trashandtreasure.com">support@trashandtreasure.com</a></p>
+                <p><strong>Phone:</strong> +1 (800) 123-4567</p>
+                <p><strong>Address:</strong> 123 Treasure Lane, Gemsville, USA</p>
+            </div>
+
+            <div class="contact-form">
+                <h2>Send Us a Message</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="subject">Subject:</label>
+                        <input type="text" id="subject" name="subject">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                     <button type="submit">Send Message</button>
+                </form>
+            </div>
+           <div class="faq">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <button class="faq-question">How do I place an order?</button>
+                    <div class="faq-answer">
+                         To place an order, simply browse our product catalog, add items to your cart, and proceed to checkout. You will be asked to provide shipping and payment details.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">What payment methods do you accept?</button>
+                    <div class="faq-answer">
+                         We accept various payment methods including major credit cards (Visa, Mastercard, American Express), PayPal, and Apple Pay.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">What is your return policy?</button>
+                    <div class="faq-answer">
+                        We offer a 30-day return policy for most items. Please see our "Shipping & Returns" page for more details.
+                    </div>
+                </div>
+               <div class="faq-item">
+                    <button class="faq-question">How do I sell my items?</button>
+                    <div class="faq-answer">
+                        To sell items, navigate to the "Sell Your Items" page and follow the instructions.
+                    </div>
+                </div>
+            </div>
+
+           <div class="social-media">
+                <h2>Follow Us</h2>
+               <div class="social-icons">
+                  <a href="#"><i class="fab fa-facebook"></i></a>
+                  <a href="#"><i class="fab fa-instagram"></i></a>
+                   <a href="#"><i class="fab fa-twitter"></i></a>
+                  <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+          <p>&copy; 2023 Trash & Treasure. All rights reserved.</p>
+        </div>
+      </footer>
+    <script>
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+
+        question.addEventListener('click', () => {
+            answer.classList.toggle('show');
+            question.classList.toggle('active');
+        });
+      });
+    </script>
+</body>
+{%endblock%}

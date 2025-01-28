@@ -1,0 +1,58 @@
+{% extends "index.html" %}
+{% block title %} Payment {% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="../static/payment.css">
+    <div class="payment-content">
+        <h1>Confirm Your Order</h1>
+
+        <div class="cart-summary">
+            <h2>Order Summary</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if session.get('payment_items') %}
+                  {% for item in session['payment_items'] %}
+                        <tr>
+                            <td>{{ item.product_name }}</td>
+                            <td><img src="{{ item.product_image_path }}" alt="{{ item.product_name }}" style="max-width: 50px; max-height: 50px;"></td>
+                            <td>{{ item.quantity }}</td>
+                             <td>RM{{ item.price }}</td>
+                             <td>RM{{ item.quantity * item.price }}</td>
+                        </tr>
+                     {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+               <p class="total">Total Amount: RM <span id="total-price">{{ total_price }}</span></p>
+        </div>
+        
+        <form method="post" action="{{ url_for('user.confirm_payment') }}">
+            <div class="payment-options">
+               <h2>Payment Options</h2>
+               <div class="payment-method-container">
+                       <label>
+                         <input type="radio" id="bank-card" name="payment_method" value="bank-card">
+                           <img src="/static/images/card.png" alt="bank card" width="100px" height="100px"/>
+                               <span>Bank Card</span>
+                        </label>
+                     </div>
+                 <div class="payment-method-container">
+                       <label>
+                           <input type="radio" id="e-wallet" name="payment_method" value="e-wallet">
+                             <img src="/static/images/e-wallet.png" alt="e-wallet" width="100px" height="100px"/>
+                            <span>E-Wallet</span>
+                       </label>
+                  </div>
+                 <button class="confirm-payment-btn" id="confirm-payment-btn" type="submit">Confirm Payment</button>
+            </div>
+          </form>
+       </div>
+   {% endblock %}

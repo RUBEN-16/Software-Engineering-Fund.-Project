@@ -1,0 +1,162 @@
+.container {
+    margin: 20px 100px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+p {
+    margin: 10px 0;
+}
+
+/* Wallet Info Section */
+.wallet-info {
+    text-align: center;
+    padding: 20px;
+    background: #ecf0f1;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+
+.wallet-info i {
+    font-size: 50px;
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+.balance {
+    font-size: 36px;
+    font-weight: bold;
+    color: #0099ff;
+    margin: 20px 0;
+}
+
+.action-btn {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Forms */
+.top-up-form, .withdraw-form {
+    background: #ecf0f1;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.top-up-form h3, .withdraw-form h3 {
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+input[type="floatformat"], select {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Transactions Section */
+#transactions {
+    margin-top: 20px;
+}
+
+.filters {
+    margin-bottom: 20px;
+}
+
+.filters input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #3498db;
+    color: #fff;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #2c3e50;
+    color: #fff;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .wallet-info {
+        padding: 10px;
+    }
+
+    .balance {
+        font-size: 28px;
+    }
+
+    .action-btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    table th, table td {
+        padding: 8px;
+    }
+}

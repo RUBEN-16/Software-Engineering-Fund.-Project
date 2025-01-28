@@ -37,15 +37,15 @@
                     <span>Welcome, {{session["admin_name"]}}</span>
                     <div class="msg">
                         {% with messages = get_flashed_messages(with_categories=true) %}
-                            {%if messages %}
-                                {% for category, message in messages %}
-                                    <div class="alert alert-{{ category }}">
-                                        <span>{{ message }}</span>
-                                        <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-                                    </div>
-                                {%endfor%} 
-                            {%endif%}
-                        {%endwith%}
+                          {% if messages %}
+                            {% for category, message in messages %}
+                              <div class="alert alert-{{ category }}">
+                                <span>{{ message }}</span>
+                                <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        {% endwith %}
                     </div>
                     <div class="profile-img">
                         <img src="/static/images/profile.png" alt="Profile">

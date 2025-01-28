@@ -7,7 +7,7 @@ DATABASE_PATH = "TrashNTreasure/database.db"
 
 con=sqlite3.connect(DATABASE_PATH)
 
-# Admins database
+# User database
 con.execute("""
     CREATE TABLE IF NOT EXISTS user (
         pid INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,7 +17,9 @@ con.execute("""
         password TEXT NOT NULL,
         isSeller INTEGER DEFAULT 0,
         haveBankCard INTEGER DEFAULT 0,
-        phone_number TEXT
+        phone_number TEXT,
+        wallet DECIMAL(10, 2) DEFAULT 0.00,
+        address TEXT
     )
 """)
 
@@ -57,6 +59,48 @@ con.execute("""
     )
 """)
 
+# E-Wallet Transaction database
+con.execute("""
+    CREATE TABLE IF NOT EXISTS wallet_transaction (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        buyer_id INTEGER NOT NULL,
+        date DATE NOT NULL,
+        description TEXT NOT NULL,
+        amount DECIMAL(10,2) NOT NULL,
+        FOREIGN KEY (buyer_id) REFERENCES user(pid) ON DELETE CASCADE ON UPDATE CASCADE
+    )
+""")
+
+# Order database
+con.execute("""
+    CREATE TABLE IF NOT EXISTS orders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        buyer_id INTEGER NOT NULL,
+        product_id INTEGER NOT NULL,
+        quantity INTEGER NOT NULL,
+        date DATE NOT NULL,
+        status TEXT DEFAULT 'Pending',
+        total_amount DECIMAL(10,2) NOT NULL,
+        FOREIGN KEY (buyer_id) REFERENCES user(pid) ON DELETE CASCADE ON UPDATE CASCADE
+    )
+""")
+
+# Cart database
+con.execute("""
+    CREATE TABLE IF NOT EXISTS cart (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        buyer_id INTEGER NOT NULL,
+        product_id INTEGER NOT NULL,
+        product_name TEXT NOT NULL,
+        quantity INTEGER NOT NULL,
+        max_quantity INTEGER NOT NULL,
+        price DECIMAL(10, 2) NOT NULL,
+        product_image_path TEXT NOT NULL,
+        FOREIGN KEY (buyer_id) REFERENCES user(pid) 
+        FOREIGN KEY (product_id) REFERENCES products(id) 
+    )
+""")
+
 # Product database
 con.execute("""
     CREATE TABLE IF NOT EXISTS products (
@@ -64,7 +108,7 @@ con.execute("""
         name TEXT NOT NULL,
         category TEXT NOT NULL,
         description TEXT,
-        price REAL NOT NULL,
+        price DECIMAL(10, 2) NOT NULL,
         quantity INTEGER NOT NULL,
         condition TEXT NOT NULL,
         seller_id TEXT NOT NULL,

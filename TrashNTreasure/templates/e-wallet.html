@@ -1,0 +1,108 @@
+{% extends "index.html" %}
+{% block title %} Seller Verification {%endblock%}
+{%block content%}
+
+<link rel="stylesheet" href="../static/e-wallet.css">
+<div class="msg">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+<section id="dashboard" class="container">
+    <h2>Your Wallet</h2>
+    <div class="wallet-info">
+        <i class="fas fa-wallet"></i>
+        <p>Your Balance</p>
+        <div class="balance">RM {{ "%.2f"| format(user.wallet) }}</div>
+        <button class="action-btn" id="topUpBtn">Top Up</button>
+        <button class="action-btn" id="withdrawBtn">Withdraw Funds</button>
+    </div>
+    
+    <div class="top-up-form" id="topUpForm" style="display:none;">
+        <h3>Top Up Your Wallet</h3>
+        <form action="{{url_for("user.top_up")}}" method="post">
+            <label for="topUpAmount">Amount:</label>
+            <input type="floatformat" id="topUpAmount" name="topUpAmount" required>
+            <label for="paymentMethod">Choose Payment Method:</label>
+            <select id="paymentMethod" name="paymentMethod">
+                <option value="onlineBanking">Online Banking</option>
+                <option value="fpx">FPX</option>
+            </select>
+            <button type="submit" class="action-btn">Proceed with Payment</button>
+        </form>
+    </div>
+
+    <div class="withdraw-form" id="withdrawForm" style="display:none;">
+        <h3>Withdraw Funds</h3>
+        <form action="{{url_for("user.withdraw")}}" method="post">
+            <label for="withdrawAmount">Amount to Withdraw:</label>
+            <input type="floatformat" id="withdrawAmount" name="withdrawAmount" required>
+            <label for="withdrawMethod">Choose Withdrawal Method:</label>
+            <select id="withdrawMethod" name="withdrawMethod">
+                <option value="bankTransfer">Bank Transfer</option>
+                <option value="paypal">PayPal</option>
+            </select>
+            <button type="submit" class="action-btn">Withdraw</button>
+        </form>
+    </div>
+
+    <div id="transactions">
+        <h3>Transaction History</h3>
+        <form method="POST">
+            <div class="filters">
+                <label for="dateFilter">Filter by Date:</label>
+                <input type="date" id="dateFilter" name="dateFilter" value="{{ date_filter }}">
+                <button type="submit" class="action-btn">Filter</button>
+            </div>
+          </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                  <tr>
+                      <td>{{ transaction["date"] }}</td>
+                      <td>{{ transaction["description"] }}</td>
+                      <td>{% if transaction["amount"] < 0 %}-RM{% else %}+RM{% endif %}{{ transaction["amount"]|abs }}</td>
+                  </tr>
+                {% endfor %}
+                {% if not transactions %}
+                 <tr><td colspan="3" style="text-align: center;">No Transactions Found</td></tr>
+                 {% endif %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+     // Toggle top-up form visibility
+     const topUpBtn = document.getElementById('topUpBtn');
+    const topUpForm = document.getElementById('topUpForm');
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    const withdrawForm = document.getElementById('withdrawForm');
+    
+    topUpBtn.addEventListener('click', () => {
+        topUpForm.style.display = topUpForm.style.display === 'none' ? 'block' : 'none';
+        withdrawForm.style.display = 'none';  // Hide Withdraw form when Top-Up form is shown
+    });
+
+    withdrawBtn.addEventListener('click', () => {
+        withdrawForm.style.display = withdrawForm.style.display === 'none' ? 'block' : 'none';
+        topUpForm.style.display = 'none';  // Hide Top-Up form when Withdraw form is shown
+    });
+</script>
+
+{%endblock%}

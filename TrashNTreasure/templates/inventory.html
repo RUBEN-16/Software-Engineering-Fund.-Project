@@ -27,7 +27,18 @@
         <li><a href="#remove-item">Remove Item</a></li>
       </ul>
     </nav>
-
+    <div class="msg">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              <span>{{ message }}</span>
+              <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
     <!-- Add Item Section -->
     <section id="add-item" class="content-section">
       <h2>Add Item</h2>
@@ -35,7 +46,14 @@
         <label for="product_name">Product Name:</label>
         <input type="text" id="product_name" name="product_name" required>
         <label for="category">Category:</label>
-        <input type="text" id="category" name="category" required>
+        <select id="category" name="category" required>
+          <option value="home-decor">Home Decor</option>
+          <option value="furniture">Furniture</option>
+          <option value="wearing">Wearing</option>
+          <option value="electronic">Electronic</option>
+          <option value="accessories">Accessories</option>
+          <option value="other">Others</option>
+        </select>
         <label for="description">Description:</label>
         <textarea id="description" name="description"></textarea>
         <label for="price">Price:</label>

@@ -1,11 +1,12 @@
   <!DOCTYPE html>
   <html lang="en">
     <head>
-        
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <title>{%block title%}Home{%endblock%}</title>
         <link rel="stylesheet" href="/static/navi.css">
     </head>
     <body>   
+      
         <!-- Header Section -->
       <header class="header">
         <div class="logo">
@@ -17,9 +18,9 @@
       <nav class="navbar">
         <ul>
           <li><a href="/">Home</a></li>
-          <li><a href="/aboutus">About Us</a></li>
-          <li><a href="/product">Product</a></li>
-          <li><a href="{{url_for("seller.wanna_be_seller")}}">Seller?</a></li>
+          <li><a href="{{url_for("about_page")}}">About Us</a></li>
+          <li><a href="{{url_for("product_page")}}">Product</a></li>
+          <li><a href="{{url_for("seller.wanna_be_seller")}}">Seller</a></li>
         </ul>
       </nav>
         <div class="menu">
@@ -30,8 +31,10 @@
               </div>
             {%else%}
               <div class="cart">
-                <p>$0.00</p>
-                <img src="../static/images/cart.png" alt="Profile">
+                <a href="{{url_for("eWallet")}}" class="e-wallet-link"><i class="fas fa-wallet" ></i></a>
+                <a href="{{url_for("cart")}}">
+                  <img src="/static/images/cart.png" alt="Cart">
+                </a>
               </div>
               
             {%endif%}
@@ -41,8 +44,8 @@
               <div class="dropdown-icon"></div>
               <div class="dropdown-links" id="dropdown-links">
                 <a href="{{url_for("user.user_page")}}">My Account</a>
-                <a href="/contact">Contact</a>
-                <a href="">Help</a>
+                <a href="{{url_for("user_orders")}}">My Orders</a>
+                <a href="{{url_for("contact")}}">Help & Contact</a>
                 {% if session.get('user_name') %}
                   <a href="{{url_for('user.logout')}}">Logout</a>  
                 {%endif%}
@@ -51,8 +54,32 @@
         </div>
       </header>
  
-    {%block content%}
-    {%endblock%}
+      <div class="content-container">
+        {% block content %}
+        <link rel="stylesheet" href="/static/mockHome.css">
+
+        <body>
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-text">
+                    <h2>Reimagine the Possibilities</h2>
+                    <h1>Turning Trash into Treasures</h1>
+                    <p>Join us in transforming unwanted items into valuable treasures. Donate, upcycle, or shop sustainable products today.</p>
+                    <button class="cta-button">Donate Now</button>
+                    <button class="cta-button-secondary">Find Treasures</button>
+                </div>
+                <div class="hero-image">
+                    <img src="/static/images/tnt.png" alt="Upcycled treasure items">
+                </div>
+            </section>
+        
+            <!-- Footer Banner -->
+            <footer class="footer-banner">
+                <p>Support sustainability. Every small effort counts. <a href="#">Learn More</a></p>
+            </footer>
+        </body>
+        {% endblock %}
+      </div>
 
     </body>
   </html>

@@ -2,17 +2,29 @@
 {% block title %} C Page {%endblock%}
 {%block content%}
     <!-- Category Section -->
+    <div class="msg">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              <span>{{ message }}</span>
+              <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
     <link rel="stylesheet" href="/static/product.css"/>
     <section class="category-section">
       <div class="category-dropdown">
         <label for="categories">Filter by Category:</label>
         <select id="categories" onchange="filterByCategory()">
-          <option value="all">Category</option>
           <option value="all">All</option>
-          <option value="Home Decor">Home Decor</option>
-          <option value="Furniture">Furniture</option>
-          <option value="Desk Accessories">Desk Accessories</option>
-          <option value="Clothing/Wear">Clothing/Wear</option>
+          <option value="furniture">Furniture</option>
+          <option value="wearing">Wearing</option>
+          <option value="electronic">Electronic</option>
+          <option value="accessories">Accessories</option>
+          <option value="other">Others</option>
         </select>
          <!-- Search Box -->
     <div class="search-box">
@@ -20,7 +32,7 @@
             <input type="text" name="query" placeholder="Search products..." required>
         </form>        
         <button class="search-btn">
-          <img src="../static/images/search-icon.png" alt="Search" />
+          <img src="../static/images/search-icon.png" alt="Search" /> 
         </button>
       </div>
       </div>
@@ -38,15 +50,17 @@
       <div class="product-item">
         <img src="{{ product.image_path }}" alt="{{ product.name }}" />
         <a href="{{url_for("product.item_detail", id=product.id)}}">{{ product.name }}</a>
-        <p>Quantity: {{ product.quantity }}</p>
+        <p>Max Quantity: {{ product.quantity }}</p>
         <p>Condition: {{ product.condition }}</p>
         <div class="rating">
           <span>⭐⭐⭐⭐☆</span> (4.4)
         </div>
         <p><s>RM1{{ product.price }}</s> <span>RM{{ product.price }}</span></p>
         <div class="hover-options">
-          <input type="number" value="1" min="1" />
-          <button>Add to Cart</button>
+          <form action="{{ url_for('product.add_to_cart', id=product.id) }}" method="POST">
+            <input type="number" name="quantity" value="1" min="1" max="{{product.quantity}}"/>
+            <button type="submit">Add to Cart</button>
+          </form>
         </div>
       </div>
     {% endfor %}
@@ -55,18 +69,7 @@
       <p>No products available.</p>
     {% endif %}
 </ul>
-  </section>  
-
-    <footer>
-      <div class="footer-content">
-        <p>&copy; 2024 Trash and Treasure. All Rights Reserved.</p>
-        <ul class="footer-links">
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
-      </div>
-    </footer>
+  </section>
 
     <script>
        // Function to filter products by category
@@ -75,5 +78,36 @@
             window.location.href = "{{ url_for('product.filter_product') }}?category=" + selectedCategory;
         }
     </script>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section contact">
+          <h3>Contact Us</h3>
+          <p>Email: support@trashandtreasure.com</p>
+          <p>Phone: +1 (800) 123-4567</p>
+          <p>Address: 123 Treasure Lane, Gemsville, USA</p>
+        </div>
+        <div class="footer-section social">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-pinterest"></i></a>
+          </div>
+        </div>
+        <div class="footer-section newsletter">
+          <h3>Newsletter</h3>
+          <p>Sign up for exclusive deals and treasure alerts!</p><br>
+          <form>
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 Trash & Treasure. All rights reserved.</p>
+      </div>
+    </footer>
 
 {%endblock%}

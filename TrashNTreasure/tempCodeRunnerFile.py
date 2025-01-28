@@ -1,1 +1,1 @@
-product_page
+ return redirect(url_for("eWallet"))

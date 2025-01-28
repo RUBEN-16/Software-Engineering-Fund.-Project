@@ -1,45 +1,266 @@
 {% extends "index.html" %}
 {% block title %} Seller Verification {%endblock%}
 {%block content%}
-
+<div class="msg">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
 {% if seller_status == 1 %}
-    <link rel="stylesheet" href="../static/seller_approved.css">
-    <!-- Approved Seller Page Content -->
-    <div class="content">
-        <h1>Welcome, Seller!</h1>
-        <p>Start managing your products, orders, and more.</p>
-
-        <!-- Vertical Navigation Bar for Seller -->
-        <div class="vertical-nav">
-            <ul>
-                <li><a href="your-product.html">Your Product</a></li>
-                <li><a href="orders.html">Orders</a></li>
-                <li><a href="request-courier.html">Request Courier</a></li>
-            </ul>
-        </div>
-
-        <!-- Additional Content for Approved Seller -->
-        <div class="main-content">
-            <p>Content specific to the approved seller can be added here.</p>
-        </div>
+<link rel="stylesheet" href="/static/seller_approved.css">
+<!-- Approved Seller Page Content -->
+<div class="content">
+    <h1>Welcome, Seller!</h1>
+    <p>Start managing your products, orders, and more.</p>
+    <!-- Vertical Navigation Bar for Seller -->
+    <div class="vertical-nav">
+        <ul>
+            <li><a href="#Product">Your Product</a></li>
+            <li><a href="#Order">Orders</a></li>
+            <li><a href="#Courier">Request Courier</a></li>
+        </ul>
     </div>
+
+    <!-- Content Sections -->
+    <section id="Product" class="content-section">
+        <link rel="stylesheet" href="/static/seller_product.css">
+        <div class="product-content" action="{{url_for('seller.your_product_page')}}">
+            <h1>Your Products</h1>
+            <a class="add-product-btn" id="addProductBtn" href="#add-product">Add New Product</a>
+            <div class="product-list" id="productList">
+                <!-- Example product -->
+                <div class="product-item">
+                    <img src="/Seller UI/tshirt.png" alt="Product" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-name">Product Name</h3>
+                        <p class="product-price">Price: $50</p>
+                        <div class="product-actions">
+                            <button class="edit-btn">Edit</button>
+                            <button class="remove-btn">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="add-product" class="content-section">
+        <div class="form-container">
+            <h1>Add New Product</h1>
+            <form action="#" method="POST" enctype="multipart/form-data">
+                <!-- Product Name -->
+                <div class="form-group">
+                    <label for="product-name">Product Name:</label>
+                    <input type="text" id="product-name" name="product-name" placeholder="Enter product name" required>
+                </div>
+    
+                <!-- Product Category -->
+                <div class="form-group">
+                    <label for="product-category">Category:</label>
+                    <select id="product-category" name="product-category" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="home-decor">Home Decor</option>
+                        <option value="wearing">Wearing</option>
+                        <option value="electronic">Electronic</option>
+                        <option value="accessories">Accessories</option>
+                    </select>
+                </div>
+    
+                <!-- Product Description -->
+                <div class="form-group">
+                    <label for="product-description">Product Description:</label>
+                    <textarea id="product-description" name="product-description" rows="5" placeholder="Describe your product." required></textarea>
+                </div>
+    
+                <!-- Price -->
+                <div class="form-group">
+                    <label for="product-price">Price (RM):</label>
+                    <input type="number" id="product-price" name="product-price" placeholder="Enter price" step="0.01" required>
+                </div>
+    
+                <!-- Quantity -->
+                <div class="form-group">
+                    <label for="product-quantity">Quantity:</label>
+                    <input type="number" id="product-quantity" name="product-quantity" placeholder="Enter quantity" required>
+                </div>
+    
+                <!-- Condition -->
+                <div class="form-group">
+                    <label>Condition:</label>
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="condition" value="new" required> New
+                        </label>
+                        <label>
+                            <input type="radio" name="condition" value="used"> Used
+                        </label>
+                    </div>
+                </div>
+    
+                <!-- Seller ID -->
+                <div class="form-group">
+                    <label for="seller-id">Seller ID:</label>
+                    <input type="text" id="seller-id" name="seller-id" placeholder="Enter seller ID" required>
+                </div>
+    
+                <!-- Product Image -->
+                <div class="form-group">
+                    <label for="product-image">Product Image:</label>
+                    <input type="file" id="product-image" name="product-image" accept="image/*" required>
+                </div>
+    
+                <!-- Product Video (Optional) -->
+                <div class="form-group">
+                    <label for="product-video">Product Video (Optional):</label>
+                    <input type="file" id="product-video" name="product-video" accept="video/*">
+                </div>
+    
+                <!-- Add Product Button -->
+                <div class="form-group">
+                    <a type="submit" class="btn-add">Add Product</a>
+                </div>
+                <div class="form-group">
+                    <a type="button" class="btn-back" href="#Product">Back</a>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section id="Order" class="content-section">
+        <link rel="stylesheet" href="/static/seller_orders.css">
+        <div class="orders-content">
+            <h1>Your Orders</h1>
+            <table>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td>#12345</td>
+                    <td>Ahmad Zulkifli</td>
+                    <td>Product 1</td>
+                    <td>Pending</td>
+                    <td>
+                        <button class="accept-btn">Accept</button>
+                        <button class="remove-btn">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#12346</td>
+                    <td>Siti Aminah</td>
+                    <td>Product 2</td>
+                    <td>Pending</td>
+                    <td>
+                        <button class="accept-btn">Accept</button>
+                        <button class="remove-btn">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#12347</td>
+                    <td>Tan Wei Ling</td>
+                    <td>Product 3</td>
+                    <td>Pending</td>
+                    <td>
+                        <button class="accept-btn">Accept</button>
+                        <button class="remove-btn">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#12348</td>
+                    <td>Ravi Kumar</td>
+                    <td>Product 4</td>
+                    <td>Pending</td>
+                    <td>
+                        <button class="accept-btn">Accept</button>
+                        <button class="remove-btn">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#12349</td>
+                    <td>Nurul Hidayah</td>
+                    <td>Product 5</td>
+                    <td>Pending</td>
+                    <td>
+                        <button class="accept-btn">Accept</button>
+                        <button class="remove-btn">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>#12350</td>
+                    <td>Chong Kah Yee</td>
+                    <td>Product 6</td>
+                    <td>Pending</td>
+                    <td>
+                        <button class="accept-btn">Accept</button>
+                        <button class="remove-btn">Remove</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+    <section id="Courier" class="content-section">
+        <div class="request-courier">
+            <h1>Request Courier</h1>
+            <form>
+                <label for="order-id">Order ID:</label>
+                <input type="text" id="order-id" name="order-id" placeholder="Enter Order ID">
+    
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" name="product-name" placeholder="Enter Product Name">
+    
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" placeholder="Enter Quantity">
+    
+                <label for="seller-address">Seller Address:</label>
+                <input type="text" id="seller-address" name="seller-address" placeholder="Enter Seller Address">
+    
+                <label for="buyer-address">Buyer Address:</label>
+                <input type="text" id="buyer-address" name="buyer-address" placeholder="Enter Buyer Address">
+    
+                <label>Choose Courier Service:</label>
+                <div class="courier-options">
+                    <label class="courier-option">
+                        <input type="radio" name="courier" value="fedex">
+                        <img src="/static/images/posLaju.png" alt="FedEx">
+                        <span>Pos Laju</span>
+                    </label>
+                    <label class="courier-option">
+                        <input type="radio" name="courier" value="ups">
+                        <img src="/static/images/ninjaVan.png" alt="UPS">
+                        <span>Ninja Van</span>
+                    </label>
+                    <label class="courier-option">
+                        <input type="radio" name="courier" value="dhl">
+                        <img src="/static/images/GDex.png" alt="DHL">
+                        <span>GDex</span>
+                    </label>
+                    <label class="courier-option">
+                        <input type="radio" name="courier" value="usps">
+                        <img src="/static/images/DHL.png" alt="USPS">
+                        <span>DHL</span>
+                    </label>
+                </div>
+                <br><br>
+                <button type="submit">Request Courier</button>
+            </form>
+        </div>
+    </section>
+</div>
+
 {% else %}
-    <link rel="stylesheet" href="../static/seller_verification.css">
+    <link rel="stylesheet" href="/static/seller_verification.css">
     <div class="content">
         <!-- Hero Section --> 
         <section class="hero">
-            <div class="msg">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {%if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">
-                                <span>{{ message }}</span>
-                                <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-                            </div>
-                        {%endfor%}
-                    {%endif%}
-                {%endwith%}
-            </div> 
             <h1>Become a Seller</h1>
             <p>Join our platform to start your selling journey and grow your business with ease.</p>
         </section>
@@ -62,7 +283,7 @@
                     <input type="text" id="phone-number" name="phone-number" placeholder="Your Phone Number" required>
 
                     <label for="description">Selling Product Description:</label>
-                    <textarea id="description" name="description" rows="5" placeholder="Tell us about your products..." required></textarea>
+                    <textarea id="description" name="description" rows="5" placeholder="Tell us about your products." required></textarea>
 
                     <label for="ic_picture">Upload Photo Copy of Your Identification Card (Compulsory):</label>
                     <input type="file" id="ic_picture" name="ic_picture" accept=".pdf, .doc, .jpg, .png">
@@ -84,19 +305,19 @@
                     </div>
                     <div class="benefits-content">
                         <div class="benefit-item">
-                            <img src="../static/images/customer-satisfaction.png" alt="Customers">
+                            <img src="/static/images/customer-satisfaction.png" alt="Customers">
                             <p>Access to millions of potential customers worldwide.</p>
                         </div>
                         <div class="benefit-item">
-                            <img src="../static/images/tools.png" alt="Tools">
+                            <img src="/static/images/tools.png" alt="Tools">
                             <p>Easy-to-use tools for managing your products and orders.</p>
                         </div>
                         <div class="benefit-item">
-                            <img src="../static/images/payment.png" alt="Payments">
+                            <img src="/static/images/payment.png" alt="Payments">
                             <p>Secure and reliable payment processing.</p>
                         </div>
                         <div class="benefit-item">
-                            <img src="../static/images/support.png" alt="Support">
+                            <img src="/static/images/support.png" alt="Support">
                             <p>Dedicated seller support team available 24/7.</p>
                         </div>
                     </div>

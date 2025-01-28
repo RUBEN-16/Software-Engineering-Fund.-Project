@@ -1,56 +1,31 @@
-/* Menu button */
-.menu-btn {
-    position:relative;
-    cursor: pointer;
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
-.menu-icon {
-    width: 30px;
-    height: 4px;
-    background-color: white;
-    margin: 5px 0;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
-
-.menu-links {
-    display: none;
-    position: absolute;
-    background-color: #21e262;
-    top: 30px;
-    right: 0;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.menu-links a {
-    color: white;
-    text-decoration: none;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.menu-links a:hover {
-    color: #77a155;
-}
-
-.menu-btn:hover .menu-links {
-    display: inline-block;
-}
-
-.menu-links.show {
-    display: list-item;
-}
-
 
 /* Form Styling */
 .form-container {
-    max-width: 600px;
+    max-width: 100%;
     margin: 50px auto;
-    padding: 20px;
-    background-color: #000000; 
-    border-radius: 10px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: white;
+    color: #333;
+    transition: transform 0.3s ease;
+}
+
+.form-container:hover {
+    transform: translateY(-5px);
 }
 
 /* Vertical Navigation Bar */
@@ -62,6 +37,8 @@
     top: 100px;
     left: 0;
     height: 100%;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .vertical-nav ul {
@@ -77,13 +54,15 @@
     text-decoration: none;
     color: rgb(255, 255, 255);
     font-size: 18px;
-    padding: 8px;
+    padding: 10px;
     display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .vertical-nav ul li a:hover {
     background-color: #c37d52;
-    border-radius: 5px;
+    transform: translateX(10px);
 }
 
 /* Main Content Area */
@@ -94,8 +73,384 @@
 
 .content h1 {
     font-size: 32px;
+    color: #333;
+    margin-bottom: 20px;
 }
 
-.content .main-content {
+/* Hide all sections by default */
+.content-section {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease;
+}
+
+/* Show the default section initially */
+.content-section.default-visible {
+    display: block;
+}
+
+/* Show the targeted section */
+.content-section:target {
+    display: block;
+}
+
+/* Hide the default section when another section is targeted */
+.content-section:target ~ .content-section.default-visible {
+    display: none;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+.orders-content {
+    margin: 50px 50px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.orders-content h1 {
+    text-align: center;
+    color: #333;
+}
+
+table {
+    width: 100%;
     margin-top: 20px;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.accept-btn {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.accept-btn:hover {
+    background-color: #1e7e34;
+}
+
+.remove-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.remove-btn:hover {
+    background-color: #c82333;
+}
+
+.product-content {
+    margin: 50px 50px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-content h1 {
+    text-align: center;
+    color: #333;
+}
+
+.add-product-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 15px 20px; /* Reduced padding to make the button smaller */
+    font-size: 1rem; /* Reduced font size */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-align: center; /* Ensure text is centered */
+    text-decoration: none; /* Remove underline from the link */
+    width: fit-content; /* Adjust width to fit content */
+}
+
+.add-product-btn:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.product-item {
+    width: 220px;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.product-item h3 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.product-item p {
+    font-size: 1rem;
+    color: #666;
+}
+
+.product-actions {
+    margin-top: 10px;
+}
+
+.product-item button {
+    background-color: #ff4081;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.product-item button:hover {
+    background-color: #ff1744;
+    transform: translateY(-2px);
+}
+
+.product-item button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 64, 129, 0.5);
+}
+
+/* Request Courier Form Styling */
+.request-courier {
+    margin: 50px 50px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.request-courier h1 {
+    text-align: center;
+    color: #c2185b;
+}
+
+.request-courier form {
+    display: flex;
+    flex-direction: column;
+}
+
+.request-courier label {
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.request-courier input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.request-courier button {
+    padding: 10px;
+    background-color: #ff4081;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.request-courier button:hover {
+    background-color: #c2185b;
+}
+ 
+/* Courier Options Styling */
+.courier-options {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.courier-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.courier-option:hover {
+    border-color: #ff4081;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.courier-option img {
+    width: 150px;
+    height: 80px;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.courier-option:hover img {
+    transform: scale(1.1);
+}
+
+.courier-option span {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.courier-option input[type="radio"] {
+    display: none;
+}
+
+.courier-option input[type="radio"]:checked + img {
+    border: 2px solid #ff4081;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+/* Form Container */
+.form-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 50px 50px;
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="file"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Radio Buttons */
+.radio-group {
+    display: flex;
+    gap: 20px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: normal;
+    color: #555;
+}
+
+/* Add Product Button */
+.form-group a {
+    display: block; /* Make the anchor tag behave like a block element */
+    width: 100%;
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+}
+
+/* Green button for "Add Product" */
+.form-group .btn-add {
+    background-color: #28a745;
+}
+
+.form-group .btn-add:hover {
+    background-color: #218838;
+}
+
+/* Gray button for "Back" */
+.form-group .btn-back {
+    background-color: #6c757d; /* Gray color */
+}
+
+.form-group .btn-back:hover {
+    background-color: #5a6268; /* Darker gray on hover */
 }

@@ -7,16 +7,16 @@
     <div class="register-container">
         <div class="msg">
             {% with messages = get_flashed_messages(with_categories=true) %}
-                {%if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            <span>{{ message }}</span>
-                            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-                        </div>
-                    {%endfor%}
-                {%endif%}
-            {%endwith%}
-        </div>
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    <span>{{ message }}</span>
+                    <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+          </div>
         <div class="top"> 
             <header><h1>Sign Up</h1></header>
         </div>

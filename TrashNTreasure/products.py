@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash, current_app
 from db import get_connect_db
 from werkzeug.utils import secure_filename
-import os
+import os, sqlite3
 
 product_blueprint = Blueprint("product", __name__, template_folder="templates")
 
@@ -39,26 +39,38 @@ def add_product():
             # Initialize file paths
             image_path = None
             video_path = None
-
+            
+            file_not_allowed = False
             # Handle image upload
             if "image" in request.files:
                 image = request.files["image"]
-                if image and allowed_file(image.filename):
-                    filename = secure_filename(image.filename)
-                    image_path = os.path.join(UPLOAD_FOLDER, "images", filename)
-                    os.makedirs(os.path.dirname(image_path), exist_ok=True)
-                    image.save(image_path)
-                    image_path = f'/static/products/images/{filename}' # Ensure web-compatible path
+                if image and image.filename != "":
+                    if allowed_file(image.filename):
+                        filename = secure_filename(image.filename)
+                        image_path = os.path.join(UPLOAD_FOLDER, "images", filename)
+                        os.makedirs(os.path.dirname(image_path), exist_ok=True)
+                        image.save(image_path)
+                        image_path = f'/static/products/images/{filename}' # Ensure web-compatible path
+                    else:
+                        flash("Invalid image file type. Please upload a PNG, JPG, JPEG, or GIF.", "danger")
+                        file_not_allowed = True
 
             # Handle video upload
             if "video" in request.files:
                 video = request.files["video"]
-                if video and allowed_file(video.filename):
-                    filename = secure_filename(video.filename)
-                    video_path = os.path.join(UPLOAD_FOLDER, "videos", filename)
-                    os.makedirs(os.path.dirname(video_path), exist_ok=True)
-                    video.save(video_path)
-                    video_path = f'/static/products/videos/{filename}'  # Ensure web-compatible path
+                if video and video.filename != "":
+                    if allowed_file(video.filename):
+                        filename = secure_filename(video.filename)
+                        video_path = os.path.join(UPLOAD_FOLDER, "videos", filename)
+                        os.makedirs(os.path.dirname(video_path), exist_ok=True)
+                        video.save(video_path)
+                        video_path = f'/static/products/videos/{filename}'  # Ensure web-compatible path
+                    else:
+                        flash("Invalid video file type. Please upload an MP4, AVI, MOV, or WMV.", "danger")
+                        file_not_allowed = True
+                        
+            if file_not_allowed:
+                return redirect(url_for("product.add_product"))
 
             # Insert data into the database
             con = get_connect_db()
@@ -83,7 +95,7 @@ def add_product():
         except Exception as e:
             flash(f"An error occurred: {e}", "danger")
     if seller_id:
-        return render_template("add_product.html", seller_id=seller_id)
+        return render_template("seller_verification.html", seller_id=seller_id)
     elif admin_id:
         return render_template("inventory.html", admin_id=admin_id)
     
@@ -172,3 +184,45 @@ def item_detail(id):
     
     return render_template("product_details.html", product=product)
 
+
+# Assuming this is part of your Flask app
+@product_blueprint.route("/add-to-cart/<id>", methods=["POST"])
+def add_to_cart(id):
+    # Ensure the user is logged in
+    user_id = session.get("buyer_id")
+    if not user_id:
+        flash("You must be logged in to add items to the cart.", "danger")
+        return redirect(url_for("login"))  # Redirect to login page if not logged in
+
+    # Get the product details from the database
+    con = get_connect_db()
+    cur = con.cursor()
+    product = cur.execute("SELECT * FROM products WHERE id = ?", (id,)).fetchone()
+
+    if not product:
+        flash("Product not found.", "danger")
+        return redirect(url_for("product_page"))  # Redirect to product list if product doesn't exist
+
+    # Get the quantity from the form (assuming it's submitted via POST)
+    quantity = request.form.get("quantity", default=1, type=int)  # Default to 1 if quantity is not provided
+
+    try:
+        cur.execute(
+            "INSERT INTO cart (buyer_id, product_id, product_name, quantity, max_quantity, price, product_image_path) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (user_id, id, product["name"], quantity, product["quantity"], product["price"], product["image_path"]),
+        )
+        con.commit()  # Commit the transaction
+        flash("Product added to cart successfully!", "success")
+    except sqlite3.Error as e:
+        con.rollback()  # Rollback in case of error
+        flash(f"An error occurred: {e}", "danger")
+    finally:
+        con.close()  # Close the database connection
+
+    # Redirect to the product list or cart page
+    return redirect(url_for("product_page"))  # Adjust the redirect as needed
+
+
+
+    
+    

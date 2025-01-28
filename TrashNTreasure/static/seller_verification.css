@@ -5,6 +5,51 @@ body {
     background-color: #ffe6e6; /* Light pink */
 }
 
+/* Hide all sections by default */
+.content-section {
+    display: none;
+}
+
+/* Show the active section */
+.content-section.active {
+    display: block;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Vertical Navigation Bar */
+.vertical-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    background-color: #f8bbd0; /* Soft pink */
+    padding: 20px;
+}
+
+.vertical-nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.vertical-nav ul li {
+    margin-bottom: 10px;
+}
+
+.vertical-nav ul li a {
+    text-decoration: none;
+    color: #2f4f4f;
+    font-size: 18px;
+}
+
+.vertical-nav ul li a:hover {
+    color: #ff4081; /* Bright pink-red */
+}
+
 /* Form Styling */
 .form-container {
     max-width: 700px;

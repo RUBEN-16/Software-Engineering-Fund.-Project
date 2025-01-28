@@ -1,8 +1,143 @@
 {% extends "index.html" %}
 {% block title %} User Page {%endblock%}
 {%block content%}
-<div>
-    <h1 class="text-success">Hi, {{user}}</h1>
-</div>
+<div class="msg">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+<link rel="stylesheet" href="../static/user.css">
+  <div class="body-container">
+    <div class="profile-container">
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav">
+        <h2>User Profile</h2>
+        <ul>
+            <li><a href="#personal-details" class="active">Personal Details</a></li>
+            <li><a href="#bank-card">Bank Card</a></li>
+            <li><a href="#change-password">Change Password</a></li>
+        </ul>
+        </nav>
 
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Personal Details Section -->
+            <section id="personal-details" class="section active">
+                <h2>Personal Details</h2><br>
+                <form class="details-form" action="{{url_for("user.update_user_info")}}" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" value="{{user.firstName +" "+ user.lastName}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-id">User ID</label>
+                        <input type="text" id="user-id" value="{{user.pid}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" value="{{user.email}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone"  name="phone_number" value="{{user.phone_number}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">House Address</label>
+                        <textarea id="address"  name="address" >{{user.address}}</textarea>
+                    </div><br>
+                    <button type="submit" class="submit-btn">Save Changes</button>
+                </form>
+            </section>
+
+            <!-- Bank Card Section -->
+            <section id="bank-card" class="section">
+                {%if user.haveBankCard == 0%}
+                    <h2>Add Bank Card</h2><br>
+                    <form class="card-form" method="post" action="{{url_for("user.add_bank_card")}}">
+                        <div class="form-group">
+                            <label for="card-number">Card Number</label>
+                            <input type="text" id="card-number" name="card_number" placeholder="1234 5678 9012 3456">
+                        </div>
+                        <div class="form-group">
+                            <label for="card-holder">Card Holder Name</label>
+                            <input type="text" id="card-holder" name="card_holder" placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="expiry-date">Expiry Date</label>
+                            <input type="text" id="expiry-date" name="expiry_date" placeholder="MM/YY">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="password" id="cvv" name="cvv" placeholder="123">
+                        </div><br>
+                        <button type="submit" class="submit-btn">Add Card</button>
+                    </form>
+                {%else%}
+                    <div class="card-added">
+                      <img src="/static/images/payment.png" alt="bank card" width="100px" height="100px"/>
+                      <p class="added-message">Bank Card Added</p>
+                        <form  id="removeCardForm" method="post" action="{{url_for("user.remove_bank_card")}}">
+                          <button type="button" class="remove-btn" onclick="confirmRemoveCard()">Remove Card</button>
+                       </form>
+                    </div>
+                {%endif%}
+            </section>
+            <script>
+              function confirmRemoveCard() {
+                  if (confirm("Are you sure you want to remove your bank card?")) {
+                    document.getElementById("removeCardForm").submit();
+                }
+              }
+            </script>
+
+            <!-- Change Password Section -->
+            <section id="change-password" class="section">
+                <h2>Change Password</h2><br>
+                <form class="password-form" method="POST" action="{{ url_for('user.change_password') }}">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" name="current_password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" name="new_password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm New Password</label>
+                    <input type="password" id="confirm-password" name="confirm_password" required>
+                </div><br>
+                <button type="submit" class="submit-btn">Change Password</button>
+                </form>
+            </section>
+        </main>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript to handle section switching
+    const links = document.querySelectorAll('.top-nav a');
+    const sections = document.querySelectorAll('.section');
+
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+
+        // Remove active class from all links and sections
+        links.forEach(l => l.classList.remove('active'));
+        sections.forEach(section => section.classList.remove('active'));
+
+        // Add active class to the clicked link and target section
+        link.classList.add('active');
+        target.classList.add('active');
+      });
+    });
+  </script>
 {%endblock%}
