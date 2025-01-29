@@ -73,7 +73,21 @@
         border-radius: 5px;
         cursor: pointer;
         font-size: 1.2em;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.back-btn {
+        background-color: #8d8d8d;
+        color: rgb(0, 0, 0);
+        border: none;
+        padding: 15px 30px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.2em;
           transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.back-btn:hover, .back-btn:focus {
+  background-color: #5c5c5c;
+    transform: translateY(-2px);
 }
 .confirm-payment-btn:hover, .confirm-payment-btn:focus {
   background-color: #0056A3;

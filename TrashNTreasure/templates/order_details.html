@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+{% block title %}Order Details{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/order_details.css">
+
+<div class="order-details-container">
+    <h1>Order Details</h1>
+
+     <section class="order-header">
+       <div class="order-info-header">
+            <h2>Order Information</h2>
+           <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+           <p><strong>Date:</strong> {{ order.date }}</p>
+           <p><strong>Total Amount:</strong> RM {{ order.total_amount }}</p>
+       </div>
+          <div class="order-status">
+            <p><strong>Payment Method:</strong> {{order.payment_method}} </p>
+            <p><strong>Delivery Status:</strong> <span class="delivery-status {{ order.delivery_status.lower() }}">{{ order.delivery_status }}</span></p>
+               <p><strong>Seller Status:</strong> <span class="seller-status {{ order.seller_status.lower() }}">{{order.seller_status}}</span></p>
+          </div>
+     </section>
+    <div class="content-container">
+        <section class="buyer-product-info">
+            <div class="product-info">
+                <h2>Product Information</h2>
+                    <p><strong>Product Name:</strong> {{ order.product_name }}</p>
+                    <p><strong>Quantity:</strong> {{ order.order_quantity }}</p>
+                    <p><strong>Product Image:</strong> <img class="product-image" src="{{ order.product_image_path }}" alt="{{ order.product_name }}"></p>
+            </div>
+            
+             <section class="seller-info">
+                    <h2>Seller Information</h2>
+                        <p><strong>Seller ID:</strong> {{ order.seller_id }}</p>
+                        <p><strong>Seller Name:</strong> {{ order.seller_name }}</p>
+                        <p><strong>Seller Email:</strong> {{ order.seller_email }}</p>
+                        <p><strong>Seller Phone:</strong> {{ order.seller_phone }}</p>
+            </section>
+
+       </section>
+    </div>
+       <button class="back-button" onclick="window.location.href='{{url_for("user_orders")}}'">Back to Order History</button>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@
 .body-signup{
     margin: 0;
     padding: 0;
-    height: 88.4vh; /* Full viewport height */
+    height: 90vh; /* Full viewport height */
     display: flex; /* Enable flexbox */
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
@@ -18,7 +18,7 @@
     padding: 20px; /* Add some spacing inside */
 }
 
-.top{
+.top{ 
     display: flex; 
     justify-content: center; /* Center horizontally */
 }

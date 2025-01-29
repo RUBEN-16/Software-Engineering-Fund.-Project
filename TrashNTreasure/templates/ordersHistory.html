@@ -1,6 +1,18 @@
 {% extends "index.html" %}
 {% block title %}My History{% endblock %}
 {% block content %}
+<div class="msg">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
     <link rel="stylesheet" href="/static/orderHistory.css">
     
     <div class="order-history-content">
@@ -30,7 +42,7 @@
                         <span class="delivery-status" data-status="{{ order["delivery_status"] }}">Status: {{ order["delivery_status"] }}</span>
                     </div>
                     <div class="order-actions">
-                        <a href="#" class="action-btn">View</a>
+                        <a href="{{url_for("user.order_details", order_id=order["id"])}}" class="action-btn">View</a>
                     </div>
                 </div>
             {% endfor %}

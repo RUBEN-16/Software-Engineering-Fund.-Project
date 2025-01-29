@@ -1,172 +1,195 @@
 /* General Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  .body-container{
-    padding: 20px 50px;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+.body-container{
+  padding: 20px 50px;
+}
 
-  /* Profile Container */
-  .profile-container {
-    display: flex;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Profile Container */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0px;
+  height: 80vh;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(61, 40, 40, 0.1);
+  overflow: hidden;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+  background: #2c3e50;
+  color: #fff;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-nav h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.top-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.top-nav ul li {
+  margin: 0;
+}
+
+.top-nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 10px 15px;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius: 5px;
+}
+
+.top-nav ul li a.active,
+.top-nav ul li a:hover {
+  background-color: #1abc9c;
+  color: #fff;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto; /* Add scroll if content overflows */
+}
+
+.section {
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+
+.section.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+h2 {
+  font-size: 35px;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* Form Styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.submit-btn {
+  background: #1abc9c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: #16a085;
+  transform: translateY(-2px);
+}
+
+.card-added{
+  display: flex;
     flex-direction: column;
-    margin: 20px 0px;
-    height: 80vh;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(61, 40, 40, 0.1);
-    overflow: hidden;
-  }
-  
-  /* Top Navigation Bar */
-  .top-nav {
-    background: #2c3e50;
-    color: #fff;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-  }
-  
-  .top-nav h2 {
-    font-size: 24px;
-    margin: 0;
-  }
-  
-  .top-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-  }
-  
-  .top-nav ul li {
-    margin: 0;
-  }
-  
-  .top-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 10px 15px;
-    transition: background-color 0.3s, color 0.3s;
-    border-radius: 5px;
-  }
-  
-  .top-nav ul li a.active,
-  .top-nav ul li a:hover {
-    background-color: #1abc9c;
-    color: #fff;
-  }
-  
-  /* Main Content */
-  .main-content {
-    flex: 1;
-    padding: 40px;
-    overflow-y: auto; /* Add scroll if content overflows */
-  }
-  
-  .section {
-    display: none;
-    animation: fadeIn 0.5s ease;
-  }
-  
-  .section.active {
+    justify-content: center;
+}
+.card-added img {
+    width: 300px;
+    height: auto;
     display: block;
-    animation: fadeIn 0.5s ease;
-  }
-  
-  h2 {
-    font-size: 35px;
-    margin-bottom: 20px;
-    color: #2c3e50;
-  }
-  
-  /* Form Styling */
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: #555;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .form-group textarea {
-    resize: vertical;
-    height: 100px;
-  }
-  
-  .submit-btn {
-    background: #1abc9c;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
-  }
-  
-  .submit-btn:hover {
-    background: #16a085;
-  }
+    margin: 15px auto;
+    transition: transform 0.3s ease;
+}
 
-  .card-added{
-    display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-  }
-  .card-added img {
-      width: 300px;
-      height: auto;
-      display: block;
-      margin: 15px auto;
-      transition: transform 0.3s ease;
-  }
-  
-  .card-added:hover img {
-      transform: scale(1.1);
-  }
-  .card-added p{
-    font-size: 1.2em;
-      color: #555;
-      margin-bottom: 10px;
-      text-align: center;
-  }
-  
-  .remove-btn{
-         background-color: #dc3545; /* Red color */
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1.1em;
+.card-added:hover img {
+    transform: scale(1.1);
+}
+.card-added p{
+  font-size: 1.2em;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.remove-btn{
+      background-color: #dc3545; /* Red color */
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1em;
       margin-top: 10px;
       transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  
-  .remove-btn:hover{
-        background-color: #c82333; /* Darker red on hover */
-      transform: translateY(-2px);
-  }
+}
+
+.remove-btn:hover{
+      background-color: #c82333; /* Darker red on hover */
+    transform: translateY(-2px);
+}
+/*Deactivate button*/
+.deactivate-btn {
+  background-color: #dc3545; /* Red color */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+.deactivate-btn:hover{
+   background-color: #c82333; /* Darker red on hover */
+   transform: translateY(-2px);
+}
+#personal-details{
+  position:relative;
+}

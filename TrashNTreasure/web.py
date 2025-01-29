@@ -208,7 +208,7 @@ def user_orders():
                     "quantity":order["quantity"]
                 },
                 "total_amount": order["total_amount"],
-                "delivery_status": order["status"]
+                "delivery_status": order["delivery_status"]
              })
     except Exception as e:
         flash(f"Error while fetching orders: {e}", "error")

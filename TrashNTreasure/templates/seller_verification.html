@@ -13,7 +13,7 @@
       {% endif %}
     {% endwith %}
   </div>
-{% if seller_status == 1 %}
+{% if session.get("seller_status") == 1 %}
 <link rel="stylesheet" href="/static/seller_approved.css">
 <!-- Approved Seller Page Content -->
 <div class="content">
@@ -22,73 +22,85 @@
     <!-- Vertical Navigation Bar for Seller -->
     <div class="vertical-nav">
         <ul>
-            <li><a href="#Product">Your Product</a></li>
-            <li><a href="#Order">Orders</a></li>
+            <li><a href="{{url_for("seller.your_products")}}#Product">Your Product</a></li>
+            <li><a href="{{url_for("seller.your_product_orders")}}#Order">Orders</a></li>
             <li><a href="#Courier">Request Courier</a></li>
         </ul>
     </div>
 
-    <!-- Content Sections -->
-    <section id="Product" class="content-section">
-        <link rel="stylesheet" href="/static/seller_product.css">
-        <div class="product-content" action="{{url_for('seller.your_product_page')}}">
+     <section id="Product" class="content-section">
+        <div class="product-content">
             <h1>Your Products</h1>
             <a class="add-product-btn" id="addProductBtn" href="#add-product">Add New Product</a>
             <div class="product-list" id="productList">
                 <!-- Example product -->
-                <div class="product-item">
-                    <img src="/Seller UI/tshirt.png" alt="Product" class="product-img">
-                    <div class="product-info">
-                        <h3 class="product-name">Product Name</h3>
-                        <p class="product-price">Price: $50</p>
-                        <div class="product-actions">
-                            <button class="edit-btn">Edit</button>
-                            <button class="remove-btn">Remove</button>
+                {%for product in products%}
+                    <div class="product-item">
+                        <img src="{{ product.image_path }}" alt="{{ product.name }}" class="product-img">
+                        <div class="product-info">
+                            <a class="product-name" href="{{url_for("seller.product_details", id=product.id)}}#product-details">{{ product.name }}</a>
+                            <p class="product-price">Price: RM {{ product.price }}</p>
+                            <p class="product-quantity">Quantity: {{ product.quantity }}</p>
+                            <div class="product-actions">
+                                <a class="view-btn" href="{{url_for("seller.product_details", id=product.id)}}#product-details">View</a>
+                                <form action="{{ url_for('seller.remove_product', product_id=product.id) }}" method="POST" onsubmit="return confirmRemove()">
+                                    <button type="submit" class="remove-btn">Remove</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {%endfor%}
+                {% if not products %}
+                    <p>Post your precious product in our platform.</p>
+                {% endif %}
             </div>
         </div>
     </section>
+    <script>
+        function confirmRemove() {
+          return confirm("Are you sure you want to remove this product?");
+        }
+    </script>
     <section id="add-product" class="content-section">
         <div class="form-container">
             <h1>Add New Product</h1>
-            <form action="#" method="POST" enctype="multipart/form-data">
+            <form action="{{url_for("product.add_product")}}" method="post" enctype="multipart/form-data">
                 <!-- Product Name -->
                 <div class="form-group">
-                    <label for="product-name">Product Name:</label>
-                    <input type="text" id="product-name" name="product-name" placeholder="Enter product name" required>
+                    <label for="product_name">Product Name:</label>
+                    <input type="text" id="product_name" name="product_name" placeholder="Enter product name" required>
                 </div>
     
                 <!-- Product Category -->
                 <div class="form-group">
-                    <label for="product-category">Category:</label>
-                    <select id="product-category" name="product-category" required>
+                    <label for="category">Category:</label>
+                    <select id="category" name="category" required>
                         <option value="" disabled selected>Select a category</option>
-                        <option value="furniture">Furniture</option>
                         <option value="home-decor">Home Decor</option>
+                        <option value="furniture">Furniture</option>
                         <option value="wearing">Wearing</option>
                         <option value="electronic">Electronic</option>
                         <option value="accessories">Accessories</option>
+                        <option value="other">Others</option>
                     </select>
                 </div>
     
                 <!-- Product Description -->
                 <div class="form-group">
-                    <label for="product-description">Product Description:</label>
-                    <textarea id="product-description" name="product-description" rows="5" placeholder="Describe your product." required></textarea>
+                    <label for="description">Product Description:</label>
+                    <textarea id="description" name="description" rows="5" placeholder="Describe your product." required></textarea>
                 </div>
     
                 <!-- Price -->
                 <div class="form-group">
-                    <label for="product-price">Price (RM):</label>
-                    <input type="number" id="product-price" name="product-price" placeholder="Enter price" step="0.01" required>
+                    <label for="price">Price (RM):</label>
+                    <input type="number" id="price" name="price" placeholder="Enter price" step="0.01" required>
                 </div>
     
                 <!-- Quantity -->
                 <div class="form-group">
-                    <label for="product-quantity">Quantity:</label>
-                    <input type="number" id="product-quantity" name="product-quantity" placeholder="Enter quantity" required>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
                 </div>
     
                 <!-- Condition -->
@@ -107,145 +119,247 @@
                 <!-- Seller ID -->
                 <div class="form-group">
                     <label for="seller-id">Seller ID:</label>
-                    <input type="text" id="seller-id" name="seller-id" placeholder="Enter seller ID" required>
+                    <input type="text" id="seller-id" name="seller-id" value="{{session.get('buyer_id')}}" readonly>
                 </div>
     
                 <!-- Product Image -->
                 <div class="form-group">
-                    <label for="product-image">Product Image:</label>
-                    <input type="file" id="product-image" name="product-image" accept="image/*" required>
+                    <label for="image">Product Image:</label>
+                    <input type="file" id="image" name="image" accept="image/*" required>
                 </div>
     
                 <!-- Product Video (Optional) -->
                 <div class="form-group">
-                    <label for="product-video">Product Video (Optional):</label>
-                    <input type="file" id="product-video" name="product-video" accept="video/*">
+                    <label for="video">Product Video (Optional):</label>
+                    <input type="file" id="video" name="video" accept="video/*">
                 </div>
     
                 <!-- Add Product Button -->
                 <div class="form-group">
-                    <a type="submit" class="btn-add">Add Product</a>
+                    <button type="submit" class="btn-add">Add Product</button>
                 </div>
                 <div class="form-group">
-                    <a type="button" class="btn-back" href="#Product">Back</a>
+                    <button type="button" class="btn-back" onclick="window.location.href='#Product'">Back</button>
                 </div>
             </form>
         </div>
     </section>
+    {% if seller_product %}
+    <section id="product-details" class="content-section">
+        <div class="product-details-container">
+            <section class="product-image-section">
+                <img src="{{ seller_product.image_path }}" alt="{{ seller_product.name }}" class="product-img">
+            </section>
+            <section class="product-info-section">
+                <h2 class="product-name"><span id="product-name-display">{{ seller_product.name }}</span></h2>
+                <p class="product-category">Category: <span id="product-category-display">{{ seller_product.category }}</span></p>
+                <p class="product-description">Description: <span id="product-description-display">{{ seller_product.description }}</span></p>
+                <div id="edit-form-container" style="display:none;">
+                  <form id="edit-form" action="{{url_for("seller.edit_product", id=seller_product.id)}}" method="POST">
+                    <div class="form-group">
+                      <label for="price">Price (RM):</label>
+                      <input type="number" id="price" name="price" value="{{ seller_product.price }}" step="0.01"  required>
+                    </div>
+                    <div class="form-group">
+                      <label for="quantity">Quantity:</label>
+                       <input type="number" id="quantity" name="quantity" value="{{ seller_product.quantity }}"  required>
+                    </div>
+                     <div class="product-actions">
+                        <button type="button" id="save-btn" class="save-btn">Save</button>
+                      </div>
+                  </form>
+                </div>
+                <div class="product-actions">
+                   <button type="button" id="edit-btn" class="edit-btn">Edit</button>
+                 </div>
+            </section>
+        </div>
+        <script>
+          document.getElementById('edit-btn').addEventListener('click', function() {
+              const editFormContainer = document.getElementById('edit-form-container');
+              const editButton = document.getElementById('edit-btn');
+              editFormContainer.style.display = "block";
+              editButton.style.display = "none";
+          });
+          document.getElementById('save-btn').addEventListener('click', function() {
+              const editForm = document.getElementById('edit-form');
+              const editFormContainer = document.getElementById('edit-form-container');
+              const editButton = document.getElementById('edit-btn');
+              editForm.submit();
+              editFormContainer.style.display = "none";
+              editButton.style.display = "block";
+          });
+        </script>
+    </section>
+    
+    {% endif %}
     <section id="Order" class="content-section">
-        <link rel="stylesheet" href="/static/seller_orders.css">
         <div class="orders-content">
             <h1>Your Orders</h1>
-            <table>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Product</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                <tr>
-                    <td>#12345</td>
-                    <td>Ahmad Zulkifli</td>
-                    <td>Product 1</td>
-                    <td>Pending</td>
-                    <td>
-                        <button class="accept-btn">Accept</button>
-                        <button class="remove-btn">Remove</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>#12346</td>
-                    <td>Siti Aminah</td>
-                    <td>Product 2</td>
-                    <td>Pending</td>
-                    <td>
-                        <button class="accept-btn">Accept</button>
-                        <button class="remove-btn">Remove</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>#12347</td>
-                    <td>Tan Wei Ling</td>
-                    <td>Product 3</td>
-                    <td>Pending</td>
-                    <td>
-                        <button class="accept-btn">Accept</button>
-                        <button class="remove-btn">Remove</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>#12348</td>
-                    <td>Ravi Kumar</td>
-                    <td>Product 4</td>
-                    <td>Pending</td>
-                    <td>
-                        <button class="accept-btn">Accept</button>
-                        <button class="remove-btn">Remove</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>#12349</td>
-                    <td>Nurul Hidayah</td>
-                    <td>Product 5</td>
-                    <td>Pending</td>
-                    <td>
-                        <button class="accept-btn">Accept</button>
-                        <button class="remove-btn">Remove</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>#12350</td>
-                    <td>Chong Kah Yee</td>
-                    <td>Product 6</td>
-                    <td>Pending</td>
-                    <td>
-                        <button class="accept-btn">Accept</button>
-                        <button class="remove-btn">Remove</button>
-                    </td>
-                </tr>
-            </table>
+            
+            <!-- Navigation Tabs -->
+            <nav class="order-mng">
+                <ul>
+                    <li><a href="#requests">Requested Orders</a></li>
+                    <li><a href="#confirmed">Confirmed Orders</a></li>
+                </ul>
+            </nav>
+    
+            <!-- Requested Orders Section -->
+            <section id="requests" class="sub-content-section">
+                <h2>Requested Orders</h2>
+                <div class="order-container">
+                    {% for order in requested_orders %}
+                        <div class="order-card">
+                            <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+                            <p><strong>Buyer ID:</strong> {{ order.buyer_id }}</p>
+                            <p><strong>Product Name:</strong> {{ order.product_name }}</p>
+                            <p><strong>Quantity:</strong> {{ order.order_quantity }}</p>
+                            <p><strong>Date:</strong> {{ order.date }}</p>
+                            <p><strong>Total Amount:</strong> RM {{ order.total_amount }}</p>
+                            <div class="actions">
+                                <form action="{{url_for('seller.accept_order', order_id=order.order_id)}}" method="POST">
+                                    <button type="submit" class="accept-btn">Accept</button>
+                                </form>
+                                <form action="{{ url_for('seller.reject_order', order_id=order.order_id)}}" method="POST" onsubmit="return confirmReject()">
+                                    <button type="submit" class="remove-btn">Reject</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% if not requested_orders %}
+                        <p class="no-orders">No orders found for your products.</p>
+                    {% endif %}
+                </div>
+            </section>
+            <script>
+                function confirmReject() {
+                  return confirm("Are you sure you want to reject this order?");
+                }
+            </script>
+            <!-- Confirmed Orders Section -->
+            <section id="confirmed" class="sub-content-section">
+                <h2>Confirmed Orders</h2>
+                <div class="order-container">
+                    {% for order in confirmed_orders %}
+                        <div class="order-card">
+                            <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+                            <p><strong>Buyer ID:</strong> {{ order.buyer_id }}</p>
+                            <p><strong>Product Name:</strong> {{ order.product_name }}</p>
+                            <p><strong>Quantity:</strong> {{ order.order_quantity }}</p>
+                            <p><strong>Date:</strong> {{ order.date }}</p>
+                            <p><strong>Total Amount:</strong> RM {{ order.total_amount }}</p>
+                            <div class="actions">
+                                <a class="view-btn" href="{{url_for("seller.order_details", order_id=order.order_id)}}">View</a>
+                           </div>
+                        </div>
+                    {% endfor %}
+                    {% if not confirmed_orders %}
+                        <p class="no-orders">No confirmed orders yet.</p>
+                    {% endif %}
+                </div>
+            </section>
         </div>
     </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const navLinks = document.querySelectorAll(".order-mng ul li a");
+            const subSections = document.querySelectorAll(".sub-content-section");
+        
+            navLinks.forEach(link => {
+                link.addEventListener("click", function (e) {
+                    e.preventDefault(); // Prevent default anchor behavior
+        
+                    // Remove active class from all links and subsections
+                    navLinks.forEach(link => link.classList.remove("active"));
+                    subSections.forEach(section => section.classList.remove("active"));
+        
+                    // Add active class to the clicked link and corresponding subsection
+                    this.classList.add("active");
+                    const targetId = this.getAttribute("href").substring(1); // Get the target ID (e.g., "requests")
+                    document.getElementById(targetId).classList.add("active");
+                });
+            });
+        
+            // Activate the first tab by default
+            if (navLinks.length > 0) {
+                navLinks[0].click();
+            }
+        });
+    </script>
+    <!-- Existing code ... -->
+
+    <section id="order-details" class="content-section">
+        {% if session.get("selected_order") %}
+            <div class="order-details-container">
+                <h1>Order Details</h1>
+                <section class="user-info">
+                    <h2>Buyer Information</h2>
+                    <p><strong>Name:</strong> {{session.get("selected_order").buyer_name}}</p>
+                    <p><strong>Email:</strong> {{session.get("selected_order").buyer_email}}</p>
+                    <p><strong>Phone:</strong> {{session.get("selected_order").buyer_phone}}</p>
+                    <p><strong>Address:</strong> {{session.get("selected_order").buyer_address}}</p>
+                </section>
+
+                <section class="order-info">
+                    <h2>Order Information</h2>
+                    <p><strong>Order ID:</strong> {{ session.get("selected_order").order_id }}</p>
+                    <p><strong>Product Name:</strong> {{ session.get("selected_order").product_name }}</p>
+                     <p><strong>Product Image:</strong> <img class="product-image" src="{{ session.get("selected_order").product_image_path }}" alt="{{ session.get("selected_order").product_name}}"/></p>
+                    <p><strong>Quantity:</strong> {{ session.get("selected_order").order_quantity }}</p>
+                    <p><strong>Date:</strong> {{ session.get("selected_order").date }}</p>
+                    <p><strong>Total Amount:</strong> RM {{ session.get("selected_order").total_amount }}</p>
+                    <p><strong>Delivery Status:</strong> {{ session.get("selected_order").delivery_status }}</p>
+                    <!-- Add any additional order info here -->
+                </section>
+                <button class="back-button" onclick="window.location.href='#Order'">Back to Orders</button>
+           </div>
+        {% else %}
+            <div class="no-order-selected">
+                <h2>Please select order to show details.</h2>
+            </div>
+        {% endif %}
+    </section>
+<!-- Existing code ... -->
     <section id="Courier" class="content-section">
         <div class="request-courier">
             <h1>Request Courier</h1>
-            <form>
+            <form action="{{url_for("seller.request_courier")}}" method="post">
                 <label for="order-id">Order ID:</label>
-                <input type="text" id="order-id" name="order-id" placeholder="Enter Order ID">
-    
+                <input type="text" id="order-id" name="order-id" placeholder="Enter Order ID" value="{% if session.get('courier_order') %}{{ session['courier_order']['order_id'] }}{% endif %}" readonly>
+
                 <label for="product-name">Product Name:</label>
-                <input type="text" id="product-name" name="product-name" placeholder="Enter Product Name">
-    
+                <input type="text" id="product-name" name="product-name" placeholder="Enter Product Name" value="{% if session.get('courier_order') %}{{ session['courier_order']['product_name'] }}{% endif %}" readonly>
+
                 <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" placeholder="Enter Quantity">
-    
+                <input type="number" id="quantity" name="quantity" placeholder="Enter Quantity" value="{% if session.get('courier_order') %}{{ session['courier_order']['order_quantity'] }}{% endif %}" readonly>
+
                 <label for="seller-address">Seller Address:</label>
-                <input type="text" id="seller-address" name="seller-address" placeholder="Enter Seller Address">
-    
+                <input type="text" id="seller-address" name="seller-address" placeholder="Enter Seller Address" value="{% if session.get('seller_address') %}{{ session['seller_address'] }}{% endif %}" required>
+
                 <label for="buyer-address">Buyer Address:</label>
-                <input type="text" id="buyer-address" name="buyer-address" placeholder="Enter Buyer Address">
-    
+                <input type="text" id="buyer-address" name="buyer-address" placeholder="Enter Buyer Address" value="{% if session.get('courier_order') %}{{ session['courier_order']['buyer_address'] }}{% endif %}" readonly>
+
                 <label>Choose Courier Service:</label>
                 <div class="courier-options">
                     <label class="courier-option">
-                        <input type="radio" name="courier" value="fedex">
-                        <img src="/static/images/posLaju.png" alt="FedEx">
+                        <input type="radio" name="courier" value="Pos Laju" required>
+                        <img src="/static/images/posLaju.png" alt="PosLaju">
                         <span>Pos Laju</span>
                     </label>
                     <label class="courier-option">
-                        <input type="radio" name="courier" value="ups">
-                        <img src="/static/images/ninjaVan.png" alt="UPS">
+                        <input type="radio" name="courier" value="Ninja Van" required>
+                        <img src="/static/images/ninjaVan.png" alt="NinjaVan">
                         <span>Ninja Van</span>
                     </label>
                     <label class="courier-option">
-                        <input type="radio" name="courier" value="dhl">
+                        <input type="radio" name="courier" value="GDex" required>
                         <img src="/static/images/GDex.png" alt="DHL">
                         <span>GDex</span>
                     </label>
                     <label class="courier-option">
-                        <input type="radio" name="courier" value="usps">
-                        <img src="/static/images/DHL.png" alt="USPS">
+                        <input type="radio" name="courier" value="DHL" required>
+                        <img src="/static/images/DHL.png" alt="DHL">
                         <span>DHL</span>
                     </label>
                 </div>

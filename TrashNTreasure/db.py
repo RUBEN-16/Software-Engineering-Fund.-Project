@@ -79,9 +79,39 @@ con.execute("""
         product_id INTEGER NOT NULL,
         quantity INTEGER NOT NULL,
         date DATE NOT NULL,
-        status TEXT DEFAULT 'Pending',
+        payment_method TEXT NOT NULL,
+        delivery_status TEXT DEFAULT 'Pending',
+        seller_status TEXT DEFAULT 'Pending',
         total_amount DECIMAL(10,2) NOT NULL,
         FOREIGN KEY (buyer_id) REFERENCES user(pid) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (product_id) REFERENCES products(id) 
+    )
+""")
+
+# Feedback database
+con.execute("""
+    CREATE TABLE IF NOT EXISTS feedback2 (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        buyer_id INTEGER NOT NULL,
+        product_id INTEGER NOT NULL,
+        rating INTEGER NOT NULL,
+        comment TEXT NOT NULL,
+        FOREIGN KEY (buyer_id) REFERENCES user(pid) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
+    )
+""")
+
+# Pickup Request database
+con.execute("""
+    CREATE TABLE IF NOT EXISTS pickup_request (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_id INTEGER NOT NULL,
+        seller_id INTEGER NOT NULL,
+        courier TEXT NOT NULL,
+        seller_address TEXT NOT NULL,
+        buyer_address TEXT NOT NULL,
+        FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE ON UPDATE CASCADE
     )
 """)
 

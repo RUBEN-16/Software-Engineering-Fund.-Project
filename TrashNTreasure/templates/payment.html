@@ -1,6 +1,18 @@
 {% extends "index.html" %}
 {% block title %} Payment {% endblock %}
 {% block content %}
+<div class="msg">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
     <link rel="stylesheet" href="../static/payment.css">
     <div class="payment-content">
         <h1>Confirm Your Order</h1>
@@ -40,18 +52,22 @@
                <div class="payment-method-container">
                        <label>
                          <input type="radio" id="bank-card" name="payment_method" value="bank-card">
-                           <img src="/static/images/card.png" alt="bank card" width="100px" height="100px"/>
+                           <img src="/static/images/bank-card.png" alt="bank card" width="80px" height="80px"/>
                                <span>Bank Card</span>
                         </label>
                      </div>
                  <div class="payment-method-container">
                        <label>
                            <input type="radio" id="e-wallet" name="payment_method" value="e-wallet">
-                             <img src="/static/images/e-wallet.png" alt="e-wallet" width="100px" height="100px"/>
+                             <img src="/static/images/e-wallet.png" alt="e-wallet" width="100px" height="60px"/>
                             <span>E-Wallet</span>
                        </label>
                   </div>
-                 <button class="confirm-payment-btn" id="confirm-payment-btn" type="submit">Confirm Payment</button>
+                  <div class="buttons">
+                        <button class="confirm-payment-btn" id="confirm-payment-btn" type="submit">Confirm Payment</button>
+                        <button class="back-btn" id="back-btn" type="button" onclick="window.location.href='/cart'" >Back</button>
+                  </div>
+                    
             </div>
           </form>
        </div>

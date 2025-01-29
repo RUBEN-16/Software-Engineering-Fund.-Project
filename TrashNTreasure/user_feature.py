@@ -35,8 +35,6 @@ def proceed_to_payment():
     # Fetch latest products added to the cart by the current buyer
     added_products = cur.execute("SELECT * FROM cart WHERE buyer_id = ?", (buyer_id,)).fetchall()
     
-    con.close()
-
     if not added_products:
         flash("Your cart is empty. Add items to proceed to checkout.", "warning")
         return redirect(url_for("product_page"))
@@ -48,17 +46,21 @@ def proceed_to_payment():
         new_quantity = request.form.get(quantity_key, type=int)
         if new_quantity is None:
             new_quantity = product['quantity']
-
+            
+        seller_id = cur.execute("SELECT seller_id FROM products WHERE id = ?", (product["product_id"],)).fetchone()
+        
         payment_items.append({
                 "product_id": product["product_id"],
                 "product_name": product["product_name"],
                 "quantity": new_quantity,
                 "price": product["price"],
+                "seller_id": seller_id[0] if seller_id else None,
                 "product_image_path": product["product_image_path"]
         })
+    con.close()
     session["payment_items"] = payment_items
     return redirect(url_for("payment_page"))
-    
+
 @user_blueprint.route('/withdraw', methods=['POST'])
 def withdraw():
     buyer_id = session.get("buyer_id")
@@ -183,12 +185,12 @@ def add_bank_card():
     
     if not all([card_number, card_holder, expiry_date, cvv]):
         flash("Please fill all bank card details", "danger")
-        return redirect(url_for("user.user_page"))
+        return redirect(url_for("user.user_page")+"/#bank-card")
     
     # Basic CVV validation, allow only 3 or 4 digit numbers
     if not re.match(r'^\d{3,4}$', cvv):
       flash("Invalid CVV format. Use 3 or 4 digit numbers", "danger")
-      return redirect(url_for("user.user_page"))
+      return redirect(url_for("user.user_page")+"/#bank-card")
 
 
     con = get_connect_db()
@@ -204,7 +206,7 @@ def add_bank_card():
          if con:
             con.close()
     
-    return redirect(url_for("user.user_page"))
+    return redirect(url_for("user.user_page")+"/#bank-card")
 
 @user_blueprint.route('/remove_bank_card', methods=['POST'])
 def remove_bank_card():
@@ -226,7 +228,7 @@ def remove_bank_card():
         if con:
             con.close()
 
-    return redirect(url_for("user.user_page"))
+    return redirect(url_for("user.user_page")+"/#bank-card")
 
 
 @user_blueprint.route('/change_password', methods=['POST'])
@@ -242,11 +244,11 @@ def change_password():
     
     if not all([current_password, new_password, confirm_password]):
       flash("Please fill all password fields", "danger")
-      return redirect(url_for("user.user_page"))
+      return redirect(url_for("user.user_page")+"/#change-password")
     
     if new_password != confirm_password:
         flash("New password and confirm password do not match.", "danger")
-        return redirect(url_for("user.user_page"))
+        return redirect(url_for("user.user_page")+"/#change-password")
 
     con = get_connect_db()
     cur = con.cursor()
@@ -256,7 +258,7 @@ def change_password():
         
         if not user_record or user_record["password"] != current_password:
           flash("Incorrect current password.", "danger")
-          return redirect(url_for("user.user_page"))
+          return redirect(url_for("user.user_page")+"/#change-password")
 
 
         cur.execute("UPDATE user SET password = ? WHERE pid = ?", (new_password, buyer_id))
@@ -268,9 +270,7 @@ def change_password():
         if con:
             con.close()
 
-    return redirect(url_for("user.user_page"))
-
-
+    return redirect(url_for("user.user_page")+"/#change-password")
 
 @user_blueprint.route('/confirm_payment', methods=['POST'])
 def confirm_payment():
@@ -288,11 +288,22 @@ def confirm_payment():
     if not payment_method:
         flash("Please choose one of the payment options.", "warning")
         return redirect(url_for('payment_page'))
-
-    total_price = sum(item["quantity"] * item["price"] for item in payment_items)
-
+    
     con = get_connect_db()
     cur = con.cursor()
+    
+    # Fetch user address for validation
+    cur.execute("SELECT address, phone_number FROM user WHERE pid = ?", (buyer_id,))
+    user = cur.fetchone()
+    user_address = user['address'] if user else None
+    user_phone_number = user['phone_number'] if user else None
+    
+    if not user_address or not user_phone_number:
+       flash("You must set your address and phone number before processing payment.", "warning")
+       con.close()
+       return redirect(url_for('user.user_page') + '#personal-details')
+    
+    total_price = sum(item["quantity"] * item["price"] for item in payment_items)
 
     if payment_method == "e-wallet":
        
@@ -314,7 +325,17 @@ def confirm_payment():
             )
             
             for item in payment_items:
-                cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, status) VALUES (?, ?, ?, DATE('now'), ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "Pending"))
+                try:
+                    seller_id = int(item["seller_id"])
+                except (KeyError, ValueError) as e:
+                    seller_id = None
+
+                if seller_id == None:
+                    cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, seller_status, delivery_status, payment_method) VALUES (?, ?, ?, DATE('now'), ?, ?, ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "Confirmed", "Shipped", "E-Wallet"))
+                else:
+                    cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, payment_method) VALUES (?, ?, ?, DATE('now'), ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "E-Wallet"))
+            
+                cur.execute("UPDATE products SET quantity = quantity - ? WHERE id = ?", (item["quantity"], item["product_id"]))
             
             con.execute("DELETE FROM cart WHERE buyer_id = ?", (buyer_id,))
             
@@ -337,7 +358,17 @@ def confirm_payment():
            return redirect(url_for("user.user_page"))
        
         for item in payment_items:
-            cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, status) VALUES (?, ?, ?, DATE('now'), ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "Pending"))
+            try:
+                seller_id = int(item["seller_id"])
+            except (KeyError, ValueError) as e:
+                seller_id = None
+
+            if seller_id == None:
+                cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, seller_status, delivery_status, payment_method) VALUES (?, ?, ?, DATE('now'), ?, ?, ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "Confirmed", "Shipped", "Bank Card"))
+            else:
+                cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, payment_method) VALUES (?, ?, ?, DATE('now'), ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "Bank Card"))
+            
+            cur.execute("UPDATE products SET quantity = quantity - ? WHERE id = ?", (item["quantity"], item["product_id"]))
         
         cur.execute("DELETE FROM cart WHERE buyer_id = ?", (buyer_id,))
         con.commit()
@@ -349,3 +380,111 @@ def confirm_payment():
     
     
     return redirect(url_for('cart'))
+
+
+@user_blueprint.route('/remove_from_cart/<int:cart_item_id>', methods=['POST'])
+def remove_from_cart(cart_item_id):
+    buyer_id = session.get("buyer_id")
+    if not buyer_id:
+        flash("You must be logged in to modify your cart.", "danger")
+        return redirect(url_for("login"))
+
+    con = get_connect_db()
+    cur = con.cursor()
+    try:
+        # Check if the cart item exists and belongs to the user
+        cur.execute("SELECT * FROM cart WHERE id = ? AND buyer_id = ?", (cart_item_id, buyer_id))
+        cart_item = cur.fetchone()
+        if not cart_item:
+            flash("Cart item not found or does not belong to this user.", "warning")
+            return redirect(url_for("cart"))
+
+        # Delete the item from the cart
+        cur.execute("DELETE FROM cart WHERE id = ?", (cart_item_id,))
+        con.commit()
+        flash("Item removed from cart successfully!", "success")
+    except Exception as e:
+        flash(f"An error occurred while removing the item from the cart: {e}", "danger")
+        con.rollback() # Rollback in case of error
+    finally:
+         if con:
+            con.close()
+    
+    return redirect(url_for("cart"))
+
+@user_blueprint.route('/order_details/<int:order_id>', methods=['GET'])
+def order_details(order_id):
+    buyer_id = session.get("buyer_id")
+    if not buyer_id:
+        flash("You must be logged in to view order details.", "error")
+        return redirect(url_for("login"))
+
+    con = get_connect_db()
+    cur = con.cursor()
+
+    order = cur.execute("""
+            SELECT 
+                o.id as order_id,
+                o.buyer_id,
+                o.product_id,
+                o.quantity as order_quantity,
+                o.date,
+                o.total_amount,
+                o.delivery_status,
+                o.seller_status,
+                o.payment_method,
+                p.name as product_name,
+                p.image_path as product_image_path,
+                p.seller_id,
+                s.name as seller_name,
+                s.email as seller_email,
+                s.phone_number as seller_phone
+            FROM orders o
+            JOIN products p ON o.product_id = p.id
+            LEFT JOIN sellers s ON p.seller_id = s.id
+            WHERE o.id = ? AND o.buyer_id = ?
+        """, (order_id, buyer_id)).fetchone()
+
+    if not order:
+        # Check if order exists with different buyer id
+        cur.execute("SELECT buyer_id FROM orders WHERE id = ?",(order_id,))
+        existing_order = cur.fetchone()
+
+        if existing_order:
+             flash(f"This order does not belong to your account, buyer ID {existing_order['buyer_id']}.", "warning")
+        else:
+            flash("Order not found in our database.", "warning")
+            
+        return redirect(url_for("user_orders"))
+    try:
+        int(order['seller_id'])
+    except (ValueError, TypeError):
+        order = dict(order) # Convert to dictionary so that we can assign new key:value
+        order['seller_name'] = "Admin's Choice"
+        order['seller_email'] = "support@trashandtreasure.com" # Added dummy admin email
+        order['seller_phone'] = "+1 (800) 123-4567" # Added dummy admin phone
+        
+    return render_template("order_details.html", order=order)
+
+@user_blueprint.route('/deactivate_account')
+def deactivate_account():
+    buyer_id = session.get("buyer_id")
+    if not buyer_id:
+        flash("You must be logged in to deactivate your account.", "error")
+        return redirect(url_for("login"))
+
+    con = get_connect_db()
+    cur = con.cursor()
+    try:
+        cur.execute("DELETE FROM user WHERE pid = ?", (buyer_id,))
+        con.commit()
+        session.clear()  # Clear user session
+        flash("Your account has been successfully deactivated.", "success")
+    except Exception as e:
+         flash(f"An error occurred: {e}", "danger")
+         con.rollback() # Rollback in case of error
+    finally:
+        if con:
+            con.close()
+
+    return redirect(url_for("login"))

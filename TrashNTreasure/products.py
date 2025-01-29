@@ -95,7 +95,7 @@ def add_product():
         except Exception as e:
             flash(f"An error occurred: {e}", "danger")
     if seller_id:
-        return render_template("seller_verification.html", seller_id=seller_id)
+        return redirect(url_for("seller.your_products")+"#Product")
     elif admin_id:
         return render_template("inventory.html", admin_id=admin_id)
     
@@ -176,14 +176,6 @@ def filter_product():
             con.close()
     return redirect(url_for("product_page"))
 
-@product_blueprint.route("/item_details/<id>", methods=["POST", "GET"])
-def item_detail(id):
-    con = get_connect_db()
-    cur = con.cursor()
-    product = cur.execute("SELECT * FROM products WHERE id = ?", (id,)).fetchone()
-    
-    return render_template("product_details.html", product=product)
-
 
 # Assuming this is part of your Flask app
 @product_blueprint.route("/add-to-cart/<id>", methods=["POST"])
@@ -224,5 +216,58 @@ def add_to_cart(id):
 
 
 
+@product_blueprint.route("/submit_comment/<int:product_id>", methods=["POST"])
+def submit_comment(product_id):
+   buyer_id = session.get("buyer_id")
+   if not buyer_id:
+        flash("You must be logged in to submit a comment.", "error")
+        return redirect(url_for("login"))
+   
+   rating = request.form.get("rating", type=int)
+   comment = request.form.get("comment")
+   
+   if not all([rating, comment]):
+      flash("Please fill all rating and comment details", "danger")
+      return redirect(url_for("product.item_detail", id=product_id))
     
+   con = get_connect_db()
+   cur = con.cursor()
+   try:
+       cur.execute(
+          "INSERT INTO feedback2 (buyer_id, product_id, rating, comment) VALUES (?, ?, ?, ?)",
+          (buyer_id, product_id, rating, comment),
+        )
+       con.commit()
+       flash("Comment submitted successfully!", "success")
+   except Exception as e:
+        flash(f"An error occurred while submitting the comment: {e}", "danger")
+        con.rollback()
+   finally:
+        if con:
+            con.close()
+   return redirect(url_for("product.item_detail", id=product_id))
+
+
+
+@product_blueprint.route("/item_details/<id>", methods=["GET"])
+def item_detail(id):
+    con = get_connect_db()
+    cur = con.cursor()
+    product = cur.execute("SELECT * FROM products WHERE id = ?", (id,)).fetchone()
+     
+    if not product:
+         flash("Product not found.", "warning")
+         return redirect(url_for("product_page"))
+    comments = cur.execute("""
+           SELECT 
+                f.buyer_id,
+                f.rating,
+                f.comment,
+                u.firstName || ' ' || u.lastName as buyer_name
+            FROM feedback2 f
+            JOIN user u ON f.buyer_id = u.pid
+            WHERE f.product_id = ?
+        """, (id, )).fetchall()
+    
+    return render_template("product_details.html", product=product, comments=comments)
     

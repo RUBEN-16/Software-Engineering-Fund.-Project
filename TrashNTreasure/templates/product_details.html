@@ -2,23 +2,74 @@
 {% block title %} C Page {%endblock%}
 {%block content%}
 <link rel="stylesheet" href="/static/product_details.css"/>
-
+<div class="msg">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <span>{{ message }}</span>
+          <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
 <section class="product-details">
     <div class="product-info">
       <img id="product-image" src="{{product.image_path }}" alt="Product Image" />
       <div id="product-description">
         <h2 id="product-name">{{product.name}}</h2>
         <p id="product-stats">It's a {{product.condition}} product</p>
-        <div id="product-rating">⭐⭐⭐⭐☆ (4.2)</div>
         <p id="product-price"><s>$1{{product.price}}</s> <span>${{product.price}}</span></p>
         <p id="product-description-text">{{product.description}}</p>
 
         <div class="add-to-cart">
-          <button id="add-to-cart-btn">Add to Cart</button>
+          <form method="POST" action="{{ url_for('product.add_to_cart', id=product.id) }}">
+              <input type="number" name="quantity" value="1" min="1" max="{{product.quantity}}" required>
+              <button type="submit" id="add-to-cart-btn">Add to Cart</button>
+           </form>
         </div>
       </div> 
     </div>
-  </section>
+
+    <div class="product-comments">
+          <h2>Product Comments</h2>
+          <div id="comment-list">
+          {% if comments %}
+             {% for comment in comments %}
+                 <div class="comment-item">
+                      <div class="comment-header">
+                         <span class="comment-buyer">{{comment.buyer_name}}</span>
+                         <div class="comment-rating">
+                                  {% for i in range(comment.rating) %}
+                                     <span class="star">⭐</span>
+                                  {% endfor %}
+                         </div>
+                      </div>
+                     <p class="comment-text">{{comment.comment}}</p>
+                 </div>
+                {% endfor %}
+            {% else %}
+                <p>No comments yet. Be the first to share your thoughts!</p>
+             {% endif %}
+            </div>
+            <form method="POST" action="{{ url_for('product.submit_comment', product_id=product.id) }}" class="comment-form">
+                <div class="rating-input">
+                    <label for="rating">Rate the product:</label>
+                    <div class="rating">
+                        <input type="radio" id="star5" name="rating" value="5" required><label for="star5" title="5 stars">⭐</label>
+                        <input type="radio" id="star4" name="rating" value="4" required><label for="star4" title="4 stars">⭐</label>
+                        <input type="radio" id="star3" name="rating" value="3" required><label for="star3" title="3 stars">⭐</label>
+                        <input type="radio" id="star2" name="rating" value="2" required><label for="star2" title="2 stars">⭐</label>
+                        <input type="radio" id="star1" name="rating" value="1" required><label for="star1" title="1 star">⭐</label>
+                    </div>
+                </div>
+                <label for="comment">Your Comment:</label>
+                <textarea id="comment" name="comment" rows="4" required></textarea>
+                <button type="submit">Post Comment</button>
+            </form>
+         </div>
+</section>
   <br><br>
   <footer class="footer">
     <div class="footer-content">
@@ -47,7 +98,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2023 Trash & Treasure. All rights reserved.</p>
+      <p>© 2023 Trash & Treasure. All rights reserved.</p>
     </div>
   </footer>
 

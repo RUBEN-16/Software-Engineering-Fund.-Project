@@ -83,6 +83,10 @@
     color: #ffc107; /* Amber/orange color */
 }
 
+.delivery-status[data-status="Cancelled"] {
+    color: #ff0707; /* Amber/orange color */
+}
+
 .delivery-status[data-status="Shipped"] {
     color: #17a2b8; /* Blue color */
 }

@@ -53,6 +53,7 @@
                         <textarea id="address"  name="address" >{{user.address}}</textarea>
                     </div><br>
                     <button type="submit" class="submit-btn">Save Changes</button>
+                    <button type="button" class="deactivate-btn" onclick="confirmDeactivateAccount()">Deactivate Account</button>
                 </form>
             </section>
 
@@ -129,6 +130,7 @@
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const target = document.querySelector(link.getAttribute('href'));
+        const targetHash = link.getAttribute('href'); // Get the href like #bank-card
 
         // Remove active class from all links and sections
         links.forEach(l => l.classList.remove('active'));
@@ -137,7 +139,52 @@
         // Add active class to the clicked link and target section
         link.classList.add('active');
         target.classList.add('active');
+
+        // Update URL hash
+        window.location.hash = targetHash;
       });
     });
+
+    // Handle initial load based on hash if it exists
+    function handleHashChange() {
+        const currentHash = window.location.hash;
+
+        if(currentHash){
+            const target = document.querySelector(currentHash);
+
+            if (target){
+                // Remove active class from all links and sections
+                links.forEach(l => l.classList.remove('active'));
+                sections.forEach(section => section.classList.remove('active'));
+
+                // Add active class to the clicked link and target section
+                const activeLink = document.querySelector(`.top-nav a[href="${currentHash}"]`);
+                activeLink.classList.add('active');
+                target.classList.add('active');
+
+            }else{
+                 // Set the first link and section to active by default if no valid hash was passed
+                links[0].classList.add('active');
+                sections[0].classList.add('active');
+            }
+        }else{
+            // Set the first link and section to active by default
+            links[0].classList.add('active');
+            sections[0].classList.add('active');
+        }
+
+
+    }
+    window.onload = handleHashChange;
+    window.addEventListener('hashchange', handleHashChange)
+    
+    function confirmDeactivateAccount() {
+    if (confirm("Are you sure you want to deactivate your account? This action cannot be undone.")) {
+        if (confirm("Are you REALLY sure? Your account will be deleted.")) {
+            window.location.href = "{{ url_for('user.deactivate_account') }}"; // Navigate using window.location.href
+        }
+     }
+   }
+
   </script>
 {%endblock%}
