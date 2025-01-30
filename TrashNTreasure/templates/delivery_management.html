@@ -1,50 +1,40 @@
-{%extends "logistic_page.html"%}
-{%block content%}
-<link rel="stylesheet" href="../static/delivery_management.css">
-
-<section id="pending-deliveries">
-    <h2>Pending Deliveries</h2>
-    <ul>
-        <li>Order ID: 12345 - Buyer: Jane Doe - Delivery Address: 123 Elm St</li>
-        <li>Order ID: 67890 - Buyer: Mark Smith - Delivery Address: 456 Oak Ave</li>
-        <li>Order ID: 11223 - Buyer: Sarah Lee - Delivery Address: 789 Pine Dr</li>
-    </ul>
-</section>
-
-<section id="in-transit">
-    <h2>In-Transit Deliveries</h2>
-    <ul>
-        <li>Order ID: 34567 - Buyer: Emily Clark - Courier: John’s Couriers</li>
-        <li>Order ID: 89012 - Buyer: David Kim - Courier: FastTrack Delivery</li>
-    </ul>
-</section>
-
-<section id="delivered">
-    <h2>Delivered Items</h2>
-    <ul>
-        <li>Order ID: 45678 - Buyer: Rachel Green - Delivered on: 2024-12-21</li>
-        <li>Order ID: 23456 - Buyer: Monica Bell - Delivered on: 2024-12-20</li>
-    </ul>
-</section>
-
-<section id="update-status">
-    <h2>Update Delivery Status</h2>
-    <form>
-        <label for="order-id">Order ID:</label>
-        <input type="text" id="order-id" name="order-id" required>
-        <label for="status">New Status:</label>
-        <select id="status" name="status">
-            <option value="in-transit">In Transit</option>
-            <option value="delivered">Delivered</option>
-            <option value="pending">Pending</option>
-        </select>
-        <button type="submit">Update Status</button>
-    </form>
-</section>  
-<footer>
-    <button class="return-btn" onclick="window.location.href='../logistic/logistics_dashboard.html'">Return to Dashboard</button>
-    <p>&copy; 2024 Trash N Treasure Logistics Reports</p>
-</footer>
-
-
-{%endblock%}
+{% extends "logistic_page.html" %}
+{% block title %}Delivery Management{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/delivery_management.css">
+    <section class="page-content">
+        <h1>Delivery Management</h1>
+        <div class="delivery-orders">
+        {% if shipped_orders %}
+            {% for order in shipped_orders %}
+                <div class="order-item">
+                    <div class="order-details">
+                        <div class="order-info">
+                            <p><strong>Order ID:</strong> {{order.order_id}}</p>
+                            <p><strong>Product Name:</strong> {{order.product_name}}</p>
+                        </div>
+                        <div class="delivery-status">
+                            {% if order.assign_delivery_condition %}
+                                {% if order.assign_delivery_condition == 'Non-Deliverable'%}
+                                    <span class="status-badge" data-status="Cancelled"><strong>Product:</strong> Order Cancelled❌ </span>
+                                {% else %}
+                                    <span class="status-badge" data-status="On Progress"><strong>Product:</strong> On Progress🔄</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="status-badge" data-status="Unassign"><strong>Product:</strong> Unassign⚠️</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                     <div class="order-actions">
+                         <form method="get" action="{{ url_for('logistic.delivery_details', order_id=order.order_id) }}">
+                                 <button type="submit" class="manage-btn">Manage</button>
+                            </form>
+                       </div>
+                   </div>
+             {% endfor %}
+         {% else %}
+            <p>No orders with 'Shipped' delivery status at the moment.</p>
+          {% endif %}
+        </div>
+    </section>
+{% endblock %}

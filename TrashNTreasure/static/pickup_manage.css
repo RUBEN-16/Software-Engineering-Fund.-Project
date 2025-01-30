@@ -1,92 +1,98 @@
-section {
-    margin-left: 220px; /* Leave space for the fixed nav on the left */
-    margin-top: 40px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
-section h2 {
-    font-size: 1.8em;
-    color: #000000;
-}
 
-form {
-    display: flex;
-    flex-direction: column;
+.page-content {
+  flex: 1;
+    padding: 40px;
 }
-
-form label {
-    margin: 10px 0 5px;
-    font-weight: bold;
-}
-
-form input,
-form textarea {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1em;
-    width: 100%;
-}
-
-form button {
-    padding: 10px;
-    border: none;
-    background-color: #28a745;
-    color: white;
-    font-size: 1.2em;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-form button:hover {
-    background-color: #218838;
-}
-
-section button {
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1.2em;
-    cursor: pointer;
-}
-
-section button:hover {
-    background-color: #2980b9;
-}
-
-footer {
+.page-content h1 {
+   margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 2.5em;
     text-align: center;
-    margin-top: 50px;
-    font-size: 0.9em;
-    color: #777;
-    padding: 20px 0;
-    background-color: #fff;
-    position: relative;
-    width: 100%;
-    bottom: 0;
+}
+.pickup-requests{
+    margin-bottom: 20px;
+        display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+/* Pickup Management - Hover Effect */
+.pickup-item {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-footer .return-btn {
-    padding: 10px 20px;
-    background-color: #e74c3c;
-    color: white;
+.pickup-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+ .pickup-item .pickup-details{
+      flex: 1;
+        display: flex;
+       flex-direction: column;
+        gap: 10px;
+}
+.id-and-courier {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+  }
+.id-and-courier p{
+    font-size: 1.1em;
+}
+.id-and-courier .courier-img{
+    width: 200px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+.product-address p{
+   font-size: 1em;
+    color: #666;
+}
+
+.pickup-actions {
+  flex:0.5;
+     text-align: right;
+    margin-left: 20px;
+}
+.pickup-actions .assign-btn{
+    background-color: #3498db;
+    color: #fff;
     border: none;
-    font-size: 1.2em;
+    padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 30px;
+    transition: background-color 0.3s ease;
+    font-size: 1.1em;
+    margin: 0px 30px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+ .pickup-actions .assign-btn:hover {
+  background-color: #2980b9;
 }
 
-footer .return-btn:hover {
-    background-color: #f4007a;
-}
+.assign-status {
+    font-weight: bold;
+    margin-top: 12px; /* Increased spacing */
+        font-size: 1.1em;
+  }
+  .assign-status[data-status="Unassign"] { 
+      color: #ffc107; /* Amber/orange color */
+  }
 
-footer p {
-    margin-bottom: 20px; /* Space between copyright and button */
-}
+  .assign-status[data-status="On Progress"] { 
+      color: #2980b9; /* Amber/orange color */
+  }
+  
+  .assign-status[data-status="Arrived"] {
+      color: #28a745; /* Green color */
+  }

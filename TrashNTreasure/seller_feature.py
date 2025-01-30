@@ -413,7 +413,7 @@ def request_courier():
    cur = con.cursor()
    try:
         cur.execute(
-            "INSERT INTO pickup_request (order_id, seller_id, courier, seller_address, buyer_address) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO pickup_request2 (order_id, seller_id, courier, seller_address, buyer_address) VALUES (?, ?, ?, ?, ?)",
             (order_id, seller_id, courier, seller_address, buyer_address)
         )
         con.commit()

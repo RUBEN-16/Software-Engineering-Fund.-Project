@@ -79,7 +79,7 @@
   margin-top: 12px; /* Increased spacing */
       font-size: 1.1em;
 }
-.delivery-status[data-status="Pending"] {
+.delivery-status[data-status="Pending"] { 
     color: #ffc107; /* Amber/orange color */
 }
 

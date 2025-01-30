@@ -1,0 +1,84 @@
+{% extends "logistic_page.html" %}
+{% block title %}Pickup Request Details{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="/static/pickup_details.css">
+<div class="order-details-container">
+    <h1>Pickup Request Details</h1>
+
+    <section class="order-header">
+        <div class="order-info-header">
+            <h2>Pickup Information</h2>
+            <p><strong>Pickup ID:</strong> {{ pickup_details.id }}</p>
+            <p><strong>Order ID:</strong> {{ pickup_details.order_id }}</p>
+            <p><strong>Seller Address:</strong> {{ pickup_details.seller_address }}</p>
+            <p><strong>Buyer Address:</strong> {{ pickup_details.buyer_address }}</p>
+        </div>
+        <div class="order-status">
+            <p><strong>Assigned Courier:</strong> {{ pickup_details.courier }}</p>
+            <span class="assign-status" data-status="{{ pickup_details.assigned_status }}"><strong>Pickup Status: </strong> {{ pickup_details.assigned_status }}</span>
+            <span class="assign-status" data-status="{{ pickup_details.delivery_status }}"><strong>Delivery Status:</strong> {{ pickup_details.delivery_status }}</span>
+        </div>
+    </section>
+
+    <div class="content-container">
+        <section class="buyer-product-info">
+            <div class="product-info">
+                <h2>Order Details</h2>
+                <p><strong>Order ID:</strong> {{ order_details.id }}</p>
+                <p><strong>Product ID:</strong> {{ order_details.product_id }}</p>
+                <p><strong>Quantity:</strong> {{ order_details.quantity }}</p>
+                <p><strong>Order Date:</strong> {{ order_details.date }}</p>
+                <p><strong>Total Amount:</strong> RM {{ order_details.total_amount }}</p>
+            </div>
+
+            <section class="seller-info">
+                <h2>Seller Details</h2>
+                <p><strong>Seller ID:</strong> {{ seller_details.id }}</p>
+                <p><strong>Name:</strong> {{ seller_details.name }}</p>
+                <p><strong>Email:</strong> {{ seller_details.email }}</p>
+                <p><strong>Phone:</strong> {{ seller_details.phone_number }}</p>
+            </section>
+        </section>
+    </div>
+
+    <div class="content-container">
+        <section class="buyer-product-info">
+            <div class="product-info">
+                <h2>Buyer Details</h2>
+                <p><strong>Buyer ID:</strong> {{ buyer_details.pid }}</p>
+                <p><strong>Name:</strong> {{ buyer_details.firstName }} {{ buyer_details.lastName }}</p>
+                <p><strong>Email:</strong> {{ buyer_details.email }}</p>
+                <p><strong>Phone:</strong> {{ buyer_details.phone_number }}</p>
+                <p><strong>Address:</strong> {{ buyer_details.address }}</p>
+            </div>
+
+            <section class="seller-info">
+                {%if pickup_details.assigned_status == 'Pending' %}
+                    <h2>Assign Courier</h2>
+                    <form method="post" action="{{ url_for('logistic.assign_courier', pickup_id=pickup_details.id) }}">
+                        <div class="form-group">
+                            <label for="courier">Select Courier:</label>
+                            <select id="courier" name="courier" required {% if pickup_details.assigned_status == 'Assigned' %}disabled{% endif %}>
+                                <option value="" disabled selected>Select Courier</option>
+                                <option value="Pos Laju">Pos Laju</option>
+                                <option value="Ninja Van">Ninja Van</option>
+                                <option value="GDex">GDex</option>
+                                <option value="DHL">DHL</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="assign-btn">Assign</button>
+                    </form>
+                {%else%}
+                    <h2>Update Product Arrival Status</h2>
+                    <form method="post" action="{{ url_for('logistic.update_pickup_status', pickup_id=pickup_details.id) }}">
+                        <button type="submit" class="arrived-btn" {% if pickup_details.delivery_status == 'Shipped' or pickup_details.delivery_status == 'Delivered' %}disabled{% endif %}>Arrived</button>
+                    </form>
+                {%endif%}
+            </section>
+        </section>
+    </div>
+
+    <button class="back-button" onclick="window.location.href='{{ url_for('logistic.pickup_management') }}'">Back to Pickup Management</button>
+</div>
+{% endblock %}

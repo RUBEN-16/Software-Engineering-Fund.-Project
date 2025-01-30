@@ -1,36 +1,44 @@
-{%extends "logistic_page.html"%}
-{%block content%}
-<link rel="stylesheet" href="../static/pickup_manage.css">
-    <section id="requests">
-        <h2>Manage Pickup Requests</h2>
-        <form action="#">
-            <label for="request-id">Request ID:</label>
-            <input type="text" id="request-id" name="request-id" required><br>
-            <label for="details">Request Details:</label>
-            <textarea id="details" name="details" rows="4" required></textarea><br>
-            <button type="submit">Approve Request</button>
-        </form>
-    </section> 
-
-    <section id="assign">
-        <h2>Assign Courier</h2>
-        <form action="#">
-            <label for="courier">Courier Name:</label>
-            <input type="text" id="courier" name="courier" required><br>
-            <label for="pickup-id">Pickup ID:</label>
-            <input type="text" id="pickup-id" name="pickup-id" required><br>
-            <button type="submit">Assign</button>
-        </form>
+{% extends "logistic_page.html" %}
+{% block title %}Pickup Management{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/pickup_manage.css">
+    <section class="page-content">
+        <h1>Pickup Management</h1>
+        <div class="pickup-requests">
+        {% if pickup_requests %}
+            {%for request in pickup_requests%}
+                {% if request.delivery_status != 'Delivered' %}
+                    <div class="pickup-item">
+                        <div class="pickup-details">
+                            <div class="id-and-courier">
+                                <p><strong>Courier chosen: </strong></p>
+                                <img class="courier-img" src="/static/images/{{ request.courier }}.png" alt="{{ request.courier }}"/>
+                            </div>
+                         
+                            <div class="product-address">
+                                <p><strong>Order ID: </strong> {{request.order_id}}</p>
+                                <p><strong>Seller Address: </strong>{{ request.seller_address }}</p>
+                            </div>
+                                {% if request.assigned_status == 'Assigned'%}
+                                    {% if request.delivery_status == 'Pending'%}
+                                        <span class="assign-status" data-status="On Progress">Product: On Progress🔄</span>
+                                    {% else %}
+                                        <span class="assign-status" data-status="Arrived">Product: Arrived✅</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="assign-status" data-status="Unassign">Product: Unassign⚠️</span>
+                                {% endif %}
+                            </div>
+                            <div class="pickup-actions">
+                                <a href="{{ url_for('logistic.pickup_details', pickup_id=request.id) }}" class="assign-btn">Assign</a>
+                            </div>
+                        </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+              <p>No pickup requests at the moment.</p>
+          {% endif %}
+      </div>
     </section>
+{% endblock %}
 
-    <section id="tracking">
-        <h2>Tracking & Status</h2>
-        <p>View real-time updates on the status of pickups.</p>
-        <button>View Tracking</button>
-    </section>
-
-    <footer>
-        <button class="return-btn" onclick="window.location.href='../logistic/logistics_dashboard.html'">Return to Dashboard</button>
-        <p>&copy; 2024 Trash N Treasure Logistics Reports</p>
-    </footer>
-{%endblock%}

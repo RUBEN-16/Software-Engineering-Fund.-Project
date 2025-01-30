@@ -91,7 +91,7 @@ con.execute("""
 # Feedback database
 con.execute("""
     CREATE TABLE IF NOT EXISTS feedback2 (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
         buyer_id INTEGER NOT NULL,
         product_id INTEGER NOT NULL,
         rating INTEGER NOT NULL,
@@ -103,15 +103,33 @@ con.execute("""
 
 # Pickup Request database
 con.execute("""
-    CREATE TABLE IF NOT EXISTS pickup_request (
+    CREATE TABLE IF NOT EXISTS pickup_request2 (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         order_id INTEGER NOT NULL,
         seller_id INTEGER NOT NULL,
         courier TEXT NOT NULL,
         seller_address TEXT NOT NULL,
         buyer_address TEXT NOT NULL,
+        assigned_status TEXT DEFAULT 'Pending',
         FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
         FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE ON UPDATE CASCADE
+    )
+""")
+
+# Assign Delivery database
+con.execute("""
+    CREATE TABLE IF NOT EXISTS assign_delivery (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_id INTEGER NOT NULL,
+        seller_id INTEGER NOT NULL,
+        condition TEXT NOT NULL,
+        courier TEXT NOT NULL,
+        arrival_date DATE NOT NULL,
+        pickup_date DATE NOT NULL,
+        delivered_date DATE,
+        description TEXT NOT NULL,
+        FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (seller_id) REFERENCES sellers(id)
     )
 """)
 

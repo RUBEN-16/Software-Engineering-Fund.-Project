@@ -1,0 +1,185 @@
+/* General Styles */
+.order-details-container {
+    margin: 20px 100px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.order-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.order-details-container h2 {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: #34495e;
+}
+
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.buyer-product-info {
+    display: flex;
+    justify-content: space-between;
+    flex-basis: calc(100% - 20px);
+    margin: 10px;
+}
+
+.product-info, .seller-info {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.order-details-container p {
+    margin-bottom: 8px;
+}
+
+.order-details-container strong {
+    font-weight: bold;
+    color: #566573;
+    margin-right: 5px;
+}
+
+.back-button {
+    display: block;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.back-button:hover {
+    background-color: #2980b9;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1em;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #555;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+.form-group select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.assign-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.assign-btn:hover {
+    background-color: #2980b9;
+}
+
+.arrived-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.arrived-btn:hover {
+    background-color: #2980b9;
+}
+
+.arrived-btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+.arrived-btn:disabled:hover {
+    background-color: #95a5a6;
+}
+
+select:disabled {
+    background-color: #f9f9f9;
+    color: #95a5a6;
+    cursor: not-allowed;
+}
+
+.assign-status {
+    padding: 0px 10px;
+    font-weight: bold;
+    margin-top: 12px; /* Increased spacing */
+    border-radius: 5px;
+}
+.assign-status[data-status="Pending"] { 
+    color: #ffc107; /* Amber/orange color */
+}
+
+.assign-status[data-status="Assigned"], 
+.assign-status[data-status="Delivered"] {
+    color: #28a745; /* Green color */
+}
+
+.assign-status[data-status="Shipped"] {
+    color: #17a2b8; /* Green color */
+}
+
+.assign-status[data-status="Cancelled"] {
+    color: #ff0707; /* Green color */
+}

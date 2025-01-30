@@ -1,88 +1,101 @@
-section {
-margin-left: 220px;  /* Leave space for the fixed nav on the left */
-margin-top: 40px;
-padding: 20px;
-background-color: white;
-border-radius: 8px;
-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.page-content {
+    flex: 1;
+      padding: 40px;
+  }
+  .page-content h1 {
+     margin-bottom: 20px;
+      color: #2c3e50;
+      font-size: 2.5em;
+      text-align: center;
+  }
+  .all-orders{
+      margin-bottom: 20px;
+       display: flex;
+      flex-direction: column;
+       gap: 20px;
+  
+  }
+/* Order Management - Hover Effect */
+.order-item {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-section h2 {
-font-size: 1.8em;
-color: #000000;
+.order-item:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
-form {
-display: flex;
-flex-direction: column;
-}
-
-form label {
-margin: 10px 0 5px;
-font-weight: bold;
-}
-
-form input,
-form select {
-padding: 10px;
-margin-bottom: 15px;
-border: 1px solid #ccc;
-border-radius: 4px;
-font-size: 1em;
-}
-
-form button {
-padding: 10px;
-border: none;
-background-color: #2c3e50;
-color: white;
-font-size: 1.2em;
-border-radius: 4px;
-cursor: pointer;
-}
-
-form button:hover {
-background-color: #34495e;
-}
-
-section ul {
-list-style-type: none;
-padding: 0;
-}
-
-section ul li {
-margin: 10px 0;
-font-size: 1.2em;
-color: #333;
-}
-
-footer {
-text-align: center;
-margin-top: 50px;
-font-size: 0.9em;
-color: #777;
-padding: 20px 0;
-background-color: #fff;
-position: relative;
-width: 100%;
-bottom: 0;
-}
-
-footer .return-btn {
-padding: 10px 10px;
-background-color: #e74c3c;
-color: white;
-border: none;
-font-size: 1.2em;
-border-radius: 4px;
-cursor: pointer;
-margin-top: 30px;
-}
-
-footer .return-btn:hover {
-background-color: #f4007a;
-}
-
-footer p {
-margin-bottom: 20px;  /* Space between the copyright and the button */
-}
+  .order-details{
+     flex:1;
+        display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .order-info{
+          display: flex;
+          flex-direction: column;
+              gap: 5px;
+  }
+  .order-info p{
+         font-size: 1.1em;
+          color: #333;
+  }
+  .order-status{
+         flex:1;
+          text-align: right;
+  }
+  .order-status p{
+      font-size: 1em;
+       color: #666;
+  }
+   .status-badge {
+      padding: 5px 8px;
+      border-radius: 4px;
+      color: white;
+      font-size: 0.9em;
+  }
+  
+  .status-badge.pending {
+      background-color: #f39c12; /* Orange for pending */
+  }
+  
+  .status-badge.shipped {
+      background-color: #3498db; /* Blue for shipped */
+  }
+  
+  .status-badge.delivered {
+      background-color: #2ecc71; /* Green for delivered */
+  }
+  
+  .status-badge.cancelled {
+      background-color: #e74c3c; /* Red for cancelled */
+  }
+  
+  .order-actions{
+      flex:0.5;
+        text-align: right;
+      margin-left: 20px;
+  }
+  .order-actions .manage-btn {
+        background-color: #8b8f92;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+         font-size: 1.1em;
+          transition: background-color 0.3s ease, transform 0.3s ease;
+          white-space: nowrap;
+  
+  }
+  
+  .order-actions .manage-btn:hover{
+      background-color: #2980b9;
+      transform: translateY(-2px);
+  }

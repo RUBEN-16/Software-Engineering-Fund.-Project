@@ -1,106 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logistics Dashboard</title>
-    <link rel="stylesheet" href="/static/logistic_page.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logistics Management</title>
+  <link rel="stylesheet" href="/static/logistic_page.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <div class="msg">
     {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">
-            <span>{{ message }}</span>
-            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-  </div>
-<body> 
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo">
-                <img src="../static/images/logo2.png" alt="Logo">
+        {%if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <span>{{ message }}</span>
+                    <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+                </div>
+            {%endfor%}
+        {%endif%}
+    {%endwith%}
+</div>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <i class="fas fa-truck"></i>
+        <span>LogisticsPro</span>
+      </div>
+      <nav>
+        <ul>
+          <li class="active"><a href="{{url_for("logistic.dashboard")}}"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="{{url_for("logistic.pickup_management")}}"><i class="fas fa-box-open"></i> Pickup Management</a></li>
+          <li><a href="{{url_for("logistic.delivery_management")}}"><i class="fas fa-shipping-fast"></i> Delivery Management</a></li>
+          <li><a href="{{url_for("logistic.order_management")}}"><i class="fas fa-clipboard-list"></i> Order Management</a></li>
+          <li><a href="{{url_for("logistic.logistics_reports")}}"><i class="fas fa-chart-line"></i> Reports</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+        <header class="header">
+            <div class="header-right">
+            <div class="profile-dropdown">
+                <button class="profile-btn">
+                <img src="/static/images/profile.png" alt="Profile">
+                <span>{{session["member_name"]}}</span>
+                <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="dropdown-content">
+                <a href="#"><i class="fas fa-user"></i> Profile</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <a href="{{url_for('logistic.logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
             </div>
-            <h2>Logistics</h2>
-            <nav>
-                <ul>
-                    <li><a href="{{url_for("logistic.dashboard")}}">Dashboard</a></li>
-                    <li><a href="{{url_for("logistic.pickup_management")}}">Pickup Management</a></li>
-                    <li><a href="{{url_for("logistic.delivery_management")}}">Delivery Management</a></li>
-                    <li><a href="{{url_for("logistic.order_management")}}">Order Management</a></li>
-                    <li><a href="{{url_for("logistic.logistics_reports")}}">Reports</a></li>
-                </ul>
-            </nav>
-        </aside>
-        
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="header">
-                <h1>Dashboard</h1>
-                <div class="profile">
-                    <span>Welcome, {{session["member_name"]}}</span>
-                    <div class="profile-img">
-                        <img src="/static/images/profile.png" alt="Profile">
-                            <div class="profile-dropdown">
-                                <ul>
-                                    <li><a href="{{url_for('logistic.logout')}}">Log Out</a></li>
-                                    <li><a href="signUp.html">Sign Out</a></li>
-                                    <li><a href="#">Change Password</a></li>
-                                </ul>
-                            </div>
-                    </div>
-                </div>
-            </header>
-        {%block content%}
-            <!-- Dashboard Cards -->
-            <section class="dashboard-cards">
-                <div class="card email">
-                    <img src="../static/images/email.jpg" alt="Email">
-                    <p>Email</p>
-                    <div class="email-dropdown">
-                        <ul>
-                            <li><a href="#">New Email</a></li>
-                            <li><a href="#">Sent Email</a></li>
-                            <li><a href="#">Draft</a></li>
-                        </ul>
-                    </div>
-                </div>
-
+            </div>
+        </header>
+        {%block content%} 
+        <!-- Page Content -->
+            <section class="page-content">
+                <h1>Welcome to LogisticsPro</h1>
+                <p>Manage your logistics operations efficiently and effectively.</p>
+                <div class="cards">
                 <div class="card">
-                    <img src="../static/images/pending.jpg" alt="Pending">
-                    <p>Pending Orders</p>
+                    <i class="fas fa-box-open"></i>
+                    <h3>Pickups Today</h3>
+                    <p>25</p>
                 </div>
-                <div class="card notification">
-                    <img src="../static/images/notification.jpg" alt="Notification">
-                    <p>New Notifications</p>
-                    <div class="notification-dropdown">
-                        <ul>
-                            <li><a href="#">New Delivery</a></li>
-                            <li><a href="#">Pending Pickup</a></li>
-                            <li><a href="#">New Reports</a></li>
-                        </ul>
-                    </div>
+                <div class="card">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h3>Deliveries Today</h3>
+                    <p>42</p>
                 </div>
-            </section>
-
-            <!-- Quick Links -->
-            <section class="quick-links">
-                <h2>Quick Links</h2>
-                <ul>
-                    <li><a href="../logistic/logistics_reports.html">Generate Reports</a></li>
-                    <li><a href="../logistic/pickup_management.html">Manage Pickups</a></li>
-                    <li><a href="../logistic/delivery_management.html">Manage Deliveries</a></li>
-                    <li><a href="../logistic/order_management.html">Manage Orders</a></li>
-                </ul>
+                <div class="card">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>Pending Orders</h3>
+                    <p>12</p>
+                </div>
+                </div>
             </section>
         {%endblock%}
-        </main>
-        
-    </div>
+    </main>
+  </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileBtn = document.querySelector('.profile-btn');
+        const dropdownContent = document.querySelector('.dropdown-content');
+
+        profileBtn.addEventListener('click', function() {
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!profileBtn.contains(event.target) && !dropdownContent.contains(event.target)) {
+                dropdownContent.style.display = 'none';
+            }
+        });
+    });
+</script>
 </body>
 </html>

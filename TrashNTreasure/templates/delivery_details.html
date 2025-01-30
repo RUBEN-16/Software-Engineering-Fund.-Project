@@ -1,0 +1,100 @@
+
+{% extends "logistic_page.html" %}
+{% block title %}Delivery Details{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/delivery_details.css">
+<div class="delivery-details-container">
+    <h1>Delivery Details</h1>
+
+    <section class="order-header">
+        <div class="order-info-header">
+            <h2>Order Information</h2>
+            <p><strong>Order ID:</strong> {{ order_details.order_id }}</p>
+            <p><strong>Product ID:</strong> {{ order_details.product_id }}</p>
+            <p><strong>Product Name:</strong> {{ order_details.product_name }}</p>
+            <p><strong>Quantity Ordered:</strong> {{ order_details.quantity }}</p>
+            <p><strong>Total Amount:</strong> RM {{ order_details.total_amount }}</p>
+            {% if assign_delivery_info and assign_delivery_info.courier and assign_delivery_info.courier != 'No Courier' %}
+                <img class="courier-img" src="/static/images/{{ assign_delivery_info.courier }}.png" alt="{{ assign_delivery_info.courier }}"/>
+            {% endif %}
+        </div>
+    </section>
+
+    <div class="content-container">
+        <section class="buyer-product-info">
+            <div class="product-info">
+                <h2>Buyer Details</h2>
+                <p><strong>Buyer ID:</strong> {{ buyer_details.pid }}</p>
+                <p><strong>Name:</strong> {{ buyer_details.firstName }} {{ buyer_details.lastName }}</p>
+                <p><strong>Email:</strong> {{ buyer_details.email }}</p>
+                <p><strong>Address:</strong> {{ buyer_details.address }}</p>
+            </div>
+            <div class="seller-info">
+                <h2>Seller Details</h2>
+                <p><strong>Seller ID:</strong> {{ seller_details.id }}</p>
+                <p><strong>Name:</strong> {{ seller_details.name }}</p>
+                <p><strong>Email:</strong> {{ seller_details.email }}</p>
+           </div>
+        </section>
+    </div>
+
+     <div class="content-container">
+        {% if not assign_delivery_info %}
+        <section class="delivery-form">
+            <h2>Assign Delivery</h2>
+            <form method="post" action="{{ url_for('logistic.assign_delivery', order_id=order_details.order_id) }}">
+                <div class="form-group">
+                    <label for="pickup_date">Pickup Date:</label>
+                    <input type="date" id="pickup_date" name="pickup_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="arrival_date">Arrival Date:</label>
+                    <input type="date" id="arrival_date" name="arrival_date" required>
+                </div>
+                 <div class="form-group">
+                        <label for="condition">Product Packaging Condition:</label>
+                        <select id="condition" name="condition" required>
+                            <option value="" disabled selected>Select Condition</option>
+                            <option value="Deliverable">Deliverable</option>
+                            <option value="Non-Deliverable">Non-Deliverable</option>
+                         </select>
+                    </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4"></textarea>
+                </div>
+                 <div class="form-group">
+                        <label for="courier">Select Courier:</label>
+                        <select id="courier" name="courier" required>
+                            <option value="" disabled selected>Select Courier</option>
+                            <option value="Pos Laju">Pos Laju</option>
+                            <option value="Ninja Van">Ninja Van</option>
+                            <option value="GDex">GDex</option>
+                            <option value="DHL">DHL</option>
+                             <option value="No Courier">No Courier</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="assign-btn">Assign Delivery</button>
+            </form>
+        </section>
+        {% endif %}
+    </div>
+     <div class="delivery-actions" id="delivery-actions">
+        {% if assign_delivery_info and assign_delivery_info['condition'] == 'Deliverable' %}
+            <div class="deliverable-actions">
+                <p>After product delivered, update the status.</p>
+                <form method="post" action="{{ url_for('logistic.update_delivery_status', order_id=order_details.order_id) }}">
+                    <button type="submit" class="delivered-btn">Delivered</button>
+                </form>
+
+            </div>
+        {% elif assign_delivery_info and assign_delivery_info['condition'] == 'Non-Deliverable' %}
+             <p style="color:red;">Cancel the Order</p>
+        {% endif %}
+    </div>
+
+
+    <button class="back-button" onclick="window.location.href='{{ url_for('logistic.delivery_management') }}'">Back to Delivery Management</button>
+</div>
+
+{% endblock %}

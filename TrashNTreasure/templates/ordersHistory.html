@@ -27,7 +27,7 @@
       <div class="orders-container">
         {% if orders %}
             {% for order in orders %}
-                <div class="order-item" data-status="{{ order["delivery_status"] }}">
+                <div class="order-item">
                         <div class="order-details">
                             <h3 class="order-id">Order ID: {{ order["id"] }}</h3>
                          <div class="order-info-row">

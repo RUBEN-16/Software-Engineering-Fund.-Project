@@ -1,7 +1,85 @@
 {% extends "index.html" %}
-{% block title %} SignUp Page {%endblock%}
+{% block title %} Sign Up Page {%endblock%}
 
 {%block content%}
+
+<link rel="stylesheet" href="/static/signup.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<div class="msg">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <span>{{ message }}</span>
+          <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+<body>
+  <div class="signup-container">
+    <div class="signup-box">
+      <div class="signup-header">
+        <div class="logo">
+          <i class="fas fa-shopping-cart"></i>
+          <span>MyPlatform</span>
+        </div>
+        <h2>Create Account</h2>
+        <p>Please fill in the details to create your account.</p>
+      </div>
+      <form class="signup-form" action="{{url_for("signup")}}" method='post'>
+         <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" name="first_name" placeholder="First Name" required>
+        </div>
+          <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" name="last_name" placeholder="Last Name" required>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePassword('password')"></i>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+            <i class="fas fa-eye toggle-password" onclick="togglePassword('confirm_password')"></i>
+        </div>
+        <button type="submit" name="submit" value="Register" class="signup-btn">Sign Up</button>
+        <div class="signup-footer">
+          <a href="{{url_for('login')}}">Already have an account? Login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+<script>
+function togglePassword(inputId) {
+    const passwordInput = document.getElementById(inputId);
+    const eyeIcon = passwordInput.nextElementSibling; // Get the next sibling which is the i.toggle-password
+
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      eyeIcon.classList.remove("fa-eye");
+      eyeIcon.classList.add("fa-eye-slash");
+    } else {
+      passwordInput.type = "password";
+      eyeIcon.classList.remove("fa-eye-slash");
+      eyeIcon.classList.add("fa-eye");
+    }
+}
+</script>
+{%endblock%}
+
+
 <link rel="stylesheet" href="/static/signuP.css">
 <div class="body-signup">
     <div class="register-container">
@@ -31,5 +109,3 @@
         </form>
     </div>
 </div>
-
-{%endblock%}

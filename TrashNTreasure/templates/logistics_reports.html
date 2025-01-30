@@ -1,62 +1,79 @@
-{%extends "logistic_page.html"%}
-{%block content%}
-<link rel="stylesheet" href="../static/logistics_report.css">
+{% extends "logistic_page.html" %}
+{% block title %}Logistics Reports{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/logistics_report.css">
+<section class="page-content">
+    <h1>Logistics Reports</h1>
+    <div class="report-filters">
+        <form method="GET" action="#">
+            <div class="filter-group">
+                <label for="report-type">Report Type:</label>
+                <select id="report-type" name="report-type">
+                    <option value="delivery">Delivery Reports</option>
+                    <option value="pickup">Pickup Reports</option>
+                    <option value="tracking">Tracking Reports</option>
+                    <option value="order-status">Order Status Reports</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="date-range">Date Range:</label>
+                <input type="date" id="start-date" name="start-date">
+                <span>to</span>
+                <input type="date" id="end-date" name="end-date">
+            </div>
+            <div class="filter-group">
+                <label for="total-orders">Total Orders:</label>
+                <input type="number" id="total-orders" name="total-orders" min="0">
+            </div>
+            <div class="filter-group">
+                <label for="successful">Successful:</label>
+                <input type="number" id="successful" name="successful" min="0">
+            </div>
+            <div class="filter-group">
+                <label for="delayed">Delayed:</label>
+                <input type="number" id="delayed" name="delayed" min="0">
+            </div>
+            <div class="filter-group">
+                <label for="issues">Issues:</label>
+                <input type="number" id="issues" name="issues" min="0">
+            </div>
+            <button type="submit" class="generate-btn">Generate Report</button>
+            <button type="button" class="report-issue-btn">Report Issue</button>
+        </form>
+    </div>
 
-<section id="report-filters">
-    <h2>Generate Report</h2>
-    <form>
-        <label for="date-range">Date Range:</label>
-        <input type="date" id="start-date" name="start-date">
-        <input type="date" id="end-date" name="end-date">
-        
-        <label for="courier">Courier:</label>
-        <select id="courier" name="courier">
-            <option value="courier1">Courier 1</option>
-            <option value="courier2">Courier 2</option>
-            <option value="courier3">Courier 3</option>
-        </select>
-        
-        <label for="order-type">Order Type:</label>
-        <select id="order-type" name="order-type">
-            <option value="pickup">Pickup</option>
-            <option value="delivery">Delivery</option>
-        </select>
-        
-        <button type="submit">Generate Report</button>
-    </form>
+    <div class="report-results">
+        <h2>Generated Reports</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Report ID</th>
+                    <th>Type</th>
+                    <th>Date Range</th>
+                    <th>Total Orders</th>
+                    <th>Successful</th>
+                    <th>Delayed</th>
+                    <th>Issues</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>001</td>
+                    <td>Delivery</td>
+                    <td>2023-10-01 to 2023-10-07</td>
+                    <td>150</td>
+                    <td>140</td>
+                    <td>5</td>
+                    <td>5</td>
+                    <td>
+                        <button class="view-btn">View</button>
+                        <button class="download-btn">Download</button>
+                    </td>
+                </tr>
+                <!-- Add more rows dynamically based on data -->
+            </tbody>
+        </table>
+    </div>
 </section>
-
-<section id="report-output">
-    <h2>Report Summary</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Courier</th>
-                <th>Status</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>#1001</td>
-                <td>Courier 1</td>
-                <td>Delivered</td>
-                <td>2024-12-15</td>
-            </tr>
-            <tr>
-                <td>#1002</td>
-                <td>Courier 2</td>
-                <td>In Transit</td>
-                <td>2024-12-16</td>
-            </tr>
-        </tbody>
-    </table>
-    <button class="export-btn">Export Report</button>
-</section>
-
-<footer>
-    <button class="return-btn" onclick="window.location.href='../logistic/logistics_dashboard.html'">Return to Dashboard</button>
-    <p>&copy; 2024 Trash N Treasure Logistics Reports</p>
-</footer>
-{%endblock%}
+{% endblock %}
