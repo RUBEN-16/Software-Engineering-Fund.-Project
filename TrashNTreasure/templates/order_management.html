@@ -11,8 +11,9 @@
                          <div class="order-details">
                            <div class="order-info">
                                 <p><strong>Order ID:</strong> {{ order.id }}</p>
-                                <p><strong>Product ID:</strong> {{ order.product_id }}</p>
-                                <p><strong>Buyer ID:</strong> {{ order.buyer_id }}</p>
+                                {% if order.delivery_status == 'Delivered' and order.courier != 'No Courier' and order.courier %}
+                                    <img class="courier-img" src="/static/images/{{order.courier}}.png" alt="{{order.courier}}" />
+                                {% endif %}
                             </div>
                              <div class="order-status">
                                   <p><strong>Status:</strong> <span class="status-badge {{ order.delivery_status|lower }}">{{ order.delivery_status }}</span></p>
@@ -20,7 +21,7 @@
 
                         </div>
                         <div class="order-actions">
-                           <form method="post" action="#">
+                           <form method="get" action="{{ url_for('logistic.order_details_logistics', order_id=order.id) }}">
                                 <button type="submit" class="manage-btn">Manage</button>
                            </form>
                        </div>

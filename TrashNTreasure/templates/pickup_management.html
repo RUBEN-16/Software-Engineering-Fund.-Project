@@ -7,37 +7,35 @@
         <div class="pickup-requests">
         {% if pickup_requests %}
             {%for request in pickup_requests%}
-                {% if request.delivery_status != 'Delivered' %}
-                    <div class="pickup-item">
-                        <div class="pickup-details">
-                            <div class="id-and-courier">
-                                <p><strong>Courier chosen: </strong></p>
-                                <img class="courier-img" src="/static/images/{{ request.courier }}.png" alt="{{ request.courier }}"/>
-                            </div>
-                         
-                            <div class="product-address">
-                                <p><strong>Order ID: </strong> {{request.order_id}}</p>
-                                <p><strong>Seller Address: </strong>{{ request.seller_address }}</p>
-                            </div>
-                                {% if request.assigned_status == 'Assigned'%}
-                                    {% if request.delivery_status == 'Pending'%}
-                                        <span class="assign-status" data-status="On Progress">Product: On Progress🔄</span>
-                                    {% else %}
-                                        <span class="assign-status" data-status="Arrived">Product: Arrived✅</span>
-                                    {% endif %}
-                                {% else %}
-                                    <span class="assign-status" data-status="Unassign">Product: Unassign⚠️</span>
-                                {% endif %}
-                            </div>
-                            <div class="pickup-actions">
-                                <a href="{{ url_for('logistic.pickup_details', pickup_id=request.id) }}" class="assign-btn">Assign</a>
-                            </div>
+                <div class="pickup-item">
+                    <div class="pickup-details">
+                        <div class="id-and-courier">
+                            <p><strong>Courier chosen: </strong></p>
+                            <img class="courier-img" src="/static/images/{{ request.courier }}.png" alt="{{ request.courier }}"/>
                         </div>
-                {% endif %}
+                        
+                        <div class="product-address">
+                            <p><strong>Order ID: </strong> {{request.order_id}}</p>
+                            <p><strong>Seller Address: </strong>{{ request.seller_address }}</p>
+                        </div>
+                            {% if request.assigned_status == 'Assigned'%}
+                                {% if request.delivery_status == 'Pending'%}
+                                    <span class="assign-status" data-status="On Progress">Product: On Progress🔄</span>
+                                {% else %}
+                                    <span class="assign-status" data-status="Arrived">Product: Arrived✅</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="assign-status" data-status="Unassign">Product: Unassign⚠️</span>
+                            {% endif %}
+                        </div>
+                        <div class="pickup-actions">
+                            <a href="{{ url_for('logistic.pickup_details', pickup_id=request.id) }}" class="assign-btn">Assign</a>
+                        </div>
+                    </div>
             {% endfor %}
         {% else %}
               <p>No pickup requests at the moment.</p>
-          {% endif %}
+        {% endif %}
       </div>
     </section>
 {% endblock %}

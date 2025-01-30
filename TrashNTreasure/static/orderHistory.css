@@ -88,7 +88,7 @@
 }
 
 .delivery-status[data-status="Shipped"] {
-    color: #17a2b8; /* Blue color */
+    color: #17a2b8; /* Blue color */ 
 }
 
 .delivery-status[data-status="Delivered"] {

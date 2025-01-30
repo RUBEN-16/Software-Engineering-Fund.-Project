@@ -51,11 +51,10 @@ def pickup_management():
             pr.buyer_address,
             pr.assigned_status,
             o.delivery_status
-        FROM pickup_request2 pr
+        FROM pickup_request pr
         JOIN orders o ON pr.order_id = o.id
-        JOIN products p ON o.product_id = p.id
-        WHERE p.seller_id = ?
-    """, (session["member_id"],)).fetchall()
+        WHERE o.delivery_status != 'Delivered' AND o.delivery_status != 'Cancelled'
+    """).fetchall()
 
     return render_template("pickup_management.html", pickup_requests=pickup_requests)
 
@@ -96,8 +95,10 @@ def order_management():
             o.id,
             o.product_id,
             o.buyer_id,
-            o.delivery_status
+            o.delivery_status,
+             ad.courier as courier
         FROM orders o
+        LEFT JOIN assign_delivery ad ON o.id = ad.order_id
     """).fetchall()
 
     return render_template("order_management.html", all_orders=all_orders)
@@ -125,7 +126,7 @@ def pickup_details(pickup_id):
     con = get_connect_db()
     cur = con.cursor()
     
-    pickup_details = cur.execute("SELECT * FROM pickup_request2 WHERE id = ?", (pickup_id,)).fetchone()
+    pickup_details = cur.execute("SELECT * FROM pickup_request WHERE id = ?", (pickup_id,)).fetchone()
     if not pickup_details:
         flash("Pickup request not found.", "danger")
         return redirect(url_for("logistic.pickup_management"))
@@ -168,7 +169,8 @@ def pickup_details(pickup_id):
 
 @logistic_blueprint.route("/assign_courier/<int:pickup_id>", methods=['POST'])
 def assign_courier(pickup_id):
-    if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
 
@@ -176,7 +178,7 @@ def assign_courier(pickup_id):
         courier = request.form['courier']
         con = get_connect_db()
         cur = con.cursor()
-        cur.execute("UPDATE pickup_request2 SET courier = ?, assigned_status = 'Assigned' WHERE id = ?", (courier, pickup_id))
+        cur.execute("UPDATE pickup_request SET courier = ?, assigned_status = 'Assigned', assigned_member_id = ? WHERE id = ?", (courier, member_id, pickup_id))
         con.commit()
         con.close()
         flash("Courier assigned successfully.", "success")
@@ -189,7 +191,8 @@ def assign_courier(pickup_id):
 
 @logistic_blueprint.route("/delivery_details/<int:order_id>", methods=['GET', 'POST'])
 def delivery_details(order_id):
-    if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
 
@@ -228,9 +231,25 @@ def delivery_details(order_id):
         JOIN orders o ON p.id = o.product_id
         WHERE o.id = ?
     """, (order_id,)).fetchone()
+    
     if not seller_details:
-        flash("Seller details not found for this order.", "danger")
-        return redirect(url_for("logistic.delivery_management"))
+         # If seller_details is None, consider it as admin's product
+        seller_details = {
+            'id': 'Admin',
+            'name': "Admin's Choice",
+            'email': "support@trashandtreasure.com",
+            'phone_number': "+1 (800) 123-4567"
+        }
+    else:
+        try:
+            int(seller_details['id'])
+        except (ValueError, TypeError):
+            seller_details = {
+                'id': 'Admin',
+                'name': "Admin's Choice",
+                'email': "support@trashandtreasure.com",
+                'phone_number': "+1 (800) 123-4567"
+            }
     
     # Fetch assign delivery info if exists
     assign_delivery_info = cur.execute("SELECT * FROM assign_delivery WHERE order_id = ?", (order_id,)).fetchone()
@@ -249,7 +268,8 @@ def delivery_details(order_id):
 
 @logistic_blueprint.route("/assign_delivery/<int:order_id>", methods=['POST'])
 def assign_delivery(order_id):
-    if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
 
@@ -281,9 +301,9 @@ def assign_delivery(order_id):
 
         try:
             cur.execute("""
-                INSERT INTO assign_delivery (order_id, seller_id, condition, courier, arrival_date, pickup_date, description)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, (order_id, seller_id, condition, courier, arrival_date, pickup_date, description))
+                INSERT INTO assign_delivery (order_id, seller_id, condition, courier, arrival_date, pickup_date, description, assigned_member_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (order_id, seller_id, condition, courier, arrival_date, pickup_date, description, member_id))
             con.commit()
             flash("Delivery assigned successfully.", "success")
         except Exception as e:
@@ -295,7 +315,8 @@ def assign_delivery(order_id):
 
 @logistic_blueprint.route("/update_delivery_status/<int:order_id>", methods=['POST'])
 def update_delivery_status(order_id):
-    if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
          flash("Please log in to access this page.", "danger")
          return redirect(url_for("logistic.login"))
     
@@ -309,7 +330,7 @@ def update_delivery_status(order_id):
         assign_delivery_data = cur.execute("SELECT id FROM assign_delivery WHERE order_id = ?", (order_id,)).fetchone()
         if assign_delivery_data:
              assign_delivery_id = assign_delivery_data['id']
-             cur.execute("UPDATE assign_delivery SET delivered_date = DATE('now') WHERE id = ?", (assign_delivery_id,))
+             cur.execute("UPDATE assign_delivery SET delivered_date = DATE('now'), status_updated_member_id = ? WHERE id = ?", (member_id, assign_delivery_id,))
 
         con.commit()
         flash("Delivery status updated to 'Delivered'.", "success")
@@ -323,7 +344,8 @@ def update_delivery_status(order_id):
 
 @logistic_blueprint.route("/update_pickup_status/<int:pickup_id>", methods=['POST'])
 def update_pickup_status(pickup_id):
-    if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
     
@@ -331,8 +353,8 @@ def update_pickup_status(pickup_id):
     cur = con.cursor()
 
     try:
-        # Fetch order ID from pickup_request2 table
-        pickup_details = cur.execute("SELECT order_id FROM pickup_request2 WHERE id = ?", (pickup_id,)).fetchone()
+        # Fetch order ID from pickup_request table
+        pickup_details = cur.execute("SELECT order_id FROM pickup_request WHERE id = ?", (pickup_id,)).fetchone()
         if not pickup_details:
             flash("Pickup request not found.", "danger")
             con.close()
@@ -341,6 +363,10 @@ def update_pickup_status(pickup_id):
 
         # Update delivery status in orders table
         cur.execute("UPDATE orders SET delivery_status = 'Shipped' WHERE id = ?", (order_id,))
+        
+        # Update pickup_request table
+        cur.execute("UPDATE pickup_request SET status_updated_member_id = ? WHERE id = ?", (member_id, pickup_id,))
+        
         con.commit()
         flash("Delivery status updated to 'Shipped'.", "success")
 
@@ -350,3 +376,103 @@ def update_pickup_status(pickup_id):
         con.close()
     
     return redirect(url_for("logistic.pickup_details", pickup_id=pickup_id))
+
+
+@logistic_blueprint.route("/order_details_logistics/<int:order_id>", methods=['GET'])
+def order_details_logistics(order_id):
+     if "member_id" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("logistic.login"))
+
+     con = get_connect_db()
+     cur = con.cursor()
+
+     order = cur.execute("""
+            SELECT
+                o.id as order_id,
+                o.buyer_id,
+                o.product_id,
+                o.quantity as order_quantity,
+                o.date,
+                o.total_amount,
+                o.delivery_status,
+                o.seller_status,
+                p.name as product_name,
+                p.image_path as product_image_path,
+                p.price as product_price,
+                s.id as seller_id,
+                s.name as seller_name,
+                s.email as seller_email,
+                s.phone_number as seller_phone,
+                u.firstName as buyer_name,
+                u.email as buyer_email,
+                u.address as buyer_address,
+                ad.pickup_date,
+                ad.arrival_date,
+                ad.delivered_date,
+                m1.firstName as delivery_assigned_member_name,
+                m1.pid as delivery_assigned_member_id,
+                m2.firstName as delivery_status_updated_member_name,
+                m2.pid as delivery_status_updated_member_id,
+                pr.courier,
+                m3.firstName as pickup_assigned_member_name,
+                m3.pid as pickup_assigned_member_id,
+                m4.firstName as pickup_status_updated_member_name,
+                m4.pid as pickup_status_updated_member_id
+            FROM orders o
+            JOIN products p ON o.product_id = p.id
+            LEFT JOIN sellers s ON p.seller_id = s.id
+            LEFT JOIN user u ON o.buyer_id = u.pid
+            LEFT JOIN assign_delivery ad ON o.id = ad.order_id
+            LEFT JOIN pickup_request pr ON o.id = pr.order_id
+            LEFT JOIN member m1 ON ad.assigned_member_id = m1.pid
+            LEFT JOIN member m2 ON ad.status_updated_member_id = m2.pid
+            LEFT JOIN member m3 ON pr.assigned_member_id = m3.pid
+            LEFT JOIN member m4 ON pr.status_updated_member_id = m4.pid
+            WHERE o.id = ?
+         """, (order_id,)).fetchone()
+     if not order:
+        flash("Order not found in our database.", "warning")
+        return redirect(url_for("logistic.order_management"))
+     try:
+         int(order['seller_id'])
+     except (ValueError, TypeError):
+         order = dict(order) # Convert to dictionary so that we can assign new key:value
+         order['seller_name'] = "Admin's Choice"
+         order['seller_email'] = "support@trashandtreasure.com" # Added dummy admin email
+         order['seller_phone'] = "+1 (800) 123-4567" # Added dummy admin phone
+     con.close()
+
+     return render_template("order_details_logistics.html", order=order)
+
+
+@logistic_blueprint.route("/cancel_order/<int:order_id>", methods=['POST'])
+def cancel_order(order_id):
+    if "member_id" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("logistic.login"))
+    
+    con = get_connect_db()
+    cur = con.cursor()
+    
+    try:
+        member_id = session["member_id"]
+       # Update the order status
+        cur.execute("UPDATE orders SET delivery_status = 'Cancelled' WHERE id = ?", (order_id,))
+
+        # Update status_updated_member_id in assign_delivery
+        cur.execute("""
+            UPDATE assign_delivery
+            SET status_updated_member_id = ?, delivered_date = DATE('now')
+            WHERE order_id = ?
+        """, (member_id, order_id))
+        
+        con.commit()
+        flash("Order Cancelled Successfully", "success")
+
+    except Exception as e:
+        flash(f"Error canceling the order: {e}", "danger")
+    finally:
+        con.close()
+    
+    return redirect(url_for('logistic.order_details_logistics',order_id = order_id ))

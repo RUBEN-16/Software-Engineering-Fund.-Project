@@ -90,7 +90,7 @@ con.execute("""
 
 # Feedback database
 con.execute("""
-    CREATE TABLE IF NOT EXISTS feedback2 (
+    CREATE TABLE IF NOT EXISTS feedback (
         id INTEGER PRIMARY KEY AUTOINCREMENT, 
         buyer_id INTEGER NOT NULL,
         product_id INTEGER NOT NULL,
@@ -103,7 +103,7 @@ con.execute("""
 
 # Pickup Request database
 con.execute("""
-    CREATE TABLE IF NOT EXISTS pickup_request2 (
+    CREATE TABLE IF NOT EXISTS pickup_request (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         order_id INTEGER NOT NULL,
         seller_id INTEGER NOT NULL,
@@ -111,15 +111,19 @@ con.execute("""
         seller_address TEXT NOT NULL,
         buyer_address TEXT NOT NULL,
         assigned_status TEXT DEFAULT 'Pending',
+        assigned_member_id INTEGER,
+        status_updated_member_id INTEGER,
         FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
         FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (assigned_member_id) REFERENCES member(id)
+        FOREIGN KEY (status_updated_member_id) REFERENCES member(id)
     )
 """)
 
 # Assign Delivery database
 con.execute("""
     CREATE TABLE IF NOT EXISTS assign_delivery (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
         order_id INTEGER NOT NULL,
         seller_id INTEGER NOT NULL,
         condition TEXT NOT NULL,
@@ -128,8 +132,12 @@ con.execute("""
         pickup_date DATE NOT NULL,
         delivered_date DATE,
         description TEXT NOT NULL,
+        assigned_member_id INTEGER,
+        status_updated_member_id INTEGER,
         FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
         FOREIGN KEY (seller_id) REFERENCES sellers(id)
+        FOREIGN KEY (assigned_member_id) REFERENCES member(id)
+        FOREIGN KEY (status_updated_member_id) REFERENCES member(id)
     )
 """)
 

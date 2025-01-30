@@ -36,7 +36,7 @@ def add_product():
             quantity = int(request.form["quantity"])
             condition = request.form["condition"]
 
-            # Initialize file paths
+            # Initialize file paths 
             image_path = None
             video_path = None
             
@@ -234,7 +234,7 @@ def submit_comment(product_id):
    cur = con.cursor()
    try:
        cur.execute(
-          "INSERT INTO feedback2 (buyer_id, product_id, rating, comment) VALUES (?, ?, ?, ?)",
+          "INSERT INTO feedback (buyer_id, product_id, rating, comment) VALUES (?, ?, ?, ?)",
           (buyer_id, product_id, rating, comment),
         )
        con.commit()
@@ -264,7 +264,7 @@ def item_detail(id):
                 f.rating,
                 f.comment,
                 u.firstName || ' ' || u.lastName as buyer_name
-            FROM feedback2 f
+            FROM feedback f
             JOIN user u ON f.buyer_id = u.pid
             WHERE f.product_id = ?
         """, (id, )).fetchall()

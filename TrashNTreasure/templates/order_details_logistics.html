@@ -1,0 +1,105 @@
+{% extends "logistic_page.html" %}
+{% block title %}Order Details{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/order_details_logistics.css">
+<div class="order-details-container">
+    <h1>Order Details</h1>
+
+    <section class="order-header">
+         <div class="order-info-header">
+            <h2>Order Information</h2>
+             <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+             <p><strong>Product Name:</strong> {{ order.product_name }}</p>
+             <p><strong>Quantity:</strong> {{ order.order_quantity }}</p>
+             <p><strong>Total Amount:</strong> RM {{ order.total_amount }}</p>
+            
+        </div>
+        <div class="order-status">
+              <span class="status-badge {{ order.delivery_status|lower }}"><strong>Delivery Status:</strong> {{ order.delivery_status }}</span>
+              <span class="status-badge {{ order.seller_status|lower }}"><strong>Seller Status:</strong> {{ order.seller_status }}</span>
+         </div>
+    </section>
+    <div class="content-container">
+        <section class="buyer-product-info">
+              <div class="product-info">
+                <h2>Product Details</h2>
+                     {% if order.product_image_path %}
+                        <img src="{{order.product_image_path}}" alt="{{ order.product_name }}" class="product-image"/>
+                     {%endif%}
+                     <p><strong>Product ID:</strong> {{ order.product_id }}</p>
+                    <p><strong>Product Name:</strong> {{ order.product_name }}</p>
+                 </div>
+                  <div class="seller-info">
+                       <h2>Seller Details</h2>
+                     {% if order.seller_id != 'Admin' %}
+                        <p><strong>Seller ID:</strong> {{ order.seller_id }}</p>
+                     {% endif %}
+                    <p><strong>Name:</strong> {{ order.seller_name }}</p>
+                    <p><strong>Email:</strong> {{ order.seller_email }}</p>
+                      {% if order.seller_phone %}
+                        <p><strong>Phone:</strong> {{ order.seller_phone }}</p>
+                       {% endif %}
+                </div>
+        </section>
+    </div>
+     <div class="content-container">
+        <section class="buyer-product-info">
+              <div class="product-info">
+                  <h2>Buyer Details</h2>
+                      <p><strong>Buyer ID:</strong> {{ order.buyer_id }}</p>
+                      <p><strong>Name:</strong> {{ order.buyer_name }}</p>
+                     <p><strong>Email:</strong> {{ order.buyer_email }}</p>
+                     <p><strong>Address:</strong> {{ order.buyer_address }}</p>
+                </div>
+                  <div class="seller-info">
+                     <h2>Timeline</h2>
+                      <p><strong>Order Date:</strong> {{ order.date }}</p>
+                         {% if order.pickup_date %}
+                           <p><strong>Pickup Date:</strong> {{ order.pickup_date }}</p>
+                          {% endif %}
+                          {% if order.arrival_date %}
+                             <p><strong>Arrival Date:</strong> {{ order.arrival_date }}</p>
+                          {% endif %}
+                           {% if order.delivered_date %}
+                              <p><strong>Delivered Date:</strong> {{ order.delivered_date }}</p>
+                         {% endif %}
+                  </div>
+          </section>
+    </div>
+    
+    <div class="content-container">
+        <section class="buyer-product-info">
+            <div class="product-info">
+                <h2>Pickup Logistics Personnel</h2>
+                    {% if order.pickup_assigned_member_name %}
+                        <p><strong>Pickup Assigned By:</strong> {{ order.pickup_assigned_member_name }} (ID: {{ order.pickup_assigned_member_id }})</p>
+                    {% endif %}
+                    {% if order.pickup_status_updated_member_name %}
+                          <p><strong>Pickup Updated By:</strong> {{ order.pickup_status_updated_member_name }} (ID: {{ order.pickup_status_updated_member_id }})</p>
+                    {% endif %}
+            </div>
+            <div class="seller-info">
+                <h2>Delivery Logistics Personnel</h2>
+                {% if order.delivery_assigned_member_name %}
+                    <p><strong>Delivery Assigned By:</strong> {{ order.delivery_assigned_member_name }} (ID: {{ order.delivery_assigned_member_id }})</p>
+                {% endif %}
+                {% if order.delivery_status_updated_member_name %}
+                      <p><strong>Delivery Updated By:</strong> {{ order.delivery_status_updated_member_name }} (ID: {{ order.delivery_status_updated_member_id }})</p>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+
+    <div class="delivery-actions" id="delivery-actions">
+      {% if order.delivery_status != 'Delivered' and  order.delivery_status != 'Cancelled' %}
+            <form method="post" action="{{ url_for('logistic.cancel_order', order_id=order.order_id) }}">
+                <button type="submit" class="cancel-btn">Cancel Order</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <button class="back-button" onclick="window.location.href='{{ url_for('logistic.order_management') }}'">Back to Order Management</button>
+</div>
+
+{% endblock %}

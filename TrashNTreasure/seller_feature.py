@@ -413,7 +413,7 @@ def request_courier():
    cur = con.cursor()
    try:
         cur.execute(
-            "INSERT INTO pickup_request2 (order_id, seller_id, courier, seller_address, buyer_address) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO pickup_request (order_id, seller_id, courier, seller_address, buyer_address) VALUES (?, ?, ?, ?, ?)",
             (order_id, seller_id, courier, seller_address, buyer_address)
         )
         con.commit()
@@ -428,4 +428,4 @@ def request_courier():
    session.pop('courier_order', None) # remove the order info in session
    session.pop('seller_address', None)  #remove the seller address in session
 
-   return redirect(url_for("seller.your_product_orders") + "#Courier")
+   return redirect(url_for("seller.your_product_orders") + "#Courier") 

@@ -143,7 +143,7 @@ def top_up():
         if con:
             con.close()
 
-    return redirect(url_for("eWallet"))
+    return redirect(url_for("eWallet")) 
 
 
 @user_blueprint.route('/update_user_info', methods=['POST'])
