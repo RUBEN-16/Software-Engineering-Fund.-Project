@@ -110,12 +110,10 @@ html {
 
 /* General Styles */
 .orders-content {
-    margin: 50px auto;
     padding: 20px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 1200px;
 }
 
 .orders-content h1 {
@@ -127,7 +125,7 @@ html {
 
 /* Navigation Tabs */
 .order-mng {
-    margin-bottom: 20px;
+    margin-bottom: 50px;
     text-align: center;
 }
 
@@ -162,7 +160,7 @@ html {
     background-color: #0074D9;
     color: white;
 }
-
+  
 /* Sub-sections */
 .sub-content-section {
     display: none; /* Hide all subsections by default */
@@ -211,7 +209,7 @@ table th {
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 15px;
-    width: calc(30% - 20px); /* Three cards per row */
+    width: calc(31.5% - 20px); /* Three cards per row */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -281,6 +279,10 @@ table th {
     text-decoration: none;
     display: inline-block;
     font-size: 1rem; /* Set the same font size */
+}
+
+.view-btn:hover {
+    background-color: #00438b;
 }
 
 .product-item button {
@@ -391,7 +393,6 @@ table th {
 }
 
 .order-details-container {
-    margin: 20px 100px;
     background: #fff;
     padding: 20px;
     border-radius: 8px;

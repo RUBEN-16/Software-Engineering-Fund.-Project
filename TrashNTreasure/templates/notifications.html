@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/notifications.css">
+<div class="notification-container">
+    <h1>Notifications</h1>
+    {% if notifications %}
+    <div class="notifications">
+        {% for notification in notifications %}
+            <div class="notification-item">
+                  <button class="notification-button">
+                        {{ notification.topic }} <br> <span>{{ notification.date }}</span>
+                  </button>
+                 <div class="notification-message">
+                        {{ notification.message }}
+                 </div>
+             </div>
+         {% endfor %}
+     </div>
+    {% else %}
+    <p>No notifications yet.</p>
+    {% endif %}
+     <button class="back-button" onclick="window.location.href='/'">Back to Home</button>
+</div>
+  <script>
+      const notificationItems = document.querySelectorAll('.notification-item');
+      notificationItems.forEach(item => {
+        const button = item.querySelector('.notification-button');
+        const message = item.querySelector('.notification-message');
+
+        button.addEventListener('click', () => {
+          message.classList.toggle('show');
+          button.classList.toggle('active');
+        });
+      });
+    </script>
+{% endblock %}

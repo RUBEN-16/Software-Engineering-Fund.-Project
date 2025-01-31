@@ -4,7 +4,7 @@ from user_feature import user_blueprint
 from logistic_feature import logistic_blueprint
 from seller_feature import seller_blueprint
 from products import product_blueprint
-from db import get_connect_db
+from db import get_connect_db, get_unread_notification_count
 import os
 
 app = Flask(__name__)
@@ -218,8 +218,11 @@ def user_orders():
             con.close()
             
     return render_template("ordersHistory.html", orders=processed_orders, date_filter=date_filter)
+
     
-    
+app.jinja_env.globals.update(get_unread_notification_count=get_unread_notification_count)
+
+
 @app.after_request
 def add_header(response):
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0"
@@ -230,4 +233,5 @@ def add_header(response):
 
 if __name__ == "__main__":
     app.run(debug=True)
+ 
  

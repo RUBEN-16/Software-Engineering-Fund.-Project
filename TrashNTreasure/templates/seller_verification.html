@@ -293,25 +293,26 @@
         {% if session.get("selected_order") %}
             <div class="order-details-container">
                 <h1>Order Details</h1>
-                <section class="user-info">
-                    <h2>Buyer Information</h2>
-                    <p><strong>Name:</strong> {{session.get("selected_order").buyer_name}}</p>
-                    <p><strong>Email:</strong> {{session.get("selected_order").buyer_email}}</p>
-                    <p><strong>Phone:</strong> {{session.get("selected_order").buyer_phone}}</p>
-                    <p><strong>Address:</strong> {{session.get("selected_order").buyer_address}}</p>
-                </section>
+                 <div class="content-container">
+                    <section class="user-info">
+                        <h2>Buyer Information</h2>
+                        <p><strong>Name:</strong> {{session.get("selected_order").buyer_name}}</p>
+                        <p><strong>Email:</strong> {{session.get("selected_order").buyer_email}}</p>
+                        <p><strong>Phone:</strong> {{session.get("selected_order").buyer_phone}}</p>
+                        <p><strong>Address:</strong> {{session.get("selected_order").buyer_address}}</p>
+                     </section>
 
-                <section class="order-info">
-                    <h2>Order Information</h2>
-                    <p><strong>Order ID:</strong> {{ session.get("selected_order").order_id }}</p>
-                    <p><strong>Product Name:</strong> {{ session.get("selected_order").product_name }}</p>
-                     <p><strong>Product Image:</strong> <img class="product-image" src="{{ session.get("selected_order").product_image_path }}" alt="{{ session.get("selected_order").product_name}}"/></p>
-                    <p><strong>Quantity:</strong> {{ session.get("selected_order").order_quantity }}</p>
-                    <p><strong>Date:</strong> {{ session.get("selected_order").date }}</p>
-                    <p><strong>Total Amount:</strong> RM {{ session.get("selected_order").total_amount }}</p>
-                    <p><strong>Delivery Status:</strong> {{ session.get("selected_order").delivery_status }}</p>
-                    <!-- Add any additional order info here -->
-                </section>
+                     <section class="order-info">
+                         <h2>Order Information</h2>
+                         <p><strong>Order ID:</strong> {{ session.get("selected_order").order_id }}</p>
+                         <p><strong>Product Name:</strong> {{ session.get("selected_order").product_name }}</p>
+                          <p><strong>Product Image:</strong> <img class="product-image" src="{{ session.get("selected_order").product_image_path }}" alt="{{ session.get("selected_order").product_name}}"/></p>
+                         <p><strong>Quantity:</strong> {{ session.get("selected_order").order_quantity }}</p>
+                         <p><strong>Date:</strong> {{ session.get("selected_order").date }}</p>
+                         <p><strong>Total Amount:</strong> RM {{ session.get("selected_order").total_amount }}</p>
+                         <p><strong>Delivery Status:</strong> {{ session.get("selected_order").delivery_status }}</p>
+                     </section>
+                </div>
                 <button class="back-button" onclick="window.location.href='#Order'">Back to Orders</button>
            </div>
         {% else %}
@@ -442,6 +443,7 @@
                     <div class="section-header">
                         <h2>Guidelines for Becoming a Seller</h2>
                         <p>Follow these simple steps to start your selling journey with us.</p>
+                        <p>Applicable only once for the seller by an account user.</p>
                     </div>
                     <div class="guidelines-content">
                         <div class="guideline-item">

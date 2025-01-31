@@ -24,6 +24,7 @@ def seller_verification():
     cur.execute('SELECT isSeller FROM user WHERE pid = ?', (id,))
     result = cur.fetchone()
     session["seller_status"] = result['isSeller'] if result else None
+    
     if user_exist:
         session['isExist'] = True
         print("isExist")
@@ -342,7 +343,7 @@ def reject_order(order_id):
         cur.execute("UPDATE orders SET seller_status = 'Rejected' WHERE id = ?",(order_id,))
         cur.execute("UPDATE orders SET delivery_status = 'Cancelled' WHERE id = ?",(order_id,))
         con.commit()
-        flash(f"Order with ID {order_id} has been rejected, buyer has been refunded.", "success")
+        flash(f"Order with ID {order_id} has been rejected.", "success")
     
     except Exception as e:
         flash(f"An error occurred while rejecting order: {e}", "danger")

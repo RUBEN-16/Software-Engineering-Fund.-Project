@@ -1,0 +1,41 @@
+{% extends "logistic_page.html" %}
+{% block title %}Member Profile{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/logistic_profile.css">
+<div class="profile-container">
+    <div class="profile-header">
+      <img src="/static/images/profile.png" alt="Profile Picture" class="profile-picture">
+        <h1>{{ member.firstName }} {{ member.lastName }}</h1>
+         </div>
+    <div class="profile-details">
+        <section class="detail-section">
+            <h2>Personal Information</h2>
+            <div class="detail-item">
+                 <strong>Member ID:</strong>
+                 <span>{{ member.pid }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Email:</strong>
+                <span>{{ member.email }}</span>
+            </div>
+             <div class="detail-item">
+                <strong>Name:</strong>
+                <span>{{ member.firstName }} {{ member.lastName }}</span>
+            </div>
+        </section>
+         <section class="detail-section">
+            <h2>Our Vision & Mission</h2>
+              <div class="detail-item">
+                  <strong>Vision:</strong>
+                    <span>Seamless, reliable logistics for everyone.</span>
+               </div>
+                 <div class="detail-item">
+                  <strong>Mission:</strong>
+                    <span>Deliver on time, every time, with superior support.</span>
+               </div>
+        </section>
+        
+    </div>
+     <button class="back-button" onclick="window.location.href='{{url_for('logistic.dashboard')}}'">Back to Dashboard</button>
+</div>
+{% endblock %}

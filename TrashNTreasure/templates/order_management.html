@@ -2,12 +2,31 @@
 {% block title %}Order Management{% endblock %}
 {% block content %}
     <link rel="stylesheet" href="/static/order_management.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <section class="page-content">
         <h1>Order Management</h1>
+         <div class="filter-search-container">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search Order ID...">
+                 <i class="fas fa-search"></i>
+            </div>
+              <div class="filter-box">
+                <select id="status-filter">
+                   <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+               </select>
+               <i class="fas fa-filter"></i>
+            </div>
+        </div>
         <div class="all-orders">
             {% if all_orders %}
                 {% for order in all_orders %}
-                    <div class="order-item">
+                    <div class="order-item" data-order-id="{{ order.id }}" data-delivery-status="{{ order.delivery_status|lower }}">
                          <div class="order-details">
                            <div class="order-info">
                                 <p><strong>Order ID:</strong> {{ order.id }}</p>
@@ -32,4 +51,32 @@
             {% endif %}
         </div>
     </section>
+      <script>
+         document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const statusFilter = document.getElementById('status-filter');
+            const orderItems = document.querySelectorAll('.order-item');
+            
+             function filterOrders() {
+              const searchTerm = searchInput.value.toLowerCase();
+              const selectedStatus = statusFilter.value;
+            
+              orderItems.forEach(item => {
+                    const orderId = item.getAttribute('data-order-id').toLowerCase();
+                    const deliveryStatus = item.getAttribute('data-delivery-status');
+                    
+                   const matchesSearch = orderId.includes(searchTerm);
+                   const matchesStatus = selectedStatus === '' || deliveryStatus === selectedStatus;
+                
+                  if (matchesSearch && matchesStatus) {
+                       item.style.display = 'flex';
+                    } else {
+                       item.style.display = 'none';
+                   }
+                 });
+               }
+             searchInput.addEventListener('input', filterOrders);
+             statusFilter.addEventListener('change', filterOrders);
+         });
+       </script>
 {% endblock %}

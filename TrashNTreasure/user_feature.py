@@ -488,3 +488,21 @@ def deactivate_account():
             con.close()
 
     return redirect(url_for("login"))
+
+
+@user_blueprint.route("/notifications")
+def notifications():
+  user_id = session.get("buyer_id") or session.get("user_id")
+  if not user_id:
+    flash("Please log in to access this page.", "danger")
+    return redirect(url_for("login"))
+  
+  con = get_connect_db()
+  cur = con.cursor()
+  notifications = cur.execute("SELECT * FROM notification WHERE user_id = ? ORDER BY date DESC", (user_id,)).fetchall()
+    # Mark notifications as read when viewed
+  cur.execute("UPDATE notification SET is_read = 1 WHERE user_id = ?", (user_id,))
+  con.commit()
+  con.close()
+
+  return render_template("notifications.html", notifications = notifications)

@@ -1,5 +1,6 @@
-from flask import Blueprint, redirect, url_for, render_template, request, session, flash, current_app
+from flask import Blueprint, redirect, url_for, render_template, request, session, flash, send_file
 from db import get_connect_db
+from io import BytesIO
 
 logistic_blueprint = Blueprint("logistic", __name__, template_folder="templates")
 
@@ -26,9 +27,30 @@ def login():
     return render_template("logisticlogin_page.html")
 
 
+@logistic_blueprint.route("/profile")
+def member_profile():
+    member_id = session.get("member_id")
+    if not member_id:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("logistic.login"))
+
+    con = get_connect_db()
+    cur = con.cursor()
+    
+    member_data = cur.execute("SELECT * FROM member WHERE pid = ?", (member_id,)).fetchone()
+    con.close()
+    
+    if not member_data:
+        flash("Member profile not found.", "danger")
+        return redirect(url_for("logistic.dashboard"))
+
+    return render_template("logistic_profile.html", member=member_data)
+
+
 @logistic_blueprint.route("/")
 def dashboard():    
-    if "member_id" in session:
+    member_id = session["member_id"]
+    if member_id:
         return render_template("logistic_page.html")
     else:
         flash("Please log in to access the admin account.", "danger")
@@ -36,9 +58,11 @@ def dashboard():
     
 @logistic_blueprint.route("/pickup_manage")
 def pickup_management():
-    if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
+    
     con = get_connect_db()
     cur = con.cursor()
     
@@ -60,7 +84,8 @@ def pickup_management():
 
 @logistic_blueprint.route("/delivery_manage")
 def delivery_management():
-    if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
     con = get_connect_db()
@@ -83,7 +108,8 @@ def delivery_management():
 
 @logistic_blueprint.route("/order_manage")
 def order_management():
-    if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
     
@@ -96,20 +122,12 @@ def order_management():
             o.product_id,
             o.buyer_id,
             o.delivery_status,
-             ad.courier as courier
+            ad.courier as courier
         FROM orders o
         LEFT JOIN assign_delivery ad ON o.id = ad.order_id
     """).fetchall()
 
     return render_template("order_management.html", all_orders=all_orders)
-
-@logistic_blueprint.route("/report")
-def logistics_reports():
-    if "member_id" not in session:
-        flash("Please log in to access this page.", "danger")
-        return redirect(url_for("logistic.login"))
-    
-    return render_template("logistics_reports.html")
 
 @logistic_blueprint.route("/logout")
 def logout():
@@ -119,7 +137,8 @@ def logout():
 
 @logistic_blueprint.route("/pickup_details/<int:pickup_id>", methods=['GET', 'POST'])
 def pickup_details(pickup_id):
-    if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
 
@@ -313,29 +332,73 @@ def assign_delivery(order_id):
 
     return redirect(url_for("logistic.delivery_details", order_id=order_id))
 
+
 @logistic_blueprint.route("/update_delivery_status/<int:order_id>", methods=['POST'])
 def update_delivery_status(order_id):
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
-         flash("Please log in to access this page.", "danger")
-         return redirect(url_for("logistic.login"))
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("logistic.login"))
     
     con = get_connect_db()
     cur = con.cursor()
     
     try:
-        cur.execute("UPDATE orders SET delivery_status = 'Delivered' WHERE id = ?", (order_id,))
+        # Fetch order details including seller id and total amount
+        cur.execute("""
+            SELECT 
+                o.total_amount,
+                p.seller_id,
+                p.name AS product_name
+            FROM orders o
+            JOIN products p ON o.product_id = p.id
+            WHERE o.id = ?
+        """, (order_id,))
+        order = cur.fetchone()
+
+        if not order:
+            flash(f"Order with ID {order_id} not found.", "danger")
+            return redirect(url_for("logistic.order_management"))
         
-         # Fetch the assign_delivery record id
+        total_amount = order['total_amount']
+        seller_id = order['seller_id']
+        product_name = order['product_name']
+
+        # Check if seller_id is a valid integer before crediting
+        try:
+            int(seller_id)
+            # Credit the amount to the seller's wallet
+            cur.execute(
+                "UPDATE user SET wallet = wallet + ? WHERE pid = ?",
+                (total_amount, seller_id)
+            )
+            
+            # Add a record in the transaction history
+            cur.execute("""
+                INSERT INTO wallet_transaction (buyer_id, date, description, amount) 
+                VALUES (?, DATE('now'), ?, ?)
+            """, (seller_id, f"Credit for delivered order of {product_name} (ID: {order_id})", total_amount))
+            
+            flash("Seller has been credited", 'success')
+        except (ValueError, TypeError):
+            # If seller_id is not an integer, it's considered admin's product so skip money transfer
+            flash(f"Skipping credit transfer for admin's product (Order ID: {order_id}).", "info")
+    
+        # Update the delivery status to 'Delivered'
+        cur.execute("UPDATE orders SET delivery_status = 'Delivered' WHERE id = ?", (order_id,))
+
+        # Fetch the assign_delivery record id
         assign_delivery_data = cur.execute("SELECT id FROM assign_delivery WHERE order_id = ?", (order_id,)).fetchone()
         if assign_delivery_data:
-             assign_delivery_id = assign_delivery_data['id']
-             cur.execute("UPDATE assign_delivery SET delivered_date = DATE('now'), status_updated_member_id = ? WHERE id = ?", (member_id, assign_delivery_id,))
+            assign_delivery_id = assign_delivery_data['id']
+            cur.execute("UPDATE assign_delivery SET delivered_date = DATE('now'), status_updated_member_id = ? WHERE id = ?", (member_id, assign_delivery_id,))
 
         con.commit()
         flash("Delivery status updated to 'Delivered'.", "success")
+
     except Exception as e:
         flash(f"Error updating delivery status: {e}", "danger")
+        con.rollback()
     finally:
         con.close()
     
@@ -380,70 +443,71 @@ def update_pickup_status(pickup_id):
 
 @logistic_blueprint.route("/order_details_logistics/<int:order_id>", methods=['GET'])
 def order_details_logistics(order_id):
-     if "member_id" not in session:
+    member_id = session["member_id"]
+    if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
 
-     con = get_connect_db()
-     cur = con.cursor()
+    con = get_connect_db()
+    cur = con.cursor()
 
-     order = cur.execute("""
-            SELECT
-                o.id as order_id,
-                o.buyer_id,
-                o.product_id,
-                o.quantity as order_quantity,
-                o.date,
-                o.total_amount,
-                o.delivery_status,
-                o.seller_status,
-                p.name as product_name,
-                p.image_path as product_image_path,
-                p.price as product_price,
-                s.id as seller_id,
-                s.name as seller_name,
-                s.email as seller_email,
-                s.phone_number as seller_phone,
-                u.firstName as buyer_name,
-                u.email as buyer_email,
-                u.address as buyer_address,
-                ad.pickup_date,
-                ad.arrival_date,
-                ad.delivered_date,
-                m1.firstName as delivery_assigned_member_name,
-                m1.pid as delivery_assigned_member_id,
-                m2.firstName as delivery_status_updated_member_name,
-                m2.pid as delivery_status_updated_member_id,
-                pr.courier,
-                m3.firstName as pickup_assigned_member_name,
-                m3.pid as pickup_assigned_member_id,
-                m4.firstName as pickup_status_updated_member_name,
-                m4.pid as pickup_status_updated_member_id
-            FROM orders o
-            JOIN products p ON o.product_id = p.id
-            LEFT JOIN sellers s ON p.seller_id = s.id
-            LEFT JOIN user u ON o.buyer_id = u.pid
-            LEFT JOIN assign_delivery ad ON o.id = ad.order_id
-            LEFT JOIN pickup_request pr ON o.id = pr.order_id
-            LEFT JOIN member m1 ON ad.assigned_member_id = m1.pid
-            LEFT JOIN member m2 ON ad.status_updated_member_id = m2.pid
-            LEFT JOIN member m3 ON pr.assigned_member_id = m3.pid
-            LEFT JOIN member m4 ON pr.status_updated_member_id = m4.pid
-            WHERE o.id = ?
-         """, (order_id,)).fetchone()
-     if not order:
+    order = cur.execute("""
+        SELECT
+            o.id as order_id,
+            o.buyer_id,
+            o.product_id,
+            o.quantity as order_quantity,
+            o.date,
+            o.total_amount,
+            o.delivery_status,
+            o.seller_status,
+            p.name as product_name,
+            p.image_path as product_image_path,
+            p.price as product_price,
+            s.id as seller_id,
+            s.name as seller_name,
+            s.email as seller_email,
+            s.phone_number as seller_phone,
+            u.firstName as buyer_name,
+            u.email as buyer_email,
+            u.address as buyer_address,
+            ad.pickup_date,
+            ad.arrival_date,
+            ad.delivered_date,
+            m1.firstName as delivery_assigned_member_name,
+            m1.pid as delivery_assigned_member_id,
+            m2.firstName as delivery_status_updated_member_name,
+            m2.pid as delivery_status_updated_member_id,
+            pr.courier,
+            m3.firstName as pickup_assigned_member_name,
+            m3.pid as pickup_assigned_member_id,
+            m4.firstName as pickup_status_updated_member_name,
+            m4.pid as pickup_status_updated_member_id
+        FROM orders o
+        JOIN products p ON o.product_id = p.id
+        LEFT JOIN sellers s ON p.seller_id = s.id
+        LEFT JOIN user u ON o.buyer_id = u.pid
+        LEFT JOIN assign_delivery ad ON o.id = ad.order_id
+        LEFT JOIN pickup_request pr ON o.id = pr.order_id
+        LEFT JOIN member m1 ON ad.assigned_member_id = m1.pid
+        LEFT JOIN member m2 ON ad.status_updated_member_id = m2.pid
+        LEFT JOIN member m3 ON pr.assigned_member_id = m3.pid
+        LEFT JOIN member m4 ON pr.status_updated_member_id = m4.pid
+        WHERE o.id = ?
+        """, (order_id,)).fetchone()
+    if not order:
         flash("Order not found in our database.", "warning")
         return redirect(url_for("logistic.order_management"))
-     try:
-         int(order['seller_id'])
-     except (ValueError, TypeError):
-         order = dict(order) # Convert to dictionary so that we can assign new key:value
-         order['seller_name'] = "Admin's Choice"
-         order['seller_email'] = "support@trashandtreasure.com" # Added dummy admin email
-         order['seller_phone'] = "+1 (800) 123-4567" # Added dummy admin phone
-     con.close()
+    try:
+        int(order['seller_id'])
+    except (ValueError, TypeError):
+        order = dict(order) # Convert to dictionary so that we can assign new key:value
+        order['seller_name'] = "Admin's Choice"
+        order['seller_email'] = "support@trashandtreasure.com" # Added dummy admin email
+        order['seller_phone'] = "+1 (800) 123-4567" # Added dummy admin phone
+    con.close()
 
-     return render_template("order_details_logistics.html", order=order)
+    return render_template("order_details_logistics.html", order=order)
 
 
 @logistic_blueprint.route("/cancel_order/<int:order_id>", methods=['POST'])
@@ -457,6 +521,40 @@ def cancel_order(order_id):
     
     try:
         member_id = session["member_id"]
+
+        # Fetch order details
+        cur.execute("""
+            SELECT 
+                o.buyer_id,
+                o.total_amount,
+                p.name AS product_name
+            FROM orders o
+            JOIN products p ON o.product_id = p.id
+            WHERE o.id = ?
+        """, (order_id,))
+        order = cur.fetchone()
+
+        if not order:
+            flash(f"Order with ID {order_id} not found.", "danger")
+            return redirect(url_for("logistic.order_management"))
+
+        buyer_id = order['buyer_id']
+        total_amount = order['total_amount']
+        product_name = order['product_name']
+        
+        # Credit the amount back to the buyer's e-wallet
+        cur.execute(
+          "UPDATE user SET wallet = wallet + ? WHERE pid = ?",
+            (total_amount, buyer_id)
+        )
+        
+         # Add a record in the transaction history
+        cur.execute("""
+            INSERT INTO wallet_transaction (buyer_id, date, description, amount) 
+            VALUES (?, DATE('now'), ?, ?)
+        """, (buyer_id, f"Refund for cancelled order of {product_name} (ID: {order_id})", total_amount))
+
+
        # Update the order status
         cur.execute("UPDATE orders SET delivery_status = 'Cancelled' WHERE id = ?", (order_id,))
 
@@ -468,11 +566,65 @@ def cancel_order(order_id):
         """, (member_id, order_id))
         
         con.commit()
-        flash("Order Cancelled Successfully", "success")
+        flash("Order Cancelled Successfully, buyer has been refunded.", "success")
 
     except Exception as e:
         flash(f"Error canceling the order: {e}", "danger")
+        con.rollback()
     finally:
         con.close()
     
     return redirect(url_for('logistic.order_details_logistics',order_id = order_id ))
+
+
+@logistic_blueprint.route("/report_page", methods=['GET', 'POST'])
+def logistics_reports():
+    member_id = session.get("member_id")
+    if not member_id:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("logistic.login"))
+
+    con = get_connect_db()
+    cur = con.cursor()
+    reports = cur.execute("SELECT * FROM logistic_report WHERE member_id = ?", (member_id,)).fetchall()
+    con.close()
+
+    if request.method == 'POST':
+        report_type = request.form['report-type']
+        start_date = request.form.get('start-date')
+        end_date = request.form.get('end-date')
+        total_orders = request.form.get('total-orders',0) #Default to 0 if not set
+        successful_deliveries = request.form.get('successful',0) #Default to 0 if not set
+        delayed_deliveries = request.form.get('delayed',0) #Default to 0 if not set
+        issues_reported = request.form.get('issues',0) #Default to 0 if not set
+
+        con = get_connect_db()
+        cur = con.cursor()
+
+        cur.execute("""
+            INSERT INTO logistic_report (member_id, report_type, start_date, end_date, total_orders, successful_deliveries, delayed_deliveries, issues_reported, report_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, DATE('now'))
+        """, (member_id, report_type, start_date, end_date, total_orders, successful_deliveries, delayed_deliveries, issues_reported))
+        con.commit()
+        con.close()
+        flash("Report generated and saved successfully.", "success")
+        return redirect(url_for("logistic.logistics_reports"))
+
+    return render_template("logistics_reports.html", reports=reports)
+
+@logistic_blueprint.route("/view_report/<int:report_id>")
+def view_report(report_id):
+    member_id = session.get("member_id")
+    if not member_id:
+         flash("Please log in to access this page.", "danger")
+         return redirect(url_for("logistic.login"))
+
+    con = get_connect_db()
+    cur = con.cursor()
+    report = cur.execute("SELECT * FROM logistic_report WHERE id = ? AND member_id = ?", (report_id, member_id)).fetchone()
+    con.close()
+    
+    if not report:
+        flash("Report not found.", "danger")
+        return redirect(url_for("logistic.logistics_reports"))
+    return render_template("view_report.html", report=report)

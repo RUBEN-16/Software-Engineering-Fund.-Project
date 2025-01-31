@@ -23,35 +23,40 @@
           <li><a href="{{url_for("seller.wanna_be_seller")}}">Seller</a></li>
         </ul>
       </nav>
-        <div class="menu">
-          <ul>
-            {% if not session.get('user_name') %}
-              <div class="login">
-                <li><a href="/login">Log In</a></li>
-              </div>
-            {%else%}
-              <div class="cart">
-                <a href="{{url_for("eWallet")}}" class="e-wallet-link"><i class="fas fa-wallet" ></i></a>
-                <a href="{{url_for("cart")}}">
-                  <img src="/static/images/cart.png" alt="Cart">
-                </a>
-              </div>
-              
-            {%endif%}
-            <div class="dropdown-btn" id="dropdown-btn">
-              <div class="dropdown-icon"></div>
-              <div class="dropdown-icon"></div>
-              <div class="dropdown-icon"></div>
-              <div class="dropdown-links" id="dropdown-links">
-                <a href="{{url_for("user.user_page")}}">My Account</a>
-                <a href="{{url_for("user_orders")}}">My Orders</a>
-                <a href="{{url_for("contact")}}">Help & Contact</a>
-                {% if session.get('user_name') %}
-                  <a href="{{url_for('user.logout')}}">Logout</a>  
-                {%endif%}
-              </div>
+      <div class="menu">
+        <ul>
+          {% if not session.get('user_name') %}
+            <div class="login">
+              <li><a href="/login">Log In</a></li>
             </div>
-        </div>
+          {%else%}
+            <div class="cart">
+              <a href="{{url_for('user.notifications')}}" class="fas-font-link">
+                  <i class="fa-solid fa-bell">
+                    {% if get_unread_notification_count() > 0 %}
+                          <span class="notification-badge"></span>
+                    {% endif %}
+                  </i>
+               </a>
+              <a href="{{url_for("eWallet")}}" class="fas-font-link"><i class="fas fa-wallet" ></i></a>
+              <a href="{{url_for("cart")}}" class="fas-font-link"><i class="fa-solid fa-cart-shopping"></i></a>
+            </div>
+            
+          {%endif%}
+          <div class="dropdown-btn" id="dropdown-btn">
+            <div class="dropdown-icon"></div>
+            <div class="dropdown-icon"></div>
+            <div class="dropdown-icon"></div>
+            <div class="dropdown-links" id="dropdown-links">
+              <a href="{{url_for("user.user_page")}}">My Account</a>
+              <a href="{{url_for("user_orders")}}">My Orders</a>
+              <a href="{{url_for("contact")}}">Help & Contact</a>
+              {% if session.get('user_name') %}
+                <a href="{{url_for('user.logout')}}">Logout</a>  
+              {%endif%}
+            </div>
+          </div>
+      </div>
       </header>
  
       <div class="content-container">

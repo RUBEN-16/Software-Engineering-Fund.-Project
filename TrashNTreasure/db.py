@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, url_for
+from flask import Blueprint, flash, session
 import sqlite3
 
 database_blueprint = Blueprint("database", __name__)
@@ -120,6 +120,23 @@ con.execute("""
     )
 """)
 
+# Logistics Reports database
+con.execute("""
+    CREATE TABLE IF NOT EXISTS logistic_report (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        member_id INTEGER NOT NULL,
+        report_type TEXT NOT NULL,
+        start_date DATE,
+        end_date DATE,
+        total_orders INTEGER,
+        successful_deliveries INTEGER,
+        delayed_deliveries INTEGER,
+        issues_reported INTEGER,
+        report_date DATE NOT NULL,
+        FOREIGN KEY (member_id) REFERENCES member(pid)
+    )
+""")
+
 # Assign Delivery database
 con.execute("""
     CREATE TABLE IF NOT EXISTS assign_delivery (
@@ -138,6 +155,19 @@ con.execute("""
         FOREIGN KEY (seller_id) REFERENCES sellers(id)
         FOREIGN KEY (assigned_member_id) REFERENCES member(id)
         FOREIGN KEY (status_updated_member_id) REFERENCES member(id)
+    )
+""")
+
+# Notification database
+con.execute("""
+    CREATE TABLE IF NOT EXISTS notification (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        message TEXT NOT NULL,
+        topic TEXT NOT NULL,
+        date DATE NOT NULL,
+        is_read INTEGER DEFAULT 0,
+        FOREIGN KEY (user_id) REFERENCES user(pid)
     )
 """)
 
@@ -226,6 +256,30 @@ def seller_database(ID):
             con.close()
 
 
+def get_unread_notification_count():
+    user_id = session.get("buyer_id") or session.get("user_id")
+    if not user_id:
+        return 0
+    con = get_connect_db()
+    cur = con.cursor()
+    unread_count = cur.execute("SELECT COUNT(*) FROM notification WHERE user_id = ? AND is_read = 0", (user_id,)).fetchone()[0]
+    con.close()
+    return unread_count
+
+def send_notification(user_id, topic, message):
+    con = get_connect_db()
+    cur = con.cursor()
+    try:
+        cur.execute("""
+                INSERT INTO notification (user_id, topic, message, date) 
+                VALUES (?, ?, ?, DATE('now'))
+            """, (user_id, topic, message))
+        con.commit()
+    except Exception as e:
+        flash(f"An error occurred while send notification : {e}", "danger")
+        con.rollback()
+    finally:
+        con.close()
 
 
 

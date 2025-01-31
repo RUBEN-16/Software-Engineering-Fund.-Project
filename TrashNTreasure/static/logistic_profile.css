@@ -1,0 +1,108 @@
+/* General Container */
+.profile-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.profile-container:hover {
+    transform: translateY(-5px);
+     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+/* Profile Header */
+.profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 5px solid #f0f0f0;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.profile-header h1 {
+    font-size: 2.2em;
+    color: #333;
+    margin:0
+}
+
+/* Profile Details Section */
+.profile-details {
+    display: flex;
+     width:100%;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.detail-section{
+   flex: 1;
+    padding: 20px;
+     border: 1px solid #eee;
+     border-radius: 5px;
+    margin: 10px;
+    min-width: 300px;
+
+}
+.detail-section h2 {
+    font-size: 1.4em;
+    color: #444;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+.detail-item {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.detail-item strong{
+   color: #777;
+    flex-basis: 100px;
+    font-weight: bold;
+}
+.detail-item span{
+     color: #555;
+}
+/* Links */
+.detail-item a {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+        padding: 10px;
+    border-radius: 5px;
+}
+.detail-item a:hover {
+    color: #0056b3;
+    background-color: #f4f7fa;
+}
+
+/* Back Button */
+.back-button {
+    margin-top: 30px;
+    display: inline-block;
+    background-color: #95a5a6;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #7f8c8d;
+}

@@ -67,7 +67,7 @@ html {
 }
 
 /* Minimal E-Wallet Link Styling */
-.e-wallet-link {
+.fas-font-link {
   color: #f0f0f0;
   text-decoration: none;
   font-size: 1.8rem;
@@ -77,13 +77,13 @@ html {
   border-radius: 3px;
 }
 
-.e-wallet-link:hover {
+.fas-font-link:hover {
   color: #e2e2e2;
   opacity: 0.9;
-  transform: scale(1.1); /* Slight upward movement on hover */
+  transform: scale(1.2); /* Slight upward movement on hover */
 }
 
-.e-wallet-link:active {
+.fas-font-link:active {
   color: #80ccff;
 }
 
@@ -93,37 +93,19 @@ html {
   border-radius: 5px;
 }
 
-.menu img {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.menu img:hover {
-  transform: scale(1.1); /* Slightly enlarge icons on hover */
-}
-
 .cart {
   display: flex;
-  width: 150px;
+  width: 200px;
   margin-top: 4px;
 }
 
-.cart img {
-  width: 60px;
-  height: 40px;
-  transition: transform 0.3s ease;
-}
+
 
 .cart i {
   font-size: 35px;
   color: #000000;
 }
 
-.cart img:hover {
-  transform: scale(1.1); /* Slightly enlarge cart icon on hover */
-}
 
 .login {
   text-decoration: none;
@@ -444,3 +426,23 @@ background-color: #45a049;
 .alert .close-btn:hover {
   color: #ff0000;
 }
+
+.fas-font-link {
+  position: relative;
+  text-decoration: none;
+  color: black;
+  font-size: 1.3em;
+  
+ }
+
+
+
+ .fas-font-link .notification-badge {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+  width: 12px;
+  height: 12px;
+  background-color: rgb(255,0,0,0.8);
+  border-radius: 50%;
+ }

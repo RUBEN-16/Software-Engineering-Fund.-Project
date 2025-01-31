@@ -1,0 +1,49 @@
+{% extends "logistic_page.html" %}
+{% block title %}View Report{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/view_report.css">
+<div class="report-view-container">
+    <h1>Report Details</h1>
+    <div class="report-details">
+        <section class="detail-section">
+            <h2>Report Information</h2>
+             <div class="detail-item">
+                 <strong>Report ID:</strong>
+                 <span>{{ report.id }}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Report Type:</strong>
+                <span>{{ report.report_type }}</span>
+            </div>
+            <div class="detail-item">
+               <strong>Date Range:</strong>
+                <span>{{ report.start_date }} to {{report.end_date}}</span>
+            </div>
+        </section>
+         <section class="detail-section">
+           <h2>Report Stats</h2>
+            <div class="detail-item">
+               <strong>Total Orders:</strong>
+                <span>{{ report.total_orders }}</span>
+            </div>
+            <div class="detail-item">
+               <strong>Successful Deliveries:</strong>
+                <span>{{ report.successful_deliveries}}</span>
+            </div>
+            <div class="detail-item">
+                <strong>Delayed Deliveries:</strong>
+                <span>{{ report.delayed_deliveries }}</span>
+            </div>
+               <div class="detail-item">
+                <strong>Issues Reported:</strong>
+                <span>{{ report.issues_reported }}</span>
+            </div>
+             <div class="detail-item">
+               <strong>Report Date:</strong>
+                <span>{{ report.report_date }}</span>
+            </div>
+        </section>
+         <button class="back-button" onclick="window.location.href='{{url_for('logistic.logistics_reports')}}'">Back to Report List</button>
+    </div>
+</div>
+{% endblock %}

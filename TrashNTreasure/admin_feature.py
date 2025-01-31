@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash
-from db import get_connect_db
-from db import seller_database
+from db import get_connect_db, send_notification, seller_database
+
 admin_blueprint = Blueprint("admin", __name__, template_folder="templates")
 
 
@@ -226,7 +226,9 @@ def approve_seller(seller_id):
         
         seller_database(seller_id)
         con.commit()
+        
         flash("Seller application approved!", "success")
+        send_notification(seller_id, "Seller Application Approved", "Congratulations! Your seller application has been approved. You can now start listing your products.")
     except Exception as e:
         flash(f"An error occurred: {e}", "danger")
     finally:
@@ -241,7 +243,9 @@ def reject_seller(seller_id):
         cur = con.cursor()
         cur.execute("UPDATE seller_registration SET status = 'Rejected' WHERE id = ?", (seller_id,))
         con.commit()
+        
         flash("Seller application rejected.", "info")
+        send_notification(seller_id, "Seller Application Rejected", "Your seller application has been rejected. You can review the requirements and apply again.")
     except Exception as e:
         flash(f"An error occurred: {e}", "danger")
     finally:

@@ -5,7 +5,7 @@
 <section class="page-content">
     <h1>Logistics Reports</h1>
     <div class="report-filters">
-        <form method="GET" action="#">
+        <form method="POST" action="#">
             <div class="filter-group">
                 <label for="report-type">Report Type:</label>
                 <select id="report-type" name="report-type">
@@ -54,24 +54,26 @@
                     <th>Successful</th>
                     <th>Delayed</th>
                     <th>Issues</th>
+                     <th>Report Date</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>001</td>
-                    <td>Delivery</td>
-                    <td>2023-10-01 to 2023-10-07</td>
-                    <td>150</td>
-                    <td>140</td>
-                    <td>5</td>
-                    <td>5</td>
-                    <td>
-                        <button class="view-btn">View</button>
-                        <button class="download-btn">Download</button>
-                    </td>
-                </tr>
-                <!-- Add more rows dynamically based on data -->
+                {% for report in reports %}
+                    <tr>
+                        <td>{{ report.id }}</td>
+                        <td>{{ report.report_type }}</td>
+                         <td>{{ report.start_date }} to {{report.end_date}}</td>
+                        <td>{{ report.total_orders }}</td>
+                         <td>{{ report.successful_deliveries}}</td>
+                        <td>{{ report.delayed_deliveries }}</td>
+                        <td>{{ report.issues_reported }}</td>
+                        <td>{{ report.report_date }}</td>
+                        <td>
+                           <a class="view-btn" href="{{ url_for('logistic.view_report', report_id=report.id) }}">View</a>
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

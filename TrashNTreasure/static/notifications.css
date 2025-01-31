@@ -1,0 +1,101 @@
+.notification-container {
+   margin: 50px 300px;
+   background-color: #ffffff;
+   border-radius: 15px;
+   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+   padding: 40px;
+    display: flex;
+   flex-direction: column;
+       transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.notification-container:hover {
+   transform: translateY(-5px);
+   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+.notification-container h1 {
+    text-align: center;
+   margin-bottom: 30px;
+    font-size: 2.2em;
+    color: #333;
+}
+
+.notifications {
+   display: flex;
+   flex-direction: column;
+   gap: 15px;
+   margin-bottom: 20px;
+}
+
+.notification-item {
+   background-color: #f9f9f9;
+   border-radius: 8px;
+   padding: 10px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   transition: all 0.3s ease;
+}
+.notification-item:hover{
+   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+   transform: translateY(-2px);
+}
+
+.notification-button {
+   background-color: #e0f7fa;
+   color: #444;
+   padding: 12px 15px;
+   border: none;
+   border-radius: 5px;
+   width: 100%;
+   text-align: left;
+   cursor: pointer;
+   display: flex;
+    justify-content: space-between;
+   align-items: center;
+   transition: background-color 0.3s ease, color 0.3s ease;
+}
+.notification-button:hover{
+   background-color: #0074D9;
+   color: #fff;
+}
+.notification-button::after {
+   content: '\25BE'; /* Down arrow */
+   font-size: 1.3em;
+   transition: transform 0.3s ease;
+}
+.notification-button.active::after{
+  transform: rotate(180deg);
+}
+
+.notification-message {
+ padding: 0px 15px;
+   border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+   background-color: #fff;
+     border-bottom-left-radius: 5px;
+     border-bottom-right-radius: 5px;
+   max-height: 0;
+   overflow: hidden;
+   transition: max-height 0.3s ease, padding 0.3s ease;
+   color: #555;
+   line-height: 1.6;
+}
+.notification-message.show{
+  max-height: 500px;
+  padding: 10px 15px 15px 15px;
+}
+.back-button {
+   margin-top: 30px;
+   display: inline-block;
+   background-color: #95a5a6;
+   color: white;
+   padding: 10px 20px;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   text-decoration: none;
+   font-size: 16px;
+   transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+   background-color: #7f8c8d;
+}
