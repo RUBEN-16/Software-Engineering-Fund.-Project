@@ -19,7 +19,7 @@ app.register_blueprint(product_blueprint, url_prefix="/product")
 @app.route("/signup", methods=["POST", "GET"])
 def signup():
     if request.method == "POST":
-        try:
+        try: 
             # Get user input from the form
             fname = request.form.get("first_name")
             lname = request.form.get("last_name")
@@ -103,7 +103,7 @@ def about_page():
 def product_page():
     con = get_connect_db()
     cur = con.cursor()
-    products = cur.execute("SELECT * FROM products").fetchall()
+    products = cur.execute("SELECT * FROM products WHERE quantity > 0").fetchall()
     
     return render_template("product.html", products=products)
 

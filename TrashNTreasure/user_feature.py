@@ -1,5 +1,5 @@
-from flask import Blueprint, redirect, url_for, render_template, request, session, flash, current_app
-from db import get_connect_db
+from flask import Blueprint, redirect, url_for, render_template, request, session, flash
+from db import get_connect_db, send_notification
 import re
 
 user_blueprint = Blueprint("user", __name__, template_folder="templates")
@@ -17,7 +17,7 @@ def user_page():
         return redirect(url_for("login"))
 
 @user_blueprint.route('/logout')
-def logout():
+def logout(): 
     session.clear()
     flash("You have been logged out.", "info")
     return redirect(url_for("login"))
@@ -293,10 +293,11 @@ def confirm_payment():
     cur = con.cursor()
     
     # Fetch user address for validation
-    cur.execute("SELECT address, phone_number FROM user WHERE pid = ?", (buyer_id,))
+    cur.execute("SELECT address, phone_number, firstName, lastName FROM user WHERE pid = ?", (buyer_id,))
     user = cur.fetchone()
     user_address = user['address'] if user else None
     user_phone_number = user['phone_number'] if user else None
+    buyer_name = f"{user['firstName']} {user['lastName']}"
     
     if not user_address or not user_phone_number:
        flash("You must set your address and phone number before processing payment.", "warning")
@@ -329,13 +330,33 @@ def confirm_payment():
                     seller_id = int(item["seller_id"])
                 except (KeyError, ValueError) as e:
                     seller_id = None
-
+                
+                # Fetch product name
+                cur.execute("SELECT name FROM products WHERE id = ?", (item["product_id"],))
+                product = cur.fetchone()
+                product_name = product['name'] if product else "Unknown Product"
+                
                 if seller_id == None:
+                     # Insert order
                     cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, seller_status, delivery_status, payment_method) VALUES (?, ?, ?, DATE('now'), ?, ?, ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "Confirmed", "Shipped", "E-Wallet"))
                 else:
+                     # Insert order
                     cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, payment_method) VALUES (?, ?, ?, DATE('now'), ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "E-Wallet"))
-            
+                
+                order_id = cur.lastrowid
+                
                 cur.execute("UPDATE products SET quantity = quantity - ? WHERE id = ?", (item["quantity"], item["product_id"]))
+               
+                # Construct notification messages
+                seller_message = f"New order received! Order ID: {order_id}, Buyer: {buyer_name}, Product: {product_name}."
+                buyer_message = f"Your purchase is confirmed! Order ID: {order_id}, Product: {product_name}, Total Amount: RM{total_price:.2f}, Payment Method: {payment_method}."
+
+                # Send notifications
+                if seller_id:
+                   send_notification(con, seller_id, "New Order", seller_message)
+                
+                send_notification(con, buyer_id, "Purchase Confirmation", buyer_message)
+
             
             con.execute("DELETE FROM cart WHERE buyer_id = ?", (buyer_id,))
             
@@ -358,17 +379,32 @@ def confirm_payment():
            return redirect(url_for("user.user_page"))
        
         for item in payment_items:
-            try:
+             try:
                 seller_id = int(item["seller_id"])
-            except (KeyError, ValueError) as e:
+             except (KeyError, ValueError) as e:
                 seller_id = None
-
-            if seller_id == None:
+             
+            # Fetch product name
+             cur.execute("SELECT name FROM products WHERE id = ?", (item["product_id"],))
+             product = cur.fetchone()
+             product_name = product['name'] if product else "Unknown Product"
+             
+             if seller_id == None:
                 cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, seller_status, delivery_status, payment_method) VALUES (?, ?, ?, DATE('now'), ?, ?, ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "Confirmed", "Shipped", "Bank Card"))
-            else:
+             else:
                 cur.execute("INSERT INTO orders (buyer_id, product_id, quantity, date, total_amount, payment_method) VALUES (?, ?, ?, DATE('now'), ?, ?)",(buyer_id, item["product_id"], item["quantity"], (item["quantity"]*item["price"]), "Bank Card"))
+             
+             order_id = cur.lastrowid
+             cur.execute("UPDATE products SET quantity = quantity - ? WHERE id = ?", (item["quantity"], item["product_id"]))
             
-            cur.execute("UPDATE products SET quantity = quantity - ? WHERE id = ?", (item["quantity"], item["product_id"]))
+              # Construct notification messages
+             seller_message = f"New order received! Order ID: {order_id}, Buyer: {buyer_name}, Product: {product_name}."
+             buyer_message = f"Your purchase is confirmed! Order ID: {order_id}, Product: {product_name}, Total Amount: RM{total_price:.2f}, Payment Method: {payment_method}."
+              # Send notifications
+             if seller_id:
+                send_notification(con, seller_id, "New Order", seller_message)
+             
+             send_notification(con, buyer_id, "Purchase Confirmation", buyer_message)
         
         cur.execute("DELETE FROM cart WHERE buyer_id = ?", (buyer_id,))
         con.commit()

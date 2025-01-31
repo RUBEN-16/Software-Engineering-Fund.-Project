@@ -52,8 +52,7 @@
       <div class="product-item">
         <img src="{{ product.image_path }}" alt="{{ product.name }}" />
         <a href="{{url_for("product.item_detail", id=product.id)}}">{{ product.name }}</a>
-        <p>Max Quantity: {{ product.quantity }}</p>
-        <p>Condition: {{ product.condition }}</p>
+        <p>Quantity: {{ product.quantity }}</p><br>
         <p><s>RM1{{ product.price }}</s> <span>RM{{ product.price }}</span></p>
         <div class="hover-options">
           <form action="{{ url_for('product.add_to_cart', id=product.id) }}" method="POST">

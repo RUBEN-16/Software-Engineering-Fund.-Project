@@ -6,8 +6,8 @@
     <h1>Notifications</h1>
     {% if notifications %}
     <div class="notifications">
-        {% for notification in notifications %}
-            <div class="notification-item">
+        {% for notification in notifications | reverse %}
+            <div class="notification-item {% if notification.is_read == 0 %}unread{% endif %}">
                   <button class="notification-button">
                         {{ notification.topic }} <br> <span>{{ notification.date }}</span>
                   </button>
@@ -20,7 +20,6 @@
     {% else %}
     <p>No notifications yet.</p>
     {% endif %}
-     <button class="back-button" onclick="window.location.href='/'">Back to Home</button>
 </div>
   <script>
       const notificationItems = document.querySelectorAll('.notification-item');

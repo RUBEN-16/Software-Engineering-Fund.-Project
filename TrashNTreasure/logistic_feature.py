@@ -1,6 +1,5 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash, send_file
-from db import get_connect_db
-from io import BytesIO
+from db import get_connect_db, generate_tracking_code, send_notification
 
 logistic_blueprint = Blueprint("logistic", __name__, template_folder="templates")
 
@@ -28,7 +27,7 @@ def login():
 
 
 @logistic_blueprint.route("/profile")
-def member_profile():
+def member_profile(): 
     member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
@@ -50,11 +49,32 @@ def member_profile():
 @logistic_blueprint.route("/")
 def dashboard():    
     member_id = session["member_id"]
-    if member_id:
-        return render_template("logistic_page.html")
-    else:
+    if not member_id:
         flash("Please log in to access the admin account.", "danger")
         return redirect(url_for("logistic.login"))
+    
+    con = get_connect_db()
+    cur = con.cursor()
+
+    # Fetch Pickups Today Count
+    pickup_count = cur.execute("""
+        SELECT COUNT(*)
+        FROM pickup_request pr
+        JOIN orders o ON pr.order_id = o.id
+        WHERE o.delivery_status != 'Delivered' AND o.delivery_status != 'Cancelled'
+    """).fetchone()[0]
+
+    # Fetch Deliveries Today Count
+    delivery_count = cur.execute("SELECT COUNT(*) FROM orders WHERE delivery_status = 'Shipped'").fetchone()[0]
+
+     # Fetch Pending Orders Count
+    pending_order_count = cur.execute("""
+        SELECT COUNT(*) FROM orders WHERE delivery_status != 'Delivered' AND delivery_status != 'Cancelled'
+    """).fetchone()[0]
+
+    con.close()
+
+    return render_template("logistic_page.html", pickup_count=pickup_count, delivery_count=delivery_count, pending_order_count=pending_order_count)
     
 @logistic_blueprint.route("/pickup_manage")
 def pickup_management():
@@ -195,14 +215,58 @@ def assign_courier(pickup_id):
 
     if request.method == 'POST':
         courier = request.form['courier']
+        
         con = get_connect_db()
         cur = con.cursor()
-        cur.execute("UPDATE pickup_request SET courier = ?, assigned_status = 'Assigned', assigned_member_id = ? WHERE id = ?", (courier, member_id, pickup_id))
-        con.commit()
-        con.close()
-        flash("Courier assigned successfully.", "success")
-        return redirect(url_for('logistic.pickup_management'))
-    
+        
+        try:
+            # Fetch pickup request details
+            cur.execute("SELECT order_id, seller_id FROM pickup_request WHERE id = ?", (pickup_id,))
+            pickup_data = cur.fetchone()
+
+            if not pickup_data:
+                flash("Pickup request not found.", "danger")
+                return redirect(url_for('logistic.pickup_management'))
+
+            order_id = pickup_data['order_id']
+            seller_id = pickup_data['seller_id']
+
+            # Fetch buyer_id from the orders table
+            cur.execute("SELECT buyer_id FROM orders WHERE id = ?", (order_id,))
+            order_data = cur.fetchone()
+
+            if not order_data:
+                flash("Order not found.", "danger")
+                return redirect(url_for('logistic.pickup_management'))
+
+            buyer_id = order_data['buyer_id']
+
+            # Update pickup request with courier and assigned status
+            cur.execute("UPDATE pickup_request SET courier = ?, assigned_status = 'Assigned', assigned_member_id = ? WHERE id = ?", (courier, member_id, pickup_id))
+            con.commit()
+
+             # Generate tracking code
+            tracking_code = generate_tracking_code(order_id)
+
+            # Construct notification messages
+            seller_message = f"Your Order with ID {order_id} has been assigned to {courier} courier for pickup. Your tracking code is: {tracking_code}."
+            buyer_message = f"Your Order with ID {order_id} has been assigned to {courier} courier for delivery. Your tracking code is: {tracking_code}."
+
+
+            # Send notifications to seller and buyer
+            send_notification(con, seller_id, f"Courier Assigned - {courier}", seller_message)
+            send_notification(con, buyer_id, f"Courier Assigned - {courier}", buyer_message)
+
+
+            flash("Courier assigned successfully.", "success")
+            return redirect(url_for('logistic.pickup_management'))
+        except Exception as e:
+            flash(f"An error occurred: {e}", "danger")
+            con.rollback()
+        finally:
+            if con:
+                con.close()
+
     flash("Invalid request method", 'danger')
     return redirect(url_for('logistic.pickup_management'))
 
@@ -226,7 +290,8 @@ def delivery_details(order_id):
             p.name as product_name,
             o.quantity,
             o.total_amount,
-            o.buyer_id
+            o.buyer_id,
+            o.delivery_status
         FROM orders o
         JOIN products p ON o.product_id = p.id
         WHERE o.id = ?
@@ -303,20 +368,19 @@ def assign_delivery(order_id):
         cur = con.cursor()
 
         # Fetch seller id from order table
-        order_details = cur.execute("SELECT product_id FROM orders WHERE id = ?", (order_id,)).fetchone()
+        order_details = cur.execute("SELECT product_id, buyer_id FROM orders WHERE id = ?", (order_id,)).fetchone()
         if not order_details:
-            flash("Order not found to get the seller ID.", "danger")
+            flash("Order not found to get the seller and buyer ID.", "danger")
             con.close()
             return redirect(url_for("logistic.delivery_details", order_id=order_id))
         
         product_details = cur.execute("SELECT seller_id FROM products WHERE id = ?", (order_details['product_id'],)).fetchone()
-         
         if not product_details:
             flash("Product not found to get the seller ID.", "danger")
             con.close()
             return redirect(url_for("logistic.delivery_details", order_id=order_id))
         seller_id = product_details['seller_id']
-
+        buyer_id = order_details['buyer_id']
 
         try:
             cur.execute("""
@@ -324,9 +388,24 @@ def assign_delivery(order_id):
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (order_id, seller_id, condition, courier, arrival_date, pickup_date, description, member_id))
             con.commit()
+
+            # Generate tracking code
+            tracking_code = generate_tracking_code(order_id)
+
+
+            # Construct notification messages
+            seller_message = f"Your Order with ID {order_id} has been assigned to {courier} courier for delivery. Pickup date: {pickup_date}, Arrival date: {arrival_date}. Tracking code: {tracking_code}."
+            buyer_message = f"Your Order with ID {order_id} has been assigned to {courier} courier for delivery. Pickup date: {pickup_date}, Arrival date: {arrival_date}. Tracking code: {tracking_code}."
+
+            # Send notifications to seller and buyer
+            send_notification(con, seller_id, f"Delivery Assigned - {courier}", seller_message)
+            send_notification(con, buyer_id, f"Delivery Assigned - {courier}", buyer_message)
+
+
             flash("Delivery assigned successfully.", "success")
         except Exception as e:
             flash(f"Error assigning delivery: {e}", "danger")
+            con.rollback()
         finally:
            con.close()
 
@@ -349,7 +428,8 @@ def update_delivery_status(order_id):
             SELECT 
                 o.total_amount,
                 p.seller_id,
-                p.name AS product_name
+                p.name AS product_name,
+                o.buyer_id
             FROM orders o
             JOIN products p ON o.product_id = p.id
             WHERE o.id = ?
@@ -363,6 +443,8 @@ def update_delivery_status(order_id):
         total_amount = order['total_amount']
         seller_id = order['seller_id']
         product_name = order['product_name']
+        buyer_id = order['buyer_id']
+
 
         # Check if seller_id is a valid integer before crediting
         try:
@@ -394,6 +476,19 @@ def update_delivery_status(order_id):
             cur.execute("UPDATE assign_delivery SET delivered_date = DATE('now'), status_updated_member_id = ? WHERE id = ?", (member_id, assign_delivery_id,))
 
         con.commit()
+
+        # Construct notification messages
+        seller_message = f"Your product {product_name} with ID {order_id} has been successfully delivered."
+        seller_credit_message = f"The amount of RM {total_amount} for the order of {product_name} with ID {order_id} has been credited to your account."
+        buyer_message = f"Your order of {product_name} with ID {order_id} has been successfully delivered."
+
+
+        # Send notifications to seller and buyer
+        send_notification(con, seller_id, "Delivery Completed", seller_message)
+        send_notification(con, seller_id, "Payment Credited", seller_credit_message)
+        send_notification(con, buyer_id, "Delivery Completed", buyer_message)
+
+
         flash("Delivery status updated to 'Delivered'.", "success")
 
     except Exception as e:
@@ -417,12 +512,22 @@ def update_pickup_status(pickup_id):
 
     try:
         # Fetch order ID from pickup_request table
-        pickup_details = cur.execute("SELECT order_id FROM pickup_request WHERE id = ?", (pickup_id,)).fetchone()
+        pickup_details = cur.execute("SELECT order_id, seller_id FROM pickup_request WHERE id = ?", (pickup_id,)).fetchone()
         if not pickup_details:
             flash("Pickup request not found.", "danger")
             con.close()
             return redirect(url_for("logistic.pickup_details", pickup_id=pickup_id))
         order_id = pickup_details['order_id']
+        seller_id = pickup_details['seller_id']
+
+        # Fetch buyer_id from order table
+        order_data = cur.execute("SELECT buyer_id FROM orders WHERE id = ?", (order_id,)).fetchone()
+        if not order_data:
+            flash("Order not found.", "danger")
+            con.close()
+            return redirect(url_for("logistic.pickup_details", pickup_id=pickup_id))
+        buyer_id = order_data['buyer_id']
+
 
         # Update delivery status in orders table
         cur.execute("UPDATE orders SET delivery_status = 'Shipped' WHERE id = ?", (order_id,))
@@ -431,6 +536,15 @@ def update_pickup_status(pickup_id):
         cur.execute("UPDATE pickup_request SET status_updated_member_id = ? WHERE id = ?", (member_id, pickup_id,))
         
         con.commit()
+
+        # Construct notification messages
+        seller_message = f"Your order with ID {order_id} has been shipped."
+        buyer_message = f"Your order with ID {order_id} has been shipped."
+
+         # Send notifications to seller and buyer
+        send_notification(con, seller_id, "Product Shipped", seller_message)
+        send_notification(con, buyer_id, "Product Shipped", buyer_message)
+
         flash("Delivery status updated to 'Shipped'.", "success")
 
     except Exception as e:
@@ -527,7 +641,9 @@ def cancel_order(order_id):
             SELECT 
                 o.buyer_id,
                 o.total_amount,
-                p.name AS product_name
+                p.name AS product_name,
+                p.seller_id,
+                o.seller_status
             FROM orders o
             JOIN products p ON o.product_id = p.id
             WHERE o.id = ?
@@ -541,6 +657,8 @@ def cancel_order(order_id):
         buyer_id = order['buyer_id']
         total_amount = order['total_amount']
         product_name = order['product_name']
+        seller_id = order['seller_id']
+        seller_status = order['seller_status']
         
         # Credit the amount back to the buyer's e-wallet
         cur.execute(
@@ -566,6 +684,22 @@ def cancel_order(order_id):
         """, (member_id, order_id))
         
         con.commit()
+
+        # Construct notification message for buyer
+        cancellation_reason = "due to not enough information or undeliverable items"
+        buyer_message = f"Your order of {product_name} with ID {order_id} has been cancelled {cancellation_reason}. Your refund of RM {total_amount} has been credited back to your wallet."
+        
+        # Send notification to buyer
+        send_notification(con, buyer_id, "Order Cancelled", buyer_message)
+
+        # Construct notification message for seller if seller status is confirmed
+        if seller_status == 'Confirmed':
+            seller_message = f"Your order of {product_name} with ID {order_id} has been cancelled {cancellation_reason}."
+        
+             # Send notification to seller
+            send_notification(con, seller_id, "Order Cancelled", seller_message)
+
+
         flash("Order Cancelled Successfully, buyer has been refunded.", "success")
 
     except Exception as e:

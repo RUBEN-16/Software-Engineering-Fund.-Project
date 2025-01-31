@@ -43,7 +43,7 @@
                             <p class="product-quantity">Quantity: {{ product.quantity }}</p>
                             <div class="product-actions">
                                 <a class="view-btn" href="{{url_for("seller.product_details", id=product.id)}}#product-details">View</a>
-                                <form action="{{ url_for('seller.remove_product', product_id=product.id) }}" method="POST" onsubmit="return confirmRemove()">
+                                <form action="{{ url_for('product.remove_product', product_id=product.id) }}" method="POST" onsubmit="return confirmRemove()">
                                     <button type="submit" class="remove-btn">Remove</button>
                                 </form>
                             </div>

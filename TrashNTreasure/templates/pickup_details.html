@@ -55,7 +55,7 @@
 
             <section class="seller-info">
                 {%if pickup_details.assigned_status == 'Pending' %}
-                    <h2>Assign Courier</h2>
+                    <h2>Assign Courier</h2> 
                     <form method="post" action="{{ url_for('logistic.assign_courier', pickup_id=pickup_details.id) }}">
                         <div class="form-group">
                             <label for="courier">Select Courier:</label>
@@ -72,7 +72,7 @@
                 {%else%}
                     <h2>Update Product Arrival Status</h2>
                     <form method="post" action="{{ url_for('logistic.update_pickup_status', pickup_id=pickup_details.id) }}">
-                        <button type="submit" class="arrived-btn" {% if pickup_details.delivery_status == 'Shipped' or pickup_details.delivery_status == 'Delivered' %}disabled{% endif %}>Arrived</button>
+                        <button type="submit" class="arrived-btn" {% if pickup_details.delivery_status == 'Shipped' %}disabled{% endif %}>Arrived</button>
                     </form>
                 {%endif%}
             </section>

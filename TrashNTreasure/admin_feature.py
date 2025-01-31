@@ -31,7 +31,7 @@ def login():
     return render_template("adminlogin_page.html")
 
 @admin_blueprint.route("/")
-def dashboard():
+def dashboard(): 
     if "admin_id" in session:
         return render_template("admin_page.html", admin = session["admin_name"])    
     else:
@@ -228,7 +228,7 @@ def approve_seller(seller_id):
         con.commit()
         
         flash("Seller application approved!", "success")
-        send_notification(seller_id, "Seller Application Approved", "Congratulations! Your seller application has been approved. You can now start listing your products.")
+        send_notification(con, seller_id, "Seller Application Approved", "Congratulations! Your seller application has been approved. You can now start listing your products.")
     except Exception as e:
         flash(f"An error occurred: {e}", "danger")
     finally:
@@ -245,7 +245,7 @@ def reject_seller(seller_id):
         con.commit()
         
         flash("Seller application rejected.", "info")
-        send_notification(seller_id, "Seller Application Rejected", "Your seller application has been rejected. You can review the requirements and apply again.")
+        send_notification(con, seller_id, "Seller Application Rejected", "Your seller application has been rejected. You can review the requirements and apply again.")
     except Exception as e:
         flash(f"An error occurred: {e}", "danger")
     finally:

@@ -1,5 +1,7 @@
 from flask import Blueprint, flash, session
 import sqlite3
+import random
+import string
 
 database_blueprint = Blueprint("database", __name__)
 
@@ -265,9 +267,8 @@ def get_unread_notification_count():
     unread_count = cur.execute("SELECT COUNT(*) FROM notification WHERE user_id = ? AND is_read = 0", (user_id,)).fetchone()[0]
     con.close()
     return unread_count
-
-def send_notification(user_id, topic, message):
-    con = get_connect_db()
+        
+def send_notification(con, user_id, topic, message):
     cur = con.cursor()
     try:
         cur.execute("""
@@ -278,8 +279,10 @@ def send_notification(user_id, topic, message):
     except Exception as e:
         flash(f"An error occurred while send notification : {e}", "danger")
         con.rollback()
-    finally:
-        con.close()
 
 
-
+def generate_tracking_code(order_id):
+    """Generates a random alphanumeric tracking code."""
+    prefix = f"TN-{order_id}-"
+    random_part = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+    return prefix + random_part

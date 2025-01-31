@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, url_for, render_template, request, session, flash, current_app
-from db import get_connect_db
+from db import get_connect_db, send_notification
 from werkzeug.utils import secure_filename
 import os, sqlite3
 
@@ -25,7 +25,7 @@ def add_product():
             return redirect(url_for("login"))
         else:
             return redirect(url_for("admin.login"))
-    
+     
     if request.method == "POST":
         try:
             # Get form data
@@ -99,29 +99,127 @@ def add_product():
     elif admin_id:
         return render_template("inventory.html", admin_id=admin_id)
     
-@product_blueprint.route("/remove_item/<id>", methods=["POST", "GET"])
-def delete_item(id):
+@product_blueprint.route("/remove_product/<int:product_id>", methods=["POST"])
+def remove_product(product_id):
+    con = get_connect_db()
+    cur = con.cursor()
+
+    user_id = session.get("buyer_id")
+    admin_id = session.get("admin_name")
+
+    is_seller = False
     try:
-        con = get_connect_db()
-        cur = con.cursor()
-        cur.execute("SELECT * FROM product WHERE id = ?", (id,))
-        user = cur.fetchone()
-        if not user:
+        if user_id:
+            is_seller = True
+        elif admin_id:
+            is_seller = False
+        
+        # Fetch product details
+        cur.execute("SELECT * FROM products WHERE id = ?", (product_id,))
+        product = cur.fetchone()
+
+        if not product:
             flash("Product not found.", "warning")
-            return redirect(url_for("admin.inventory"))
-        cur.execute("DELETE FROM product WHERE id = ?", (id,))
+            if is_seller:
+                return redirect(url_for('seller.your_products')+"#Product")
+            else: 
+                return redirect(url_for("admin.inventory") ) 
+        
+        if is_seller == False:
+             # Fetch all associated orders before deleting
+            cur.execute("""
+                SELECT 
+                    orders.id AS order_id,
+                    orders.buyer_id,
+                    orders.total_amount
+                FROM orders
+                WHERE product_id = ?
+            """, (product_id,))
+            orders_to_refund = cur.fetchall()
+
+            seller_id = product['seller_id']
+
+            # Refund and Delete each order
+            for order in orders_to_refund:
+                buyer_id = order["buyer_id"]
+                total_amount = order["total_amount"]
+                order_id = order['order_id']
+
+                # Credit the amount back to the buyer's e-wallet
+                cur.execute(
+                "UPDATE user SET wallet = wallet + ? WHERE pid = ?",
+                    (total_amount, buyer_id)
+                )
+
+                # Add a record in the transaction history
+                cur.execute("""
+                    INSERT INTO wallet_transaction (buyer_id, date, description, amount) 
+                    VALUES (?, DATE('now'), ?, ?)
+                """, (buyer_id, f"Refund for removed product with ID: {product_id} and order ID {order_id}", total_amount))
+
+                # Send notification to buyer
+                buyer_message = f"Your order for product with ID {product_id} has been cancelled and refunded due to product removal. Order ID: {order_id}.  Your refund of RM {total_amount} has been credited back to your wallet."
+                send_notification(con, buyer_id, "Product Removed", buyer_message)
+
+            # Send notification to seller if admin deleting it
+            seller_message = f"Your product with ID {product_id} has been removed by the admin."
+            send_notification(con, seller_id, "Product Removed", seller_message)
+
+            # Delete orders of the product after refund
+            cur.execute("DELETE FROM orders WHERE product_id = ?", (product_id,))
+        elif is_seller == True:
+             # Fetch all associated orders before deleting
+            cur.execute("""
+                SELECT 
+                    orders.id AS order_id,
+                    orders.buyer_id,
+                    orders.total_amount
+                FROM orders
+                WHERE product_id = ?
+            """, (product_id,))
+            orders_to_refund = cur.fetchall()
+
+            # Refund and Delete each order
+            for order in orders_to_refund:
+                buyer_id = order["buyer_id"]
+                total_amount = order["total_amount"]
+                order_id = order['order_id']
+
+                # Credit the amount back to the buyer's e-wallet
+                cur.execute(
+                "UPDATE user SET wallet = wallet + ? WHERE pid = ?",
+                    (total_amount, buyer_id)
+                )
+
+                # Add a record in the transaction history
+                cur.execute("""
+                    INSERT INTO wallet_transaction (buyer_id, date, description, amount) 
+                    VALUES (?, DATE('now'), ?, ?)
+                """, (buyer_id, f"Refund for removed product with ID: {product_id} and order ID {order_id}", total_amount))
+
+                # Send notification to buyer
+                buyer_message = f"Your order for product with ID {product_id} has been cancelled and refunded due to product removal. Order ID: {order_id}.  Your refund of RM {total_amount} has been credited back to your wallet."
+                send_notification(con, buyer_id, "Product Removed", buyer_message)
+
+            # Delete orders of the product after refund
+            cur.execute("DELETE FROM orders WHERE product_id = ?", (product_id,))
+
+        # Delete the product after refund the orders
+        cur.execute("DELETE FROM products WHERE id = ?", (product_id,))
+        
         con.commit()
-        
-        flash("Product deleted successfully!", "success")
-        
+        flash(f"Product with ID {product_id} have been removed successfully.", "success")
     except Exception as e:
-        flash(f"An error occurred: {e}", "danger")
-        
+        flash(f"An error occurred while removing the product: {e}", "danger")
+        con.rollback()
     finally:
         if con:
             con.close()
             
-    return redirect(url_for("admin.inventory"))
+    if is_seller:
+        return redirect(url_for('seller.your_products')+"#Product")
+    else: 
+        return redirect(url_for("admin.inventory") ) 
 
 @product_blueprint.route('/search', methods=["GET"])
 def search_product():
@@ -233,11 +331,33 @@ def submit_comment(product_id):
    con = get_connect_db()
    cur = con.cursor()
    try:
+       # Fetch product details including seller_id
+       cur.execute("SELECT name, seller_id FROM products WHERE id = ?", (product_id,))
+       product = cur.fetchone()
+       if not product:
+            flash("Product not found.", "warning")
+            return redirect(url_for("product_page"))
+       seller_id = product['seller_id']
+       product_name = product['name']
+        
+       # Fetch buyer's name
+       cur.execute("SELECT firstName, lastName FROM user WHERE pid = ?", (buyer_id,))
+       buyer = cur.fetchone()
+       if not buyer:
+           flash("Buyer not found.", "warning")
+           return redirect(url_for("product.item_detail", id=product_id))
+       buyer_name = f"{buyer['firstName']} {buyer['lastName']}"
+
        cur.execute(
           "INSERT INTO feedback (buyer_id, product_id, rating, comment) VALUES (?, ?, ?, ?)",
           (buyer_id, product_id, rating, comment),
         )
        con.commit()
+       
+       # Construct notification message
+       message = f"Buyer {buyer_name} left a comment and rating on your product {product_name}."
+       send_notification(seller_id, "New Comment", message)
+       
        flash("Comment submitted successfully!", "success")
    except Exception as e:
         flash(f"An error occurred while submitting the comment: {e}", "danger")

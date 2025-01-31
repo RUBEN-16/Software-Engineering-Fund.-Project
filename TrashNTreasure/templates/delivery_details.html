@@ -73,7 +73,7 @@
                             <option value="DHL">DHL</option>
                              <option value="No Courier">No Courier</option>
                         </select>
-                    </div>
+                    </div> 
                     <button type="submit" class="assign-btn">Assign Delivery</button>
             </form>
         </section>
@@ -84,7 +84,7 @@
             <div class="deliverable-actions">
                 <p>After product delivered, update the status.</p>
                 <form method="post" action="{{ url_for('logistic.update_delivery_status', order_id=order_details.order_id) }}">
-                    <button type="submit" class="delivered-btn">Delivered</button>
+                    <button type="submit" class="delivered-btn" {% if order_details.delivery_status == 'Delivered' %}disabled{% endif %}>Delivered</button>
                 </form>
 
             </div>

@@ -37,6 +37,11 @@
    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
    transform: translateY(-2px);
 }
+.notification-item.unread{
+    background-color: #e0f7fa; /* Brighter background for unread notifications */
+    border: 2px solid #00bcd4; /* Distinct border for unread notifications */
+}
+
 
 .notification-button {
    background-color: #e0f7fa;

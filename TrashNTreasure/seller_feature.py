@@ -1,6 +1,5 @@
-from flask import Blueprint, redirect, url_for, render_template, request, session, flash, current_app
-from db import get_connect_db
-from flask_mail import Mail, Message
+from flask import Blueprint, redirect, url_for, render_template, request, session, flash
+from db import get_connect_db, send_notification
 import os
 
 seller_blueprint = Blueprint("seller", __name__, template_folder="templates")
@@ -18,19 +17,23 @@ def seller_verification():
         flash("You need to log in to proceed.", "danger")
         return redirect(url_for('login')) 
 
-    con = get_connect_db() 
+    con = get_connect_db()  
     cur = con.cursor() 
-    user_exist = cur.execute('SELECT * FROM seller_registration WHERE id = ?', (id,)).fetchone()
+    
+    # Check for existing rejected request
+    rejected_request = cur.execute('SELECT * FROM seller_registration WHERE id = ? AND status = "Rejected"', (id,)).fetchone()
+    if rejected_request:
+        session['isExist'] = False
+    else:
+        user_exist = cur.execute('SELECT * FROM seller_registration WHERE id = ?', (id,)).fetchone()
+        if user_exist:
+            session['isExist'] = True
+        else:
+            session['isExist'] = False
+    
     cur.execute('SELECT isSeller FROM user WHERE pid = ?', (id,))
     result = cur.fetchone()
     session["seller_status"] = result['isSeller'] if result else None
-    
-    if user_exist:
-        session['isExist'] = True
-        print("isExist")
-    else:
-        session['isExist'] = False
-        print("notExist")
     
     con.close()
     if request.method == "POST":
@@ -70,11 +73,16 @@ def seller_verification():
             
         if os.path.exists(ic_filename) and os.path.exists(profile_filename):
             con = get_connect_db()
-            con.execute("""
+            cur = con.cursor()
+            cur.execute("""
                 INSERT INTO seller_registration (id, name, email, phone_number, ic_picture, profile_picture)
                 VALUES (?, ?, ?, ?, ?, ?)
             """, (id, name, email, phone_number, ic_filename_db, profile_filename_db))
             con.commit()
+            
+            # Send notification to the user
+            message = "Your seller verification request has been submitted successfully! We will notify you once it has been processed."
+            send_notification(con, id, "Seller Verification Request", message)
             con.close()
                         
             flash("Seller verification submitted successfully!", "success")
@@ -206,63 +214,6 @@ def edit_product(id):
 
     return redirect(url_for("seller.your_products", id=id)+"#Product")
 
-@seller_blueprint.route('/remove_product/<int:product_id>', methods=['POST'])
-def remove_product(product_id):
-    """
-    Removes a product from the products table, refunds associated orders, and deletes the orders.
-
-    Args:
-        product_id (int): The ID of the product to remove.
-    """
-    con = get_connect_db()
-    cur = con.cursor()
-
-    try:
-        # Fetch all associated orders before deleting
-        cur.execute("""
-            SELECT 
-                orders.id AS order_id,
-                orders.buyer_id,
-                orders.total_amount
-            FROM orders
-            WHERE product_id = ?
-        """, (product_id,))
-        orders_to_refund = cur.fetchall()
-        
-        # Refund and Delete each order
-        for order in orders_to_refund:
-            buyer_id = order["buyer_id"]
-            total_amount = order["total_amount"]
-            order_id = order['order_id']
-
-            # Credit the amount back to the buyer's e-wallet
-            cur.execute(
-            "UPDATE user SET wallet = wallet + ? WHERE pid = ?",
-                (total_amount, buyer_id)
-            )
-
-            # Add a record in the transaction history
-            cur.execute("""
-                INSERT INTO wallet_transaction (buyer_id, date, description, amount) 
-                VALUES (?, DATE('now'), ?, ?)
-            """, (buyer_id, f"Refund for removed product with ID: {product_id} and order ID {order_id}", total_amount))
-
-        # Delete orders of the product after refund
-        cur.execute("DELETE FROM orders WHERE product_id = ?", (product_id,))
-        
-        # Delete the product after refund the orders
-        cur.execute("DELETE FROM products WHERE id = ?", (product_id,))
-        
-        con.commit()
-        flash(f"Product with ID {product_id} have been removed successfully.", "success")
-    except Exception as e:
-        flash(f"An error occurred while removing the product: {e}", "danger")
-        con.rollback()
-    finally:
-        con.close()
-
-    return redirect(url_for('seller.your_products')+"#Product")
-
 @seller_blueprint.route("/accept_order/<int:order_id>", methods=["POST"])
 def accept_order(order_id):
     seller_id = session.get("buyer_id")
@@ -289,7 +240,16 @@ def accept_order(order_id):
              JOIN user u ON o.buyer_id = u.pid
             WHERE o.id = ? AND p.seller_id = ?
         """, (order_id, seller_id)).fetchone()
-       
+        
+        if order:
+           buyer_id = order["buyer_id"]
+           product_name = order["product_name"]
+           # Construct notification message
+           message = f"Your order with ID {order_id} for product {product_name} has been accepted by the seller."
+
+           # Send notification to buyer
+           send_notification(con, buyer_id, "Order Accepted", message)
+
         session["courier_order"] = dict(order)  # Store order data in session
     
     except Exception as e:
@@ -312,7 +272,9 @@ def reject_order(order_id):
             SELECT 
                 orders.buyer_id,
                 orders.total_amount,
-                products.name AS product_name
+                products.name AS product_name,
+                orders.product_id,
+                orders.quantity
             FROM orders
             JOIN products ON orders.product_id = products.id
             WHERE orders.id = ?
@@ -326,6 +288,8 @@ def reject_order(order_id):
         buyer_id = order['buyer_id']
         total_amount = order['total_amount']
         product_name = order['product_name']
+        product_id = order['product_id']
+        quantity = order['quantity']
         
         # Credit the amount back to the buyer's e-wallet
         cur.execute(
@@ -339,10 +303,20 @@ def reject_order(order_id):
             VALUES (?, DATE('now'), ?, ?)
         """, (buyer_id, f"Refund for rejected order of {product_name} (ID: {order_id})", total_amount))
       
+         # Update the quantity of the product
+        cur.execute("UPDATE products SET quantity = quantity + ? WHERE id = ?", (quantity, product_id))
+        
         # Update seller_status to 'Rejected' and delivery status to cancelled
         cur.execute("UPDATE orders SET seller_status = 'Rejected' WHERE id = ?",(order_id,))
         cur.execute("UPDATE orders SET delivery_status = 'Cancelled' WHERE id = ?",(order_id,))
         con.commit()
+        
+        # Construct notification message
+        message = f"Your order with ID {order_id} for product {product_name} has been rejected by the seller. A refund of RM {total_amount:.2f} has been credited back to your e-wallet."
+        
+        # Send notification to buyer
+        send_notification(con, buyer_id, "Order Rejected", message)
+
         flash(f"Order with ID {order_id} has been rejected.", "success")
     
     except Exception as e:
@@ -418,6 +392,13 @@ def request_courier():
             (order_id, seller_id, courier, seller_address, buyer_address)
         )
         con.commit()
+        
+        # Construct notification message
+        message = f"Your courier request for Order ID: {order_id} has been submitted successfully! We will notify you once it has been processed."
+        
+        # Send notification to seller
+        send_notification(con, seller_id, "Courier Request Submitted", message)
+        
         flash("Courier request submitted successfully!", "success")
    except Exception as e:
         flash(f"An error occurred while requesting courier: {e}", "danger")
@@ -429,4 +410,4 @@ def request_courier():
    session.pop('courier_order', None) # remove the order info in session
    session.pop('seller_address', None)  #remove the seller address in session
 
-   return redirect(url_for("seller.your_product_orders") + "#Courier") 
+   return redirect(url_for("seller.your_product_orders") + "#Product")

@@ -36,6 +36,7 @@ html, body {
 .search-box {
     display: flex;
     align-items: center;
+    width: 105  0px;
 }
 
 .search-box input[type="text"] {
@@ -44,6 +45,7 @@ html, body {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-right: 10px;
+    width: 1000px;
 }
 
 .search-btn {
