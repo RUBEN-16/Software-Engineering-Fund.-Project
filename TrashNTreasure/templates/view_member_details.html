@@ -1,0 +1,124 @@
+{% extends "admin_page.html" %}
+{% block title %}Member Details{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/view_member_details.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="member-details-container">
+    <div class="header-section">
+        <h1>{{ member.firstName }}'s Details</h1>
+        <form action="{{ url_for('admin.delete_member', member_id=member.pid) }}" method="POST" onsubmit="return confirmRemove()">
+            <button type="submit" class="remove-button" >Remove Member</button>
+        </form>
+    </div>
+
+    <div class="top-content-container">
+        <section class="personnel-info-section">
+          <h2>Personnel Information</h2>
+          <div class="member-profile">
+             <img class="member-profile-picture" src="/static/images/mock-profile.jpg" alt="profile photo">
+            <div class="member-details">
+                <p><i class="fas fa-id-card icon"></i> <strong>ID:</strong> {{ member.pid }}</p>
+                <p><i class="fas fa-user icon"></i> <strong>Name:</strong> {{ member.firstName }} {{ member.lastName }}</p>
+                <p><i class="fas fa-envelope icon"></i> <strong>Email:</strong> {{ member.email }}</p>
+            </div>
+         </div>
+        </section>
+
+        <section class="performance-section">
+            <h2>Performance</h2>
+            <div class="chart-container">
+            <canvas id="performanceChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+    </div>
+
+
+    <section class="works-list-section">
+        <h2>Works List</h2>
+         <div class="works-tables">
+             <div class="delivery-table-section">
+                  <h3>Delivery Assignments</h3>
+                 <div class="table-responsive">
+                      <table class="delivery-table">
+                        <thead>
+                          <tr>
+                            <th>Order ID</th>
+                            <th>Delivery Status</th>
+                            <th>Worked Type</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                             {% for delivery in delivery_assignments %}
+                                  <tr>
+                                       <td>{{ delivery.order_id }}</td>
+                                       <td>{{ delivery.delivery_status }}</td>
+                                        <td>{{ delivery.worked_type }}</td>
+                                  </tr>
+                              {% else %}
+                                  <tr><td colspan="3" style="text-align: center">No Delivery Assignments</td></tr>
+                             {% endfor %}
+                        </tbody>
+                      </table>
+                   </div>
+               </div>
+
+              <div class="pickup-table-section">
+                  <h3>Pickup Assignments</h3>
+                   <div class="table-responsive">
+                      <table class="pickup-table">
+                        <thead>
+                          <tr>
+                            <th>Order ID</th>
+                            <th>Pickup Status</th>
+                            <th>Worked Type</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            {% for pickup in pickup_assignments %}
+                                   <tr>
+                                        <td>{{ pickup.order_id }}</td>
+                                        <td>{% if pickup.delivery_status == 'Shipped' %}Shipped{% else %}Pending{% endif %}</td>
+                                         <td>{{ pickup.worked_type }}</td>
+                                  </tr>
+                             {% else %}
+                                <tr><td colspan="3" style="text-align: center">No Pickup Assignments</td></tr>
+                             {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+              </div>
+         </div>
+    </section>
+      <button class="back-button" onclick="window.location.href='{{ url_for('admin.logistic_management') }}'">Back to Logistic Management</button>
+</div>
+<script>
+    function confirmRemove() {
+        return confirm("Are you sure you want to remove this member?");
+    }
+
+    const performanceChartCanvas = document.getElementById('performanceChart').getContext('2d');
+    const performanceChart = new Chart(performanceChartCanvas, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Performance (Tasks Completed)',
+                 data: [22, 25, 28, 30, 35, 38], // hardcoded data
+                borderColor: '#007bff',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+               y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+</script>
+{% endblock %}

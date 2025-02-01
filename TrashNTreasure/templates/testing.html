@@ -1,23 +1,20 @@
 {% extends "admin_page.html" %}
 {% block title %}User Management{% endblock %}
 {% block content %}
-
 <link rel="stylesheet" href="/static/user_management.css">
-<section id="user-management" class="page-content active-section">
+<section class="page-content">
     <div class="user-management-container">
-        <div class="header-container">
-          <h1>User Management</h1>
-        </div>
-        <!-- Navigation within User Management Page-->
-        <nav class="user-management-nav">
-            <ul>
-                <li><a href="#users" data-section="users">Users</a></li>
-                <li><a href="#sellers" data-section="sellers">Sellers</a></li>
-            </ul>
-        </nav>
-
+        <h1>User Management</h1>
+           <nav class="management-nav">
+              <ul>
+                <li><a href="#users" class="management-nav-link" data-target="user-list-section">Users</a></li>
+                <li><a href="#sellers" class="management-nav-link" data-target="seller-list-section">Sellers</a></li>
+              </ul>
+           </nav>
+           
         <!-- User List Section -->
-        <section id="users" class="users internal-active-section">
+        <section id="users" class="user-list-section active">
+            <h2>Users</h2>
             <div class="table-responsive">
             <table class="user-table">
                 <thead>
@@ -57,7 +54,8 @@
          </section>
 
         <!-- Seller List Section -->
-        <section id="sellers" class="sellers">
+        <section id="sellers" class="seller-list-section">
+            <h2>Sellers</h2>
              <div class="table-responsive">
             <table class="seller-table">
                <thead>
@@ -96,42 +94,10 @@
     function confirmDelete() {
       return confirm("Are you sure you want to remove this user?");
     }
-    document.addEventListener('DOMContentLoaded', function () {
-    
-       //  Internal Navigation for User Management Page
-       const internalNavLinks = document.querySelectorAll('.user-management-nav a');
-       const internalSections = document.querySelectorAll('.users, .sellers');
-       const internalNavItems = document.querySelectorAll('.user-management-nav li');
-    
-    
-        internalNavItems.forEach(item => {
-          if(item.querySelector('a').getAttribute('data-section') === 'users'){
-            item.classList.add('internal-active-nav')
-          }
-        })
-    
-        internalNavLinks.forEach(link => {
-            link.addEventListener('click', function (event) {
-                event.preventDefault();
-    
-                const targetSectionId = this.getAttribute('data-section');
-    
-                 internalSections.forEach(section => {
-                    section.classList.remove('internal-active-section');
-                    if(section.id === targetSectionId){
-                      section.classList.add('internal-active-section');
-                    }
-                 });
-    
-                  internalNavItems.forEach(item => {
-                      item.classList.remove('internal-active-nav'); // Remove highlight from all nav items
-                    if (item.querySelector('a').getAttribute('data-section') === targetSectionId) {
-                      item.classList.add('internal-active-nav'); // Add highlight to the clicked item
-                    }
-                });
-    
-            });
-        });
-    });
 </script>
 {% endblock %}
+
+
+
+
+

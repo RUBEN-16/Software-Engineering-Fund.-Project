@@ -1,105 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="/static/navi_admin.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/static/admin_page.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<div class="msg">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {%if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <span>{{ message }}</span>
+                    <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+                </div>
+            {%endfor%}
+        {%endif%}
+    {%endwith%}
+</div>
 <body>
-    <div class="dashboard-container"> 
-        <!--Side bar-->
-        <aside class="sidebar"> 
-            <div class="logo">
-                <a href="{{url_for("admin.dashboard")}}">
-                    <img src="/static/images/logo2.png" alt="LOGO"/>
-                </a>
+  <div class="container">
+    <!-- Sidebar -->
+      <aside class="sidebar">
+      <div class="logo">
+          <i class="fas fa-shield-alt"></i>
+        <span>Admin Panel</span>
+      </div>
+        <nav>
+        <ul>
+          <li><a href="{{url_for("admin.dashboard")}}"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="{{url_for("admin.user_management")}}"><i class="fas fa-users"></i> User Management</a></li>
+          <li><a href="{{url_for("admin.logistic_management")}}"><i class="fas fa-truck"></i> Logistic Management</a></li>
+          <li><a href="{{url_for("admin.inventory")}}"><i class="fas fa-box"></i> Inventory</a></li>
+            <li><a href="{{url_for("admin.seller_approval")}}"><i class="fas fa-user-check"></i> Seller Approval</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+        <header class="header">
+           <div class="header-right">
+              <div class="profile-dropdown">
+                <button class="profile-btn">
+                  <img src="/static/images/profile.png" alt="Profile">
+                  <span>{{session["admin_name"]}}</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+               <div class="dropdown-content">
+                  <a href="#"><i class="fas fa-user"></i> Profile</a>
+                  <a href="{{url_for('admin.logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+              </div>
             </div>
-            <h2>Admin</h2>
-            <nav>
-                <ul>
-                    <li><a href="{{url_for("admin.user_management")}}">User Management</a></li>
-                    <li><a href="{{url_for("admin.logistic_management")}}">Logistics Management</a></li>
-                    <li><a href="{{url_for("admin.inventory")}}">Inventory</a></li>
-                    <li><a href="{{url_for('admin.seller_approval')}}">Seller Approval</a></li>
-                </ul>
-            </nav>
-        </aside>
-        <!-- Main Content -->
-        <main class="main-content">
-
-            
-
-            <!-- Header --> 
-            <header class="header">
-                <h1>Dashboard</h1>
-                <div class="profile">
-                    <span>Welcome, {{session["admin_name"]}}</span>
-                    <div class="msg">
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                          {% if messages %}
-                            {% for category, message in messages %}
-                              <div class="alert alert-{{ category }}">
-                                <span>{{ message }}</span>
-                                <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-                              </div>
-                            {% endfor %}
-                          {% endif %}
-                        {% endwith %}
+        </header>
+        {%block content%} 
+        <!-- Page Content -->
+           <section class="page-content">
+             <div class="dashboard-content">
+                <h1>Welcome, {{session["admin_name"]}}</h1>
+                <p>Manage your system effectively and efficiently.</p>
+                <div class="cards">
+                    <div class="card">
+                    <i class="fas fa-users"></i>
+                    <h3>Total Users</h3>
+                    <p>124</p>
                     </div>
-                    <div class="profile-img">
-                        <img src="/static/images/profile.png" alt="Profile">
-                            <div class="profile-dropdown">
-                                <ul>
-                                    <li><a href="{{url_for('admin.logout')}}">Log Out</a></li>
-                                    <li><a href="signUp.html">Sign Out</a></li>
-                                    <li><a href="#">Change Password</a></li>
-                                </ul>
-                            </div>
+                    <div class="card">
+                        <i class="fas fa-truck"></i>
+                        <h3>Total Logistics</h3>
+                        <p>34</p>
+                    </div>
+                     <div class="card">
+                         <i class="fas fa-box"></i>
+                         <h3>Total Products</h3>
+                         <p>567</p>
+                     </div>
+                    <div class="card">
+                        <i class="fas fa-user-check"></i>
+                         <h3>Pending Seller</h3>
+                        <p>45</p>
                     </div>
                 </div>
-            </header>
-
-    {%block content%}
-        <section class="dashboard-cards">
-            <div class="card email">
-                <img src="/static/images/email.jpg" alt="Email">
-                <p>Email</p>
-                <div class="email-dropdown">
-                    <ul>
-                        <li><a href="#">New Email</a></li>
-                        <li><a href="#">Sent Email</a></li>
-                        <li><a href="#">Draft</a></li>
-                    </ul>
+             </div>
+             <div class="charts-container">
+                <div class="chart-card">
+                    <canvas id="salesChart" width="400" height="200"></canvas>
                 </div>
-            </div>
+                 <div class="chart-card">
+                    <canvas id="sellerChart" width="400" height="200"></canvas>
+                </div>
+              </div>
+          </section>
+        {%endblock%}
+    </main>
+  </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileBtn = document.querySelector('.profile-btn');
+        const dropdownContent = document.querySelector('.dropdown-content');
 
-            <div class="card">
-                <img src="/static/images/pending.jpg" alt="Pending">
-                <p>Pending Requests</p>
-            </div>
-            <div class="card notification">
-                <img src="/static/images/notification.jpg" alt="Notification">
-                <p>New Notifications</p>
-                <div class="notification-dropdown">
-                    <ul>
-                        <li><a href="#">New Messages</a></li>
-                        <li><a href="#">Request Approval</a></li>
-                        <li><a href="#">System Update</a></li>
-                    </ul>
-            </div>
-            </div>
-        </section>
+        profileBtn.addEventListener('click', function() {
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        });
 
-        <!-- Quick Links -->
-        <section class="quick-links">
-            <h2>Quick Links</h2>
-            <ul>
-                <li><a href="{{url_for("admin.user_management")}}">Manage Users</a></li>
-                <li><a href="{{url_for("admin.inventory")}}#add-item">Add Inventory Items</a></li>
-                <li><a href="{{url_for('admin.seller_approval')}}">Review Seller Requests</a></li>
-            </ul>
-        </section>
-    {%endblock%}
+        document.addEventListener('click', function(event) {
+            if (!profileBtn.contains(event.target) && !dropdownContent.contains(event.target)) {
+                dropdownContent.style.display = 'none';
+            }
+        });
+    });
+    
+    const salesChartCanvas = document.getElementById('salesChart').getContext('2d');
+      const sellerChartCanvas = document.getElementById('sellerChart').getContext('2d');
+
+    const salesChart = new Chart(salesChartCanvas, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Total Sales (RM)',
+                data: [1200, 1500, 1300, 2000, 2200, 2500],
+                borderColor: '#007bff',
+                borderWidth: 2,
+                 fill: false
+            }]
+        },
+         options: {
+            responsive: true,
+            maintainAspectRatio: false,
+          scales: {
+             y: {
+              beginAtZero: true
+            }
+          }
+       }
+    });
+     const sellerChart = new Chart(sellerChartCanvas, {
+      type: 'bar',
+        data: {
+           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Total Sellers',
+                data: [20, 25, 30, 35, 40, 45],
+               backgroundColor: '#28a745',
+                
+           }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+             scales: {
+              y: {
+              beginAtZero: true
+            }
+           }
+        }
+    });
+</script>
 </body>
 </html>

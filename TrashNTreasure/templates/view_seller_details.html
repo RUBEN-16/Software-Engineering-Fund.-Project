@@ -1,0 +1,93 @@
+{% extends "admin_page.html" %}
+{% block title %}Seller Details{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/view_seller_details.css">
+<div class="seller-details-container">
+    <h1>{{ seller_details.name }}'s Details</h1>
+
+    <div class="content-container">
+        <section class="seller-info-section">
+            <h2>Seller Information</h2>
+            <div class="seller-profile">
+              <img class="seller-profile-picture" src="{{ seller_details.profile_picture }}" alt="{{ seller_details.name }}'s profile picture">
+              <div class="seller-details">
+                 <p><strong>Name:</strong> {{ seller_details.name }}</p>
+                 <p><strong>Phone Number:</strong> {{ seller_details.phone_number }}</p>
+                 <p><strong>Email:</strong> {{ seller_details.email }}</p>
+                </div>
+            </div>
+        </section>
+        <section class="seller-ic-section">
+            <h2>IC Information</h2>
+            <div class="seller-ic">
+                <img class="seller-ic-picture" src="{{ seller_details.ic_picture }}" alt="{{ seller_details.name }}'s IC photo">
+                <p>{{ seller_details.name }}</p>
+            </div>
+        </section>
+    </div>
+     <section class="product-info-section">
+         <h2>Seller's Products</h2>
+           <div class="table-responsive">
+           <table class="product-table">
+            <thead>
+              <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Max Quantity</th>
+                    <th>Price</th>
+              </tr>
+             </thead>
+           <tbody>
+            {% for product in seller_products %}
+              <tr>
+                   <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>RM {{ product.price }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                   <td colspan="4" style="text-align: center">No Products Found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+           </table>
+        </div>
+     </section>
+
+     <section class="order-history-section">
+       <h2>Order History</h2>
+       <p><strong>Total Orders:</strong> {{ seller_orders|length }}</p>
+       <div class="table-responsive">
+         <table class="order-table">
+            <thead>
+              <tr>
+                    <th>Order ID</th>
+                    <th>Order Status</th>
+                     <th>Actions</th>
+              </tr>
+             </thead>
+            <tbody>
+               {% for order in seller_orders %}
+                 <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.delivery_status }}</td>
+                    <td class="action-buttons">
+                        <form action="{{ url_for('admin.view_order_details', order_id=order.id) }}" method="GET">
+                            <button type="submit" class="view-btn">View</button>
+                        </form>
+                    </td>
+                </tr>
+              {% else %}
+                <tr>
+                   <td colspan="3" style="text-align: center">No Orders Found</td>
+                </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+        </div>
+    </section>
+
+    <button class="back-button" onclick="window.location.href='{{ url_for('admin.user_management') }}'">Back to User Management</button>
+</div>
+{% endblock %}

@@ -535,7 +535,7 @@ def notifications():
   
   con = get_connect_db()
   cur = con.cursor()
-  notifications = cur.execute("SELECT * FROM notification WHERE user_id = ? ORDER BY date DESC", (user_id,)).fetchall()
+  notifications = cur.execute("SELECT * FROM notification WHERE user_id = ? ORDER BY date DESC, id DESC", (user_id,)).fetchall()
     # Mark notifications as read when viewed
   cur.execute("UPDATE notification SET is_read = 1 WHERE user_id = ?", (user_id,))
   con.commit()

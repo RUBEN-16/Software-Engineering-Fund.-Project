@@ -5,7 +5,6 @@ from logistic_feature import logistic_blueprint
 from seller_feature import seller_blueprint
 from products import product_blueprint
 from db import get_connect_db, get_unread_notification_count
-import os
 
 app = Flask(__name__)
 app.secret_key = "Strong_Key_Secret_Key"

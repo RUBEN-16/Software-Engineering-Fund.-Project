@@ -1,82 +1,48 @@
 {% extends "admin_page.html" %}
-{% block title %}Logistic Management{%endblock%}
-{%block content%}
+{% block title %}Logistic Management{% endblock %}
+{% block content %}
 <link rel="stylesheet" href="/static/logistic_management.css">
-    <body>
-        <header class="hdr">
-            <h1>Logistic Management System</h1>
-        </header>
-        
-        <nav class="logis-mng">
-            <ul>
-                <li><a href="#list">Members</a></li>
-                <li><a href="#hire">Hire Member</a></li>
-                <li><a href="#fire">Fire Member</a></li>
-                <li><a href="#report">Reporting & Analysis</a></li>
-            </ul>
-        </nav>
-        {%block nested%}
-        <section id="list" class="content-section">
-            <h1 class="hdr2">User Management</h1>
-            <!-- Table of Members -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for member in members %}
-                    <tr>
-                        <td>{{ member.id }}</td>
-                        <td>{{ member.first_name }} {{ member.last_name }}</td>
-                        <td>{{ member.email }}</td>
-                        <td>
-                            <!-- Delete member Form -->
-                            <form action="#">
-                                <button type="submit" >View</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-
-        <section id="hire" class="content-section">
-            <h2>Hire New Member</h2>
-            <form action="{{url_for('admin.adding_logistic')}}" method="post">
-                <input type="text" id="name" name="first_name" placeholder="Member First Name" required><br>
-                <input type="text" id="name" name="last_name" placeholder="Member Last Name" required><br>
-                <input type="text" id="position" name="email" placeholder="Email" required><br>
-                <input type="password" id="position" name="password" placeholder="Password" required><br>
-                <button type="submit" name="action" value="Hire">Hire Member</button>
-            </form>
-        </section>
-
-        <section id="fire" class="content-section">
-            <h2>Fire Member</h2>
-            <form action="#">
-                <input type="number" id="name" name="name" placeholder="Member ID" required><br>
-                <button type="submit">Fire Member</button>
-            </form>
-        </section>
-
-        <section id="report" class="content-section">
-            <h2>Reporting & Analysis</h2>
-            <p>Generate various reports and analyze member performance.</p>
-            <button>Generate Report</button>
-        </section>
-
-        <footer>
-            <button class="return-btn" onclick="window.location.href='admin_page.html'">Return to Admin Page</button>
-            <p></p>
-            <p>&copy; 2024 Trash N Treasure Logistic Management System</p>
-        </footer>
-    </body>
-    {%endblock%}
-    
-{%endblock%}
+<section class="page-content">
+    <div class="logistic-management-container">
+         <div class="header-container">
+            <h1>Logistic Management</h1>
+            <a href="{{url_for("admin.adding_logistic")}}" class="hire-member-btn">Hire Member</a>
+         </div>
+        <div class="table-responsive">
+        <table class="logistic-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                 <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                <tr>
+                    <td>{{ member.id }}</td>
+                    <td>{{ member.first_name }}</td>
+                    <td>{{ member.last_name }}</td>
+                    <td>{{ member.email }}</td>
+                     <td class="action-buttons">
+                        <form action="{{ url_for('admin.view_member_details', member_id=member.id) }}" method="GET">
+                            <button type="submit" class="view-btn">View</button>
+                        </form>
+                        <form action="{{url_for('logistic.logistics_reports')}}" method="GET">
+                             <button type="submit" class="report-btn">Report</button>
+                         </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="5" style="text-align: center">No logistic members found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+</section>
+{% endblock %}

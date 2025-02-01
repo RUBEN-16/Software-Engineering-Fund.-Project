@@ -1,0 +1,218 @@
+/* General Styles */
+.user-details-container {
+  margin: 20px 100px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+}
+
+.user-details-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.user-details-container h2 {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  color: #34495e;
+}
+
+.content-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+.personal-info-section {
+  flex: 1;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin: 10px;
+  flex-basis: calc(40% - 20px);
+}
+
+.details-card{
+  padding: 10px;
+}
+.personal-info-section p {
+   margin-bottom: 10px;
+}
+
+.payment-info-section {
+  flex: 1;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin: 10px;
+  text-align: center;
+  flex-basis: calc(40% - 20px);
+}
+.payment-icons{
+ display: flex;
+ justify-content: center;
+  align-items: center;
+  gap: 70px; /* Increased gap here */
+}
+.payment-icons .icon-container{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+   align-items: center;
+   justify-content: center;
+}
+.payment-icons .separator{
+  border-left: 2px solid #ddd;
+  height: 170px;
+  align-self: center;
+}
+.payment-info-section p{
+  text-align: center;
+  margin: 5px 0px;
+}
+.order-history-section{
+  flex-basis: calc(100% - 20px);
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin: 10px;
+}
+
+.user-details-container p {
+  margin-bottom: 8px;
+}
+
+.user-details-container strong {
+  font-weight: bold;
+  color: #566573;
+  margin-right: 5px;
+}
+
+.back-button {
+  display: block;
+  background-color: #95a5a6;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.back-button:hover {
+  background-color: #7f8c8d;
+}
+
+/* Table Styling */
+.table-responsive{
+  width: 100%;
+ overflow-x: auto;
+}
+.order-table {
+ width: 95%;
+ border-collapse: collapse;
+ margin: 10px auto;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ border-radius: 10px;
+ overflow: hidden;
+}
+
+.order-table th, .order-table td {
+padding: 12px 15px;
+ text-align: left;
+ border-bottom: 1px solid #ddd;
+ font-size: 16px;
+}
+
+.order-table th {
+ background-color: #f2f2f2;
+ font-weight: bold;
+ color: #495057;
+}
+
+.order-table tbody tr:hover {
+background-color: #f9f9f9;
+}
+.order-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Password Field Styling */
+.password-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+   position: relative; /* Important for absolute positioning of the icon */
+}
+
+.password-field label {
+  margin-right: 10px;
+  color: #566573;
+}
+
+.password-field input[type="password"],
+.password-field input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  flex-grow: 1;
+  color: #555;
+  box-sizing: border-box; /* Ensure padding doesn't affect size */
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+   transition: all 0.3s ease-in-out;
+}
+.password-field i{
+   position: absolute;
+    right: 10px;
+     top: 50%;
+  transform: translateY(-50%);
+   cursor: pointer;
+   color: #555;
+}
+/* Responsive Table */
+@media (max-width: 768px) {
+ .order-table th, .order-table td {
+    padding: 8px;
+    font-size: 14px;
+}
+}
+
+.action-buttons {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-start;
+}
+.action-buttons button, .action-buttons form button {
+  padding: 8px 12px;
+   margin: 0px 2px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+   font-size: 14px;
+   transition: background-color 0.3s ease;
+}
+
+.action-buttons .view-btn {
+  background-color: #28a745;
+}
+
+.action-buttons .view-btn:hover {
+ background-color: #218838;
+}
+
+/* Increased icon sizes */
+.payment-icons .icon-container i {
+  font-size: 10.45em; /* Adjust this value to your desired size */
+}

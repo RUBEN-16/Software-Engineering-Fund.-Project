@@ -1,117 +1,167 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #bbab9d;
-}
-
-.container {
-    max-width: 1500px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px; 
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-
-/* Navigation */
-.user-type {
-margin-bottom: 20px;
-}
-
-.user-type ul {
-list-style: none;
-display: flex;
-justify-content: space-around;
-background-color: #4CAF50;
-border-radius: 5px;
-overflow: hidden;
-}
-
-.user-type ul li {
-flex: 1;
-}
-
-.user-type ul li a {
-display: block;
-text-align: center;
-padding: 10px 15px;
-color: white;
-text-decoration: none;
-font-size: 1.2em;
-transition: background-color 0.3s;
-}
-
-.user-type ul li a:hover {
-background-color: #45a049;
-}
-
-
-.hdr {  
-    text-align: center;
-    color: #333;
-    margin-bottom: 30px;
-}
-
-/* Content Sections */
-.content-section {
-    display: none; /* Hide all sections by default */
+/*User Management*/
+.user-management-container {
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    margin-bottom: 20px;
-  }
-  
-  .content-section:target {
-    display: block; /* Show the section when targeted */
-  }
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-table {
+.user-management-container .header-container {
+    display: flex;
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-table th, table td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: left;
+
+.user-management-container h1 {
+    font-size: 2.2rem;
+    color: #343a40;
 }
 
-table th {
-    background-color: #f2f2f2;
-    color: #333;
+/* Internal Navigation */
+.user-management-nav {
+    width: 100%;
+    margin: 0px auto 0px auto;
+    text-align: center;
 }
 
-.delete-button {
-    background-color: #ff4d4d;
+.user-management-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block; /* Make the ul fit content */
+    background-color: #dddada;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.user-management-nav ul li {
+    display: inline-block; /* Make the li's display inline */
+    margin: 0 10px;
+    background-color: #dddada;
+    border-radius: 8px;
+}
+
+.user-management-nav li.internal-active-nav {
+    background-color: #343a40; /* Highlighted background color */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.user-management-nav li.internal-active-nav a {
+    color: white; /* Change text color of the active link */
+}
+
+
+.user-management-nav a {
+    text-decoration: none;
+    color: #000000;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: inline-block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 1rem;
+}
+
+.user-management-nav a:hover{
+    background-color: #343a40;
     color: white;
+}
+
+/* Table Styling */
+.table-responsive{
+    width: 100%;
+   overflow-x: auto;
+}
+.user-table, .seller-table {
+   width: 95%;
+   border-collapse: collapse;
+   margin: 10px auto;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   border-radius: 10px;
+   overflow: hidden;
+}
+
+.user-table th, .user-table td, .seller-table th, .seller-table td {
+  padding: 12px 15px;
+   text-align: left;
+   border-bottom: 1px solid #ddd;
+   font-size: 16px;
+}
+
+.user-table th, .seller-table th {
+   background-color: #f2f2f2;
+   font-weight: bold;
+   color: #495057;
+}
+
+.user-table tbody tr:hover, .seller-table tbody tr:hover {
+ background-color: #f9f9f9;
+}
+.user-table tbody tr:last-child td, .seller-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.users.internal-active-section, .sellers.internal-active-section{
+    width: 100%;
+    padding: 10px;
+}
+
+.users, .sellers {
+    display: none; /* hide by default */
+}
+
+.users.internal-active-section,
+.sellers.internal-active-section {
+    display: block;
+}
+
+
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-start;
+}
+.action-buttons button, .action-buttons form button {
+    padding: 8px 12px;
+     margin: 0px 2px;
     border: none;
-    padding: 8px 16px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-}
+    color: #fff;
+     font-size: 14px;
+     transition: background-color 0.3s ease;
+ }
+ 
+ .action-buttons .view-btn {
+    background-color: #28a745;
+ }
+ 
+ .action-buttons .view-btn:hover {
+   background-color: #218838;
+ }
+ 
+ .action-buttons .remove-btn {
+     background-color: #dc3545;
+ }
+ 
+ .action-buttons .remove-btn:hover {
+     background-color: #c82333;
+ }
 
-.delete-button:hover {
-    background-color: #d11a2a;
-}
-
-.alert {
-    margin-bottom: 20px;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
+ /* Responsive Table */
+@media (max-width: 768px) {
+    .user-table th, .user-table td, .seller-table th, .seller-table td {
+      padding: 8px;
+      font-size: 14px;
+  }
+  .action-buttons button, .action-buttons form button {
+      padding: 5px 8px;
+        font-size: 13px;
+  }
+  }

@@ -1,49 +1,44 @@
 {% extends "admin_page.html" %}
-{%block content%}
-    <link rel="stylesheet" href="/static/seller_approval.css">
-    <body>
-        <div class="container">
-            <h1 class="hdr">Seller Approval</h1>
-
-            <!-- Display Flash Messages -->
-            <div>
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-            </div>
-
-            <!-- Table of Pending Sellers -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for seller in pending_sellers %}
-                    <tr>
-                        <td>{{ seller.id }}</td>
-                        <td>{{ seller.firstName }} {{ seller.lastName }}</td>
-                        <td>{{ seller.email }}</td>
-                        <td>{{ seller.status }}</td>
-                        <td>
-                            <form action="{{ url_for('admin.view_seller', seller_id=seller.id) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="view-button">View</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+{% block title %}Seller Approval{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/seller_approval.css">
+<section class="page-content">
+    <div class="seller-approval-container">
+        <div class="header-container">
+             <h1>Seller Approval</h1>
         </div>
-    </body>
-{%endblock%}
+          <div class="table-responsive">
+        <table class="seller-approval-table">
+            <thead>
+               <tr>
+                   <th>ID</th>
+                   <th>First Name</th>
+                   <th>Last Name</th>
+                    <th>Email</th>
+                   <th>Actions</th>
+               </tr>
+            </thead>
+             <tbody>
+               {% for seller in pending_sellers %}
+                  <tr>
+                      <td>{{ seller.id }}</td>
+                       <td>{{ seller.firstName }}</td>
+                        <td>{{ seller.lastName }}</td>
+                      <td>{{ seller.email }}</td>
+                       <td class="action-buttons">
+                         <form action="{{url_for('admin.view_seller', seller_id=seller.id)}}" method="post">
+                                 <button type="submit" class="verify-btn">Verify</button>
+                          </form>
+                       </td>
+                    </tr>
+                    {% else %}
+                      <tr>
+                           <td colspan="5" style="text-align:center">No pending seller requests found.</td>
+                      </tr>
+                 {% endfor %}
+               </tbody>
+          </table>
+      </div>
+    </div>
+</section>
+{% endblock %}
