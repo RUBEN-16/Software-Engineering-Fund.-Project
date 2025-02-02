@@ -1,0 +1,62 @@
+{% extends "admin_page.html" %}
+{% block title %}Add Product{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/admin_add_product.css">
+ <section class="page-content">
+  <div class="add-product-container">
+        <h1>Add Product</h1>
+        <form method="post" action="{{ url_for('product.add_product') }}" enctype="multipart/form-data" class="add-product-form">
+            <div class="form-group">
+                 <label for="product_name">Product Name</label>
+                 <input type="text" id="product_name" name="product_name" required>
+             </div>
+              <div class="form-group">
+                   <label for="category">Category</label>
+                     <select name="category" id="category" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="home-decor">Home Decor</option>
+                            <option value="furniture">Furniture</option>
+                             <option value="wearing">Wearing</option>
+                            <option value="electronic">Electronic</option>
+                           <option value="Books">Books</option>
+                            <option value="accessories">Accessories</option>
+                            <option value="other">Others</option>
+                       </select>
+              </div>
+              <div class="form-group">
+                  <label for="description">Description</label>
+                   <textarea name="description" id="description"  rows="4" required></textarea>
+               </div>
+             <div class="form-group">
+                  <label for="price">Price (RM)</label>
+                  <input type="number" id="price" name="price" min="0" step="0.01" required>
+              </div>
+            <div class="form-group">
+                 <label for="quantity">Quantity</label>
+                  <input type="number" id="quantity" name="quantity" min="1" required>
+             </div>
+              <div class="form-group">
+                        <label for="condition">Condition:</label>
+                         <select name="condition" id="condition" required>
+                            <option value="" disabled selected>Select Condition</option>
+                            <option value="New">New</option>
+                             <option value="Used">Used</option>
+                        </select>
+                 </div>
+            <div class="form-group">
+                 <label for="image">Image</label>
+                 <input type="file" id="image" name="image" accept="image/*">
+              </div>
+               <div class="form-group">
+                  <label for="video">Video</label>
+                  <input type="file" id="video" name="video" accept="video/*">
+             </div>
+            <div class="modal-buttons">
+             <button type="submit" class="add-btn" onclick="window.location.href='{{url_for('product.add_product')}}'">Add Product</button>
+            <button type="button" class="back-button" onclick="window.location.href='{{url_for('admin.inventory')}}'">Back to Inventory</button>
+        </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

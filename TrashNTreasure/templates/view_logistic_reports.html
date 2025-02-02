@@ -1,0 +1,51 @@
+{% extends "admin_page.html" %}
+{% block title %}Logistic Reports{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="/static/view_logistic_reports.css">
+
+<div class="report-container">
+   <div class="report-header">
+        <h1>Reports List for Logistic Member</h1>
+            <p><strong>Member Name:</strong> {{ member_name }} </p>
+    </div>
+    
+       <div class="table-responsive">
+           <table class="reports-table">
+                <thead>
+                    <tr>
+                       <th>Report ID</th>
+                       <th>Report Date</th>
+                        <th>Report Type</th>
+                         <th>Date Range</th>
+                          <th>Actions</th>
+                       </tr>
+                  </thead>
+                    <tbody>
+                         {% for report in reports %}
+                              <tr>
+                                  <td>{{report.id}}</td>
+                                   <td>{{report.report_date}}</td>
+                                   <td>{{report.report_type}}</td>
+                                    <td>
+                                      {% if report.start_date and report.end_date %}
+                                           {{ report.start_date }} - {{ report.end_date }}
+                                    {% elif report.start_date%}
+                                         {{ report.start_date }} - Today
+                                         {%else%}
+                                            NA
+                                    {%endif%}
+                                      </td>
+                                 <td><form action="{{ url_for('admin.view_report', report_id=report.id) }}" method="GET"> <button type="submit" class="view-button">View</button></form></td>
+                             </tr>
+                           {% else %}
+                              <tr>
+                                 <td colspan="5" style="text-align:center;"> No Report Found </td>
+                                </tr>
+                            {% endfor %}
+                       </tbody>
+                </table>
+           </div>
+
+       <button class="back-button" onclick="window.location.href='{{ url_for('admin.logistic_management') }}'">Back to Logistic Management</button>
+</div>
+{% endblock %}

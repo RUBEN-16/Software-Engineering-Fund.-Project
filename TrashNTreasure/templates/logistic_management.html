@@ -6,7 +6,7 @@
     <div class="logistic-management-container">
          <div class="header-container">
             <h1>Logistic Management</h1>
-            <a href="{{url_for("admin.adding_logistic")}}" class="hire-member-btn">Hire Member</a>
+            <a href="{{ url_for('admin.hire_member') }}" class="hire-member-btn">Hire Member</a>
          </div>
         <div class="table-responsive">
         <table class="logistic-table">
@@ -30,7 +30,7 @@
                         <form action="{{ url_for('admin.view_member_details', member_id=member.id) }}" method="GET">
                             <button type="submit" class="view-btn">View</button>
                         </form>
-                        <form action="{{url_for('logistic.logistics_reports')}}" method="GET">
+                        <form action="{{url_for('admin.view_logistic_reports', member_id=member.id)}}" method="GET">
                              <button type="submit" class="report-btn">Report</button>
                          </form>
                     </td>

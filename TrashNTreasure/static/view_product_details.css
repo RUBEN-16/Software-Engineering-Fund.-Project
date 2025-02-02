@@ -1,0 +1,157 @@
+/* General Styles */
+.product-details-container {
+    margin: 20px 100px;
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      font-family: 'Roboto', sans-serif;
+}
+.product-details-container h1 {
+  text-align: center;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+.product-details-container h2{
+   border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+   color: #34495e;
+}
+.top-content-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+     flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+.product-name-header{
+ margin-bottom: 10px;
+}
+.product-media-section{
+   flex: 1;
+    padding: 15px;
+    border: 1px solid #eee;
+   border-radius: 4px;
+     margin: 10px;
+   flex-basis: calc(45% - 20px);
+
+}
+.product-media-section .image-container {
+   overflow: hidden; /* for responsive size and cropping */
+}
+ .product-info-section{
+   flex: 1;
+   padding: 15px;
+    border: 1px solid #eee;
+  border-radius: 4px;
+    margin: 10px;
+ flex-basis: calc(45% - 20px);
+
+}
+ .product-information-card p{
+     margin-bottom: 8px;
+ }
+
+.content-container {
+     display: flex;
+    justify-content: space-between;
+     align-items: flex-start;
+     flex-wrap: wrap;
+     margin-bottom: 15px;
+
+}
+
+.seller-info-section {
+  flex: 1;
+  padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+     margin: 10px;
+  flex-basis: calc(45% - 20px);
+
+}
+
+.product-order-section{
+     flex: 1;
+      padding: 15px;
+    border: 1px solid #eee;
+   border-radius: 4px;
+    margin: 10px;
+   flex-basis: calc(45% - 20px);
+
+}
+
+ .seller-details p{
+     margin-bottom: 8px;
+ }
+.order-history-container p{
+    margin-bottom: 8px;
+}
+
+ /*image styles*/
+.product-image {
+    width: 300px; /*Set explicit image width */
+    height: 250px; /*set explicit image height */
+    object-fit: cover; /* maintain aspect ratio when resizing by covering its area and crop any that exceeds the parent div*/
+    display:block;/* by having block it creates that visibility  */
+     margin: auto;/* keep the item at center */
+ }
+
+/* style table */
+.table-responsive{
+   width: 100%;
+    overflow-x: auto;
+}
+.order-table {
+    width: 100%;
+     border-collapse: collapse;
+     margin: 10px 0;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.order-table th, .order-table td {
+  padding: 12px 15px;
+   text-align: left;
+   border-bottom: 1px solid #ddd;
+   font-size: 16px;
+}
+
+.order-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #495057;
+}
+.order-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+.order-table tbody tr:last-child td{
+    border-bottom: none;
+}
+.back-button{
+      display: block;
+    background-color: #95a5a6;
+   color: #fff;
+    border: none;
+  padding: 10px 15px;
+   border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+   text-decoration: none;
+    transition: background-color 0.3s ease;
+   margin-top: 20px;
+}
+
+.back-button:hover{
+ background-color: #7f8c8d;
+}
+
+  /* Responsive Table */
+ @media (max-width: 768px) {
+       .order-table th, .order-table td{
+         padding: 8px;
+           font-size: 14px;
+      }
+ }

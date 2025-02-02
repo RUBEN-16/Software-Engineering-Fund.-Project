@@ -119,7 +119,6 @@ def your_products():
 def your_product_orders():
     # Get the seller_id from the session
     seller_id = session.get('buyer_id')
-    
     if not seller_id:
         return redirect(url_for('login'))  # Redirect to login if seller_id is not in session
 

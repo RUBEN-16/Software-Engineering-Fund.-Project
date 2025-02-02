@@ -38,42 +38,38 @@ def dashboard():
         flash("Please log in to access the admin account.", "danger")
         return redirect(url_for("admin.login"))
 
-@admin_blueprint.route("/addLogistic", methods=["POST", "GET"])
-def adding_logistic():
-    if "admin_id" not in session:  # Check if admin is logged in
+@admin_blueprint.route('/hire_member', methods=["GET", "POST"])
+def hire_member():
+    if "admin_id" not in session:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("admin.login"))
-    
-    con = None 
+
     if request.method == "POST":
         try:
-            action = request.form.get("action")
-            if action == "Hire":
-                fname = request.form["first_name"]
-                lname = request.form["last_name"]
-                email = request.form["email"]
-                password = request.form["password"]
-                
-                con = get_connect_db() # Initialize the connection here
-                cur = con.cursor()
-                cur.execute("SELECT * FROM member WHERE email = ?", (email,))
-                member = cur.fetchone()
-                
-                if member:  # If a record is found
-                    flash("Email already exists!", "danger")
-                    return redirect(url_for("admin.adding_logistic"))
-                cur.execute("INSERT INTO member (firstName, lastName, email, password) VALUES (?, ?, ?, ?)",(fname, lname, email, password),)
-                con.commit()
-                flash("Account Created Successfully!", "success")
-                return redirect(url_for("admin.adding_logistic"))
-            elif action == "Back":
-                return redirect(url_for("admin.dashboard"))
+          fname = request.form["first_name"]
+          lname = request.form["last_name"]
+          email = request.form["email"]
+          password = request.form["password"]
+        
+          con = get_connect_db() # Initialize the connection here
+          cur = con.cursor()
+          cur.execute("SELECT * FROM member WHERE email = ?", (email,))
+          member = cur.fetchone()
+        
+          if member:  # If a record is found
+            flash("Email already exists!", "danger")
+            return redirect(url_for("admin.hire_member"))
+          cur.execute("INSERT INTO member (firstName, lastName, email, password) VALUES (?, ?, ?, ?)",(fname, lname, email, password),)
+          con.commit()
+          flash("Account Created Successfully!", "success")
+          return redirect(url_for("admin.logistic_management"))
         except Exception as e:
             flash(f"An error occurred: {e}", "danger")
         finally:
             if con:  # Check if con is initialized
                 con.close()
-    return render_template("logistic_management.html")
+
+    return render_template("hire_member.html")
 
 @admin_blueprint.route("/logistic_management")
 def logistic_management():
@@ -467,3 +463,95 @@ def send_notification_to_seller(product_id):
         con.close()
     
    return redirect(url_for("admin.inventory"))
+
+@admin_blueprint.route("/add_product_page", methods=["GET", "POST"])
+def add_product_page():
+    if "admin_id" not in session:
+      flash("Please log in to access this page.", "danger")
+      return redirect(url_for("admin.login"))
+    
+    return render_template('admin_add_product.html')
+
+
+@admin_blueprint.route("/view_product_details/<int:product_id>", methods=["GET"])
+def view_product_details(product_id):
+    if "admin_id" not in session:
+         flash("Please log in to access this page.", "danger")
+         return redirect(url_for("admin.login"))
+    
+    con = get_connect_db()
+    cur = con.cursor()
+    
+    # Fetch the product
+    cur.execute("SELECT * FROM products WHERE id = ?", (product_id,))
+    product = cur.fetchone()
+    
+    if not product:
+         flash("Product not found.", "warning")
+         return redirect(url_for("admin.inventory"))
+    try:
+           cur.execute("SELECT id, name, email, phone_number FROM sellers WHERE id = ?", (product['seller_id'],))
+           seller = cur.fetchone()
+
+    except Exception as e:
+          seller = None #If Seller ID is not present it is the Admin choice so seller value becomes None and set accordingly at jinja.
+
+    
+     # Fetch product order details
+    product_orders = cur.execute("""
+        SELECT
+        o.id,
+        o.date,
+        o.quantity,
+        o.delivery_status
+        FROM orders o
+        WHERE o.product_id = ?
+    """, (product_id,)).fetchall()
+
+    con.close()
+      
+    return render_template("view_product_details.html", product=product, seller=seller, product_orders = product_orders)
+
+
+
+@admin_blueprint.route("/view_logistic_reports/<int:member_id>", methods=["GET"])
+def view_logistic_reports(member_id):
+   if "admin_id" not in session:
+      flash("Please log in to access this page.", "danger")
+      return redirect(url_for("admin.login"))
+    
+   con = get_connect_db()
+   cur = con.cursor()
+   
+   cur.execute("SELECT * FROM member WHERE pid = ?", (member_id,))
+   member = cur.fetchone()
+    
+   if not member:
+        flash("Member not found.", "danger")
+        return redirect(url_for("admin.logistic_management"))
+      
+  
+   reports = cur.execute("SELECT * FROM logistic_report WHERE member_id = ?", (member_id,)).fetchall()
+
+   con.close()
+   
+   return render_template("view_logistic_reports.html", member=member, reports=reports)
+
+
+@admin_blueprint.route("/view_report_details/<int:report_id>", methods=["GET"])
+def view_report(report_id):
+    if "admin_id" not in session:
+         flash("Please log in to access this page.", "danger")
+         return redirect(url_for("admin.login"))
+
+    con = get_connect_db()
+    cur = con.cursor()
+    report = cur.execute("SELECT * FROM logistic_report WHERE id = ?", (report_id,)).fetchone()
+    
+    if not report:
+      flash("Report not found.", "danger")
+      return redirect(url_for("admin.view_logistic_reports"))
+    
+    member_data = cur.execute("SELECT firstName,lastName from member where pid = ?", (report["member_id"],)).fetchone()
+    con.close()
+    return render_template("view_report_details.html", report=report, member_name= f"{member_data['firstName']} {member_data['lastName']}")

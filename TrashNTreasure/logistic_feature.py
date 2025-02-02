@@ -48,7 +48,7 @@ def member_profile():
 
 @logistic_blueprint.route("/")
 def dashboard():    
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access the admin account.", "danger")
         return redirect(url_for("logistic.login"))
@@ -78,7 +78,7 @@ def dashboard():
     
 @logistic_blueprint.route("/pickup_manage")
 def pickup_management():
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
@@ -104,7 +104,7 @@ def pickup_management():
 
 @logistic_blueprint.route("/delivery_manage")
 def delivery_management():
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
@@ -128,7 +128,7 @@ def delivery_management():
 
 @logistic_blueprint.route("/order_manage")
 def order_management():
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
@@ -157,7 +157,7 @@ def logout():
 
 @logistic_blueprint.route("/pickup_details/<int:pickup_id>", methods=['GET', 'POST'])
 def pickup_details(pickup_id):
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
@@ -208,7 +208,7 @@ def pickup_details(pickup_id):
 
 @logistic_blueprint.route("/assign_courier/<int:pickup_id>", methods=['POST'])
 def assign_courier(pickup_id):
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
@@ -274,7 +274,7 @@ def assign_courier(pickup_id):
 
 @logistic_blueprint.route("/delivery_details/<int:order_id>", methods=['GET', 'POST'])
 def delivery_details(order_id):
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
@@ -352,7 +352,7 @@ def delivery_details(order_id):
 
 @logistic_blueprint.route("/assign_delivery/<int:order_id>", methods=['POST'])
 def assign_delivery(order_id):
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
@@ -502,7 +502,7 @@ def update_delivery_status(order_id):
 
 @logistic_blueprint.route("/update_pickup_status/<int:pickup_id>", methods=['POST'])
 def update_pickup_status(pickup_id):
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
@@ -557,7 +557,7 @@ def update_pickup_status(pickup_id):
 
 @logistic_blueprint.route("/order_details_logistics/<int:order_id>", methods=['GET'])
 def order_details_logistics(order_id):
-    member_id = session["member_id"]
+    member_id = session.get("member_id")
     if not member_id:
         flash("Please log in to access this page.", "danger")
         return redirect(url_for("logistic.login"))
@@ -634,7 +634,7 @@ def cancel_order(order_id):
     cur = con.cursor()
     
     try:
-        member_id = session["member_id"]
+        member_id = session.get("member_id")
 
         # Fetch order details
         cur.execute("""

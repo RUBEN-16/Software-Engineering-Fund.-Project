@@ -1,0 +1,31 @@
+{% extends "admin_page.html" %}
+{% block title %}Hire Member{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/hire_member.css">
+ <section class="page-content">
+    <div class="hire-member-container">
+        <h1>Hire New Logistic Member</h1>
+        <form action="{{ url_for('admin.hire_member') }}" method="post" class="hire-form">
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                    <input type="text" id="first_name" name="first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="hire-btn" name="action" value="Hire" >Hire Member</button>
+            <button class="back-button" onclick="window.location.href='{{url_for('admin.logistic_management')}}'">Back to Logistic Management</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

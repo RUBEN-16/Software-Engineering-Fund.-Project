@@ -125,6 +125,7 @@ table td {
     background-color: #2ecc71;
     color: #fff;
     margin-right: 5px;
+    text-decoration: none;
 }
 
 .view-btn:hover {

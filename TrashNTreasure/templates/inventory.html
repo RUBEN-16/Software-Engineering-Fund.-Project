@@ -6,14 +6,14 @@
     <div class="inventory-container">
          <div class="header-container">
             <h1>Inventory</h1>
-           <a href="{{ url_for('product.add_product') }}" class="add-item-btn">Add Item</a>
+           <a href="{{url_for('admin.add_product_page')}}" class="add-item-btn">Add Item</a>
         </div>
         <div class="product-grid">
             {% for product in products %}
             <div class="product-card">
                   <img src="{{ product.image_path }}" alt="{{ product.name }}" class="product-image">
                 <div class="product-details">
-                    <a href="{{url_for('product.item_detail', id=product.id)}}" class="product-name">
+                    <a href="{{url_for('admin.view_product_details', product_id=product.id)}}" class="product-name">
                          {{ product.name }}
                     </a>
                      <p class="product-quantity">Quantity: {{ product.quantity }}</p>
