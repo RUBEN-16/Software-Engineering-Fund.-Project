@@ -51,8 +51,8 @@
       margin-left: 20px;
   
    }
-   .order-actions .manage-btn{
-        background-color: #2ecc71;
+   .order-actions .assign-btn{
+        background-color: #3498db;
         color: white;
         padding: 10px 15px;
         border: none;
@@ -63,8 +63,8 @@
         white-space: nowrap;
         margin: 0px 30px;
    }
-   .order-actions .manage-btn:hover{
-    background-color: #27ae60;
+   .order-actions .assign-btn:hover{
+    background-color: #2980b9;
     transform: translateY(-2px);
   }
   .delivery-status {

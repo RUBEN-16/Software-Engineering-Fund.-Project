@@ -277,6 +277,7 @@ def filter_product():
 
 # Assuming this is part of your Flask app
 @product_blueprint.route("/add-to-cart/<id>", methods=["POST"])
+@product_blueprint.route("/add-to-cart/<id>", methods=["POST"])
 def add_to_cart(id):
     # Ensure the user is logged in
     user_id = session.get("buyer_id")
@@ -302,6 +303,13 @@ def add_to_cart(id):
             (user_id, id, product["name"], quantity, product["quantity"], product["price"], product["image_path"]),
         )
         con.commit()  # Commit the transaction
+
+        # Update cart_item_count in the session
+        if "cart_item_count" in session:
+            session["cart_item_count"] += 1
+        else:
+            session["cart_item_count"] = 1
+
         flash("Product added to cart successfully!", "success")
     except sqlite3.Error as e:
         con.rollback()  # Rollback in case of error

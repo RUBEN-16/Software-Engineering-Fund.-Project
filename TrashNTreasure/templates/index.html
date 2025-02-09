@@ -43,16 +43,20 @@
             <a href="{{url_for('user.notifications')}}" class="fas-font-link">
               <i class="fa-solid fa-bell">
                 {% if get_unread_notification_count() > 0 %}
-                <span class="notification-badge"></span>
+                  <span class="notification-badge"></span>
                 {% endif %}
               </i>
             </a>
-            <a href="{{url_for("eWallet")}}" class="fas-font-link"
-              ><i class="fas fa-wallet"></i></a
-            >
-            <a href="{{url_for("cart")}}" class="fas-font-link"
-              ><i class="fa-solid fa-cart-shopping"></i></a
-            ></a>
+            <a href="{{url_for("eWallet")}}" class="fas-font-link">
+              <i class="fas fa-wallet"></i>
+            </a>
+            <a href="{{url_for('cart')}}" class="fas-font-link">
+              <i class="fa-solid fa-cart-shopping">
+                {% if session.get('cart_item_count', 0) > 0 %}
+                  <span class="cart-badge">{{ session.get('cart_item_count', 0) }}</span>
+                {% endif %}
+              </i>
+            </a>
           </div>
           {%endif%}
           <div class="dropdown-btn" id="dropdown-btn">
@@ -73,22 +77,18 @@
     </header>
 
     <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %}
-    <div class="msg">
-      {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">
-        <span>{{ message }}</span>
-        <button
-          class="close-btn"
-          onclick="this.parentElement.style.display='none';"
-        >
-          ×
-        </button>
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+      {% if messages %}
+      <div class="msg">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <span>{{ message }}</span>
+          <buttonclass="close-btn" onclick="this.parentElement.style.display='none';">×</button>
+        </div>
+        {% endfor %}
       </div>
-      {% endfor %}
-    </div>
-    {% endif %} {% endwith %}
+      {% endif %} 
+    {% endwith %}
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -187,8 +187,8 @@
           <div class="footer-section contact">
             <h3>Contact Us</h3>
             <p>Email: support@trashandtreasure.com</p>
-            <p>Phone: +1 (800) 123-4567</p>
-            <p>Address: 123 Treasure Lane, Gemsville, USA</p>
+            <p>Phone: +60 13 9483982</p>
+            <p>Address: No. 45, Jalan Merdeka, Taman Seri Indah, 50480 Kuala Lumpur, Malaysia</p>
           </div>
           <div class="footer-section social">
             <h3>Follow Us</h3>

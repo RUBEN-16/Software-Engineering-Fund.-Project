@@ -438,6 +438,11 @@ def remove_from_cart(cart_item_id):
         # Delete the item from the cart
         cur.execute("DELETE FROM cart WHERE id = ?", (cart_item_id,))
         con.commit()
+
+        # Update cart_item_count in the session
+        if "cart_item_count" in session and session["cart_item_count"] > 0:
+            session["cart_item_count"] -= 1
+
         flash("Item removed from cart successfully!", "success")
     except Exception as e:
         flash(f"An error occurred while removing the item from the cart: {e}", "danger")

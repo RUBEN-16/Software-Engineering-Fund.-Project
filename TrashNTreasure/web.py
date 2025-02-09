@@ -84,17 +84,25 @@ def login():
 @app.route("/")
 def home():
     buyer_id = session.get("buyer_id")
+    cart_item_count = 0  # Default value
+
     if buyer_id:
         con = get_connect_db()
         cur = con.cursor()
+
+        # Fetch user details
         user = cur.execute("SELECT * FROM user WHERE pid = ?", (buyer_id,)).fetchone()
         if user:
             session["e-wallet"] = user["wallet"]
+
+        # Fetch cart item count
+        cart_item_count = cur.execute("SELECT COUNT(*) FROM cart WHERE buyer_id = ?", (buyer_id,)).fetchone()[0]
+        session["cart_item_count"] = cart_item_count  # Update session variable
         con.close()
     
     return render_template("index.html")
 
-@app.route("/aboutus") 
+@app.route("/aboutus")
 def about_page():
     return render_template("about.html")
 
