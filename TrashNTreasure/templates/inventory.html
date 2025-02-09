@@ -1,5 +1,5 @@
 {% extends "admin_page.html" %}
-{% block title %}Inventory{% endblock %}
+{% block title %}Inventory - T&T(Admin){% endblock %}
 {% block content %}
 <link rel="stylesheet" href="/static/inventory.css">
 <section class="page-content">
@@ -19,11 +19,16 @@
                      <p class="product-quantity">Quantity: {{ product.quantity }}</p>
                       <p class="product-condition">Condition: {{ product.condition }}</p>
                     <p class="product-price">Price: RM{{ product.price }}</p>
+                    
                     <div class="actions">
-                       <form action="{{ url_for('product.remove_product', product_id=product.id) }}" method="POST" onsubmit="return confirmRemove()">
-                            <button type="submit" class="remove-btn">Remove</button>
-                       </form>
-                         <button type="button" class="notify-btn" onclick="openModal({{ product.id }})">Notify</button>
+                      <!-- Check if seller_id is valid -->
+                      {% if product.seller_id is not none and product.seller_id|int %}
+                        <button type="button" class="notify-btn" onclick="openModal({{ product.id }})">Notify</button>
+                      {% endif %}
+                        <form action="{{ url_for('product.remove_product', product_id=product.id) }}" method="POST" onsubmit="return confirmRemove()">
+                              <button type="submit" class="remove-btn">Remove</button>
+                        </form>
+                         
                   </div>
                 </div>
             </div>

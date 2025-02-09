@@ -43,6 +43,7 @@ def seller_verification():
         name = request.form.get("name")
         email = request.form.get("email")
         phone_number = request.form.get("phone-number")
+        description = request.form.get("description")
         
         if 'ic_picture' not in request.files or 'profile_picture' not in request.files:
             flash("Both IC and profile pictures are required.", "danger")
@@ -75,9 +76,9 @@ def seller_verification():
             con = get_connect_db()
             cur = con.cursor()
             cur.execute("""
-                INSERT INTO seller_registration (id, name, email, phone_number, ic_picture, profile_picture)
-                VALUES (?, ?, ?, ?, ?, ?)
-            """, (id, name, email, phone_number, ic_filename_db, profile_filename_db))
+                INSERT INTO seller_registration (id, name, email, phone_number, ic_picture, profile_picture, description)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (id, name, email, phone_number, ic_filename_db, profile_filename_db, description))
             con.commit()
             
             # Send notification to the user

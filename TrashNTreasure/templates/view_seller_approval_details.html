@@ -1,5 +1,5 @@
 {% extends "admin_page.html" %}
-{% block title %}Seller Details{% endblock %}
+{% block title %}Approval Request Details - T&T(Admin) {% endblock %}
 {% block content %}
     <link rel="stylesheet" href="/static/view_seller_approval_details.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -11,21 +11,27 @@
         </div>
 
         <div class="top-content-container">
-
-            <section class="product-info-section">
-                <h2>Seller Information</h2>
-                <div class="product-information-card">
-                    <p><i class="fas fa-id-card"></i> <strong>Name:</strong> {{ seller_details.firstName }} {{ seller_details.lastName }}</p>
-                    <p><i class="fas fa-fingerprint"></i> <strong>User ID:</strong> {{ seller_details.id }}</p>
-                    <p><i class="fas fa-envelope"></i> <strong>Email:</strong> {{ seller_details.email }}</p>
-                    <p><i class="fas fa-phone"></i> <strong>Phone Number:</strong> {{ seller_details.phone_number }}</p>
-                </div>
-            </section>
-
-              <section class = "seller-media-container">
-                    
+                <section class="info-seller">
+                    <section class="product-info-section">
+                        <h2>Seller Information</h2>
+                        <div class="product-information-card">
+                            <p><i class="fas fa-id-card"></i> <strong>Name:</strong> {{ seller_details.firstName }} {{ seller_details.lastName }}</p>
+                            <p><i class="fas fa-fingerprint"></i> <strong>User ID:</strong> {{ seller_details.id }}</p>
+                            <p><i class="fas fa-envelope"></i> <strong>Email:</strong> {{ seller_details.email }}</p>
+                            <p><i class="fas fa-phone"></i> <strong>Phone Number:</strong> {{ seller_details.phone_number }}</p>
+                        </div>
+                    </section>
+                    <section class="product-description-section">
+                        <h2>Product Description</h2>
+                        <div class="description-card">
+                            <p>{{seller_details.description}}</p>
+                        </div>
+                    </section>
+                </section>
+                <section class = "seller-media-container">
+                
                     <section class="product-media-section">
-                          <div class="image-container">
+                            <div class="image-container">
                             <h3>Profile Picture</h3>
                             {% if seller_details.profile_picture %}
                                 <img src="{{ seller_details.profile_picture }}" alt="Profile Picture" class="seller-image">
@@ -33,19 +39,19 @@
                                 <p>No profile picture available.</p>
                             {% endif %}
                         </div>
-                   
+                    
                     </section>
-                      <section class="product-media-section">
-                         <div class="image-container">
+                    <section class="product-media-section">
+                        <div class="image-container">
                             <h3>IC Picture</h3>
                             {% if seller_details.ic_picture %}
                                 <img src="{{ seller_details.ic_picture }}" alt="IC Picture" class="seller-image">
                             {% else %}
                                 <p>No IC picture available.</p>
                             {% endif %}
-                        </div>
-                         </section>
-                   
+                        </div> 
+                    </section>
+                
                 </section>
         </div>
 

@@ -170,17 +170,3 @@ body {
 .login-footer a:hover {
   color: #72c019; /* Gold on hover */
 }
-
-/* Container for Flash Messages */
-.msg {
-  position: fixed; /* Fixed positioning to overlap on top */
-  top: 20px; /* Distance from the top of the screen */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Adjust for exact centering */
-  z-index: 1000; /* Ensure it appears above other elements */
-  width: 100%; /* Full width */
-  max-width: 500px; /* Limit maximum width */
-  display: flex;
-  flex-direction: column; /* Stack messages vertically */
-  align-items: center; /* Center messages horizontally */
-}

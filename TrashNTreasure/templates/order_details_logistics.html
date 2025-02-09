@@ -1,11 +1,11 @@
 {% extends "logistic_page.html" %}
-{% block title %}Order Details{% endblock %}
+{% block title %}Order Details - T&T(Logistic) {% endblock %}
 {% block content %}
 <link rel="stylesheet" href="/static/order_details_logistics.css">
 <div class="order-details-container">
     <h1>Order Details</h1>
 
-    <section class="order-header">
+    <section class="order-header"> 
          <div class="order-info-header">
             <h2>Order Information</h2>
              <p><strong>Order ID:</strong> {{ order.order_id }}</p>
@@ -93,7 +93,7 @@
 
     <div class="delivery-actions" id="delivery-actions">
       {% if order.delivery_status != 'Delivered' and  order.delivery_status != 'Cancelled' %}
-            <form method="post" action="{{ url_for('logistic.cancel_order', order_id=order.order_id) }}">
+            <form method="post" action="{{ url_for('logistic.cancel_order', order_id=order.order_id) }}" onsubmit="return confirmCancellation()">
                 <button type="submit" class="cancel-btn">Cancel Order</button>
             </form>
         {% endif %}
@@ -101,5 +101,9 @@
 
     <button class="back-button" onclick="window.location.href='{{ url_for('logistic.order_management') }}'">Back to Order Management</button>
 </div>
-
+<script>
+    function confirmCancellation() {
+        return confirm("Are you sure you want to cancel this order?");
+    }
+</script>
 {% endblock %}

@@ -46,6 +46,7 @@ con.execute("""
         ic_picture TEXT NOT NULL,
         profile_picture TEXT NOT NULL,
         status TEXT DEFAULT 'Pending',
+        description TEXT NOT NULL,
         FOREIGN KEY (id) REFERENCES user(pid) ON DELETE CASCADE
     )
 """)

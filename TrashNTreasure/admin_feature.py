@@ -7,9 +7,9 @@ admin_blueprint = Blueprint("admin", __name__, template_folder="templates")
 @admin_blueprint.route("/login", methods=["POST", "GET"])
 def login():
     admins = [
-        {"Username": "ruben123", "Password" : "passRuben", "Name" : "Rubeneswaran"},
-        {"Username": "thris987", "Password" : "passThris", "Name" : "Thrissha"},
-        {"Username": "nasss123", "Password" : "passNasss", "Name" : "Nasreen"}
+        {"Username": "admin1", "Password" : "a1", "Name" : "AdminName1"},
+        {"Username": "admin2", "Password" : "a2", "Name" : "AdminName2"},
+        {"Username": "admin3", "Password" : "a3", "Name" : "AdminName3"}
     ]
     if request.method == "POST":
         action = request.form.get("action")
@@ -254,7 +254,7 @@ def seller_approval():
 
     return render_template("seller_approval.html", pending_sellers=pending_sellers)
 
-@admin_blueprint.route("/view_seller/<int:seller_id>", methods=["POST"])
+@admin_blueprint.route("/view_seller/<int:seller_id>", methods=["POST", "GET"])
 def view_seller(seller_id):
     if "admin_id" not in session:
         flash("Please log in to access this page.", "danger")
@@ -355,6 +355,9 @@ def reject_seller(seller_id):
         con = get_connect_db()
         cur = con.cursor()
         cur.execute("UPDATE seller_registration SET status = 'Rejected' WHERE id = ?", (seller_id,))
+        
+        cur.execute("DELETE FROM seller_registration WHERE id = ?", (seller_id,))  # Delete each rejected seller
+            
         con.commit()
         
         flash("Seller application rejected.", "info")
