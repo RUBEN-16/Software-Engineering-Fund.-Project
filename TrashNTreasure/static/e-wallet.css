@@ -1,67 +1,63 @@
 .container {
     margin: 20px 100px;
     padding: 20px;
-    background: #fff;
+    background: #fff; /* White background */
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 h2, h3 {
-    color: #2c3e50;
+    color: #003102; /* Dark green for headings */
     margin-bottom: 20px;
 }
 
 p {
     margin: 10px 0;
+    color: #333; /* Dark text for readability */
 }
 
 /* Wallet Info Section */
 .wallet-info {
     text-align: center;
     padding: 20px;
-    background: #ecf0f1;
+    background: #faf8ec; /* Light gray background */
     border-radius: 10px;
     margin-bottom: 20px;
 }
 
-/* Smooth scrolling */
-html {
-    scroll-behavior: smooth;
-}
-
-
 .wallet-info i {
     font-size: 50px;
-    color: #3498db;
+    color: #FFD700; /* Gold for icon */
     margin-bottom: 10px;
 }
 
 .balance {
     font-size: 36px;
     font-weight: bold;
-    color: #0099ff;
+    color: #FFD700; /* Gold for balance */
     margin: 20px 0;
 }
 
 .action-btn {
-    background-color: #3498db;
-    color: #fff;
+    background-color: #FFD700; /* Gold for buttons */
+    color: #003102; /* Dark green text */
     border: none;
     padding: 10px 20px;
     margin: 10px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .action-btn:hover {
-    background-color: #2980b9;
+    background-color: #e6c200; /* Darker gold on hover */
+    transform: translateY(-2px);
 }
 
 /* Forms */
 .top-up-form, .withdraw-form {
-    background: #ecf0f1;
+    background: #f9f9f9; /* Light gray background */
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -69,12 +65,14 @@ html {
 
 .top-up-form h3, .withdraw-form h3 {
     margin-top: 0;
+    color: #003102; /* Dark green for headings */
 }
 
 label {
     display: block;
     margin: 10px 0 5px;
     font-weight: bold;
+    color: #555; /* Gray for labels */
 }
 
 input[type="floatformat"], select {
@@ -115,20 +113,20 @@ table th, table td {
 }
 
 table th {
-    background-color: #3498db;
-    color: #fff;
+    background-color: #FFD700; /* Gold for table headers */
+    color: #003102; /* Dark green text */
 }
 
 table tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f1f1f1; /* Light gray for hover */
 }
 
 /* Footer */
 footer {
     text-align: center;
     padding: 20px;
-    background: #2c3e50;
-    color: #fff;
+    background: #003102; /* Dark green for footer */
+    color: #FFD700; /* Gold text */
     margin-top: 20px;
     border-radius: 10px;
 }
@@ -140,6 +138,7 @@ footer p {
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
+        margin: 20px 20px; /* Reduce margin for smaller screens */
         padding: 10px;
     }
 

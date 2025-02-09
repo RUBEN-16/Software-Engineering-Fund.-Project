@@ -2,41 +2,31 @@
 {% block title %} C Page {%endblock%}
 {%block content%}
     <!-- Category Section -->
-    <div class="msg">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">
-              <span>{{ message }}</span>
-              <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-            </div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-    </div>
     <link rel="stylesheet" href="/static/product.css"/>
     <section class="category-section">
       <div class="category-dropdown">
+        <div>
         <label for="categories">Filter by Category:</label>
-        <select id="categories" onchange="filterByCategory()">
-          <option value="category">Category</option>
-          <option value="all">All</option>
-          <option value="home-decor">Home Decor</option>
-          <option value="furniture">Furniture</option>
-          <option value="wearing">Wearing</option>
-          <option value="electronic">Electronic</option>
-          <option value="accessories">Accessories</option>
-          <option value="other">Others</option>
-        </select>
+          <select id="categories" onchange="filterByCategory()">
+            <option value="category">Category</option>
+            <option value="all">All</option>
+            <option value="home-decor">Home Decor</option>
+            <option value="furniture">Furniture</option>
+            <option value="wearing">Wearing</option>
+            <option value="electronic">Electronic</option>
+            <option value="accessories">Accessories</option>
+            <option value="other">Others</option>
+          </select>
+        </div>
          <!-- Search Box -->
-    <div class="search-box">
-        <form action="{{ url_for('product.search_product') }}" method="get">
-            <input type="text" name="query" placeholder="Search products..." required>
-        </form>        
-        <button class="search-btn">
-          <img src="../static/images/search-icon.png" alt="Search" /> 
-        </button>
-      </div>
+        <div class="search-box">
+          <form action="{{ url_for('product.search_product') }}" method="get">
+              <input type="text" name="query" placeholder="Search products..." required>
+          </form>        
+          <button class="search-btn">
+            <img src="../static/images/search-icon.png" alt="Search" /> 
+          </button>
+        </div>
       </div>
     </section>
     <div>

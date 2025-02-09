@@ -132,7 +132,7 @@ def top_up():
 
         cur.execute(
             "INSERT INTO wallet_transaction (buyer_id, date, description, amount) VALUES (?, DATE('now'), ?, ?)",
-               (buyer_id, f"Top-up: RM{amount:.2f}", amount,)
+               (buyer_id, f"Top-up: RM{amount:.2f}", amount,) 
         )
             
         con.commit()
@@ -425,7 +425,7 @@ def remove_from_cart(cart_item_id):
         flash("You must be logged in to modify your cart.", "danger")
         return redirect(url_for("login"))
 
-    con = get_connect_db()
+    con = get_connect_db() 
     cur = con.cursor()
     try:
         # Check if the cart item exists and belongs to the user

@@ -115,7 +115,7 @@ def cart():
 
     con = get_connect_db()
     cur = con.cursor()
-
+    
     # Fetch products added to the cart by the current buyer
     added_products = cur.execute("SELECT * FROM cart WHERE buyer_id = ?", (buyer_id,)).fetchall()
     

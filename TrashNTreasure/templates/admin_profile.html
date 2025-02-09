@@ -1,0 +1,32 @@
+{% extends "admin_page.html" %}
+{% block title %}Admin Profile{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="/static/admin_profile.css">
+<div class="profile-container">
+    <div class="profile-header">
+      <img src="/static/images/profile.png" alt="Profile Picture" class="profile-picture">
+        <h1>{{ admin_name }}</h1>
+         </div>
+    <div class="profile-details">
+        <section class="detail-section">
+            <h2>Admin Information</h2>
+            <div class="detail-item">
+                 <strong>Admin ID:</strong>
+                 <span>{{ admin_id }}</span>
+            </div>
+        </section>
+         <section class="detail-section">
+            <h2>Website Description</h2>
+              <div class="detail-item">
+                  <strong>Platform:</strong>
+                    <span>Trash and Treasure Website.</span>
+               </div>
+                 <div class="detail-item">
+                  <strong>Description:</strong>
+                    <span>Buy and Sell Second Hand Product.</span>
+               </div>
+        </section>
+    </div>
+     <button class="back-button" onclick="window.location.href='{{url_for('admin.dashboard')}}'">Back to Dashboard</button>
+</div>
+{% endblock %}

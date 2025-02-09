@@ -1,20 +1,28 @@
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <title>{%block title%}Home{%endblock%}</title>
-        <link rel="stylesheet" href="/static/navi.css">
-    </head>
-    <body>   
-      
-        <!-- Header Section -->
-      <header class="header">
-        <div class="logo">
-            <a href="/">
-                <img src="/static/images/logo2.png" alt="LOGO" href="/"/>
-            </a>
-        </div> 
-        <!-- Navigation Bar -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Home{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />  
+    <link rel="stylesheet" href="/static/navi.css">
+
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header class="header">
+      <div class="logo">
+        <a href="/">
+          <img src="/static/images/logo2.png" alt="LOGO" href="/" />
+        </a>
+      </div>
+      <!-- Navigation Bar -->
       <nav class="navbar">
         <ul>
           <li><a href="/">Home</a></li>
@@ -26,22 +34,25 @@
       <div class="menu">
         <ul>
           {% if not session.get('user_name') %}
-            <div class="login">
-              <li><a href="/login">Log In</a></li>
-            </div>
+          <div class="login">
+            <li><a href="/login">Log In</a></li>
+          </div>
           {%else%}
-            <div class="cart">
-              <a href="{{url_for('user.notifications')}}" class="fas-font-link">
-                  <i class="fa-solid fa-bell">
-                    {% if get_unread_notification_count() > 0 %}
-                          <span class="notification-badge"></span>
-                    {% endif %}
-                  </i>
-               </a>
-              <a href="{{url_for("eWallet")}}" class="fas-font-link"><i class="fas fa-wallet" ></i></a>
-              <a href="{{url_for("cart")}}" class="fas-font-link"><i class="fa-solid fa-cart-shopping"></i></a>
-            </div>
-            
+          <div class="cart">
+            <a href="{{url_for('user.notifications')}}" class="fas-font-link">
+              <i class="fa-solid fa-bell">
+                {% if get_unread_notification_count() > 0 %}
+                <span class="notification-badge"></span>
+                {% endif %}
+              </i>
+            </a>
+            <a href="{{url_for("eWallet")}}" class="fas-font-link"
+              ><i class="fas fa-wallet"></i></a
+            >
+            <a href="{{url_for("cart")}}" class="fas-font-link"
+              ><i class="fa-solid fa-cart-shopping"></i></a
+            ></a>
+          </div>
           {%endif%}
           <div class="dropdown-btn" id="dropdown-btn">
             <div class="dropdown-icon"></div>
@@ -52,40 +63,155 @@
               <a href="{{url_for("user_orders")}}">My Orders</a>
               <a href="{{url_for("contact")}}">Help & Contact</a>
               {% if session.get('user_name') %}
-                <a href="{{url_for('user.logout')}}">Logout</a>  
+              <a href="{{url_for('user.logout')}}">Logout</a>
               {%endif%}
             </div>
           </div>
+        </ul>
       </div>
-      </header>
- 
-      <div class="content-container">
-        {% block content %}
-        <link rel="stylesheet" href="/static/mockHome.css">
+    </header>
 
-        <body>
-            <!-- Hero Section -->
-            <section class="hero">
-                <div class="hero-text">
-                    <h2>Reimagine the Possibilities</h2>
-                    <h1>Turning Trash into Treasures</h1>
-                    <p>Join us in transforming unwanted items into valuable treasures. Donate, upcycle, or shop sustainable products today.</p>
-                    <button class="cta-button">Donate Now</button>
-                    <button class="cta-button-secondary">Find Treasures</button>
-                </div>
-                <div class="hero-image">
-                    <img src="/static/images/tnt.png" alt="Upcycled treasure items">
-                </div>
-            </section>
-        
-            <!-- Footer Banner -->
-            <footer class="footer-banner">
-                <p>Support sustainability. Every small effort counts. <a href="#">Learn More</a></p>
-            </footer>
-        </body>
-        {% endblock %}
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="msg">
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        <span>{{ message }}</span>
+        <button
+          class="close-btn"
+          onclick="this.parentElement.style.display='none';"
+        >
+          ×
+        </button>
       </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
 
-    </body>
-  </html>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const alertMessages = document.querySelectorAll('.alert');
 
+        alertMessages.forEach(function(alert) {
+          setTimeout(function() {
+            alert.classList.add('fade-out');
+            setTimeout(function() {
+              alert.style.display = 'none';
+            }, 500); // Match the transition duration
+          }, 1500); // 3 seconds delay
+        });
+      });
+    </script>
+
+    <div class="content-container">
+      {% block content %}
+      <!-- Creative Landing Page Content -->
+      <section class="hero">
+        <div class="hero-content">
+          <h1>Find New Life for Your Old Treasures</h1>
+          <p>
+            Discover a community where unwanted items find new homes. Upcycle,
+            sell, and shop sustainably with Trash & Treasure.
+          </p>
+          <div class="cta-buttons">
+            <a href="/seller/seller_verification" class="cta-button">Sell Items</a>
+            <a href="/product" class="cta-button">Shop Treasures</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="about">
+        <h2>What is 'Trash & Treasure'?</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>
+              Trash & Treasure is more than a marketplace; it's a movement
+              towards sustainability. We believe that every item, regardless of
+              its current state, has the potential to bring joy and value to
+              someone's life. Our platform connects sellers with those in need,
+              upcyclers with materials, and conscious shoppers with unique
+              finds.
+            </p>
+          </div>
+          <div class="about-image">
+            <img
+              src="/static/images/tnt.png"
+              alt="Upcycling Examples"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="categories">
+        <h2>Explore Our Categories</h2>
+        <div class="category-list">
+          <div class="category-item">
+            <i class="fa-solid fa-couch"></i>
+            <h3>Furniture</h3>
+          </div>
+          <div class="category-item">
+            <i class="fa-solid fa-shirt"></i>
+            <h3>Clothing</h3>
+          </div>
+          <div class="category-item">
+            <i class="fa-solid fa-plug"></i>
+            <h3>Electronics</h3>
+          </div>
+          <div class="category-item">
+            <i class="fa-solid fa-ribbon"></i>
+            <h3>Home Decorations</h3>
+          </div>
+          <div class="category-item">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <h3>Accessories</h3>
+          </div>
+        </div>
+      </section>
+
+      <section class="testimonials">
+        <h2>What Our Users Say</h2>
+        <div class="testimonial-card">
+          <p>
+            "Trash & Treasure has transformed the way I think about decluttering.
+            It's so rewarding to know that my old belongings are helping
+            someone else!"
+          </p>
+          <p class="author">- Jane Smith, Happy Donor</p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-section contact">
+            <h3>Contact Us</h3>
+            <p>Email: support@trashandtreasure.com</p>
+            <p>Phone: +1 (800) 123-4567</p>
+            <p>Address: 123 Treasure Lane, Gemsville, USA</p>
+          </div>
+          <div class="footer-section social">
+            <h3>Follow Us</h3>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-pinterest"></i></a>
+            </div>
+          </div>
+          <div class="footer-section newsletter">
+            <h3>Newsletter</h3>
+            <p>Sign up for exclusive deals and treasure alerts!</p><br>
+            <form>
+              <input type="email" placeholder="Enter your email" required>
+              <button type="submit">Subscribe</button>
+            </form>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2023 Trash & Treasure. All rights reserved.</p>
+        </div>
+      </footer>
+      {% endblock %}
+    </div>
+  </body>
+</html>

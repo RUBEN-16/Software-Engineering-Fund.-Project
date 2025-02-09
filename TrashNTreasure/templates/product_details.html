@@ -2,18 +2,6 @@
 {% block title %} C Page {%endblock%}
 {%block content%}
 <link rel="stylesheet" href="/static/product_details.css"/>
-<div class="msg">
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">
-          <span>{{ message }}</span>
-          <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-        </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-</div>
 <section class="product-details">
     <div class="product-info">
       <img id="product-image" src="{{product.image_path }}" alt="Product Image" />

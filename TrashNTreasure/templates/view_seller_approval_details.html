@@ -1,0 +1,63 @@
+{% extends "admin_page.html" %}
+{% block title %}Seller Details{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="/static/view_seller_approval_details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <div class="seller-details-container">
+        <div class="product-name-header">
+            <h1>Seller Details</h1>
+        </div>
+
+        <div class="top-content-container">
+
+            <section class="product-info-section">
+                <h2>Seller Information</h2>
+                <div class="product-information-card">
+                    <p><i class="fas fa-id-card"></i> <strong>Name:</strong> {{ seller_details.firstName }} {{ seller_details.lastName }}</p>
+                    <p><i class="fas fa-fingerprint"></i> <strong>User ID:</strong> {{ seller_details.id }}</p>
+                    <p><i class="fas fa-envelope"></i> <strong>Email:</strong> {{ seller_details.email }}</p>
+                    <p><i class="fas fa-phone"></i> <strong>Phone Number:</strong> {{ seller_details.phone_number }}</p>
+                </div>
+            </section>
+
+              <section class = "seller-media-container">
+                    
+                    <section class="product-media-section">
+                          <div class="image-container">
+                            <h3>Profile Picture</h3>
+                            {% if seller_details.profile_picture %}
+                                <img src="{{ seller_details.profile_picture }}" alt="Profile Picture" class="seller-image">
+                            {% else %}
+                                <p>No profile picture available.</p>
+                            {% endif %}
+                        </div>
+                   
+                    </section>
+                      <section class="product-media-section">
+                         <div class="image-container">
+                            <h3>IC Picture</h3>
+                            {% if seller_details.ic_picture %}
+                                <img src="{{ seller_details.ic_picture }}" alt="IC Picture" class="seller-image">
+                            {% else %}
+                                <p>No IC picture available.</p>
+                            {% endif %}
+                        </div>
+                         </section>
+                   
+                </section>
+        </div>
+
+        <div class = "action-button">
+           <form action="{{ url_for('admin.approve_seller', seller_id=seller_details.id) }}" method="POST" style="display:inline;">
+               <button type="submit" class="approve-button">Approve</button>
+           </form>
+           <form action="{{ url_for('admin.reject_seller', seller_id=seller_details.id) }}" method="POST" style="display:inline;">
+               <button type="submit" class="reject-button">Reject</button>
+           </form>
+         </div>
+        
+         <button class="back-button" onclick="window.location.href='{{ url_for('admin.seller_approval') }}'">Back to Seller Approvals</button>
+    </div>
+{% endblock %}

@@ -1,18 +1,6 @@
 {% extends "index.html" %}
 {% block title %}My History{% endblock %}
 {% block content %}
-<div class="msg">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">
-            <span>{{ message }}</span>
-            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-  </div>
     <link rel="stylesheet" href="/static/orderHistory.css">
     
     <div class="order-history-content">
@@ -31,15 +19,13 @@
                         <div class="order-details">
                             <h3 class="order-id">Order ID: {{ order["id"] }}</h3>
                          <div class="order-info-row">
-                               <p class="order-date">Date: {{ order["date"] }}</p>
-                                 <p class="order-total">Total Amount: RM{{ order["total_amount"] }}</p>
+                            <p class="order-date">Date: {{ order["date"] }}</p>
                          </div>
                         <div class="order-products">
-                             <h4>Product</h4>
-                                 <p>{{order["products"]["product_name"]}} (qty: {{order["products"]["quantity"]}})</p>
+                            <p>Product: {{order["products"]["product_name"]}} ({{order["products"]["quantity"]}}x)</p>  
                         </div>
                         
-                        <span class="delivery-status" data-status="{{ order["delivery_status"] }}">Status: {{ order["delivery_status"] }}</span>
+                        <strong><span class="delivery-status" data-status="{{ order["delivery_status"] }}">Status: {{ order["delivery_status"] }}</span></strong>
                     </div>
                     <div class="order-actions">
                         <a href="{{url_for("user.order_details", order_id=order["id"])}}" class="action-btn">View</a>

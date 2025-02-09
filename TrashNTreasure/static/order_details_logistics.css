@@ -1,135 +1,164 @@
 /* General Styles */
-.order-details-container {
-    margin: 20px 100px;
+.seller-details-container {
+    margin: 20px 50px; /* Reduced side margins */
     background: #fff;
-    padding: 20px;
+    padding: 30px; /* Increased padding */
+    border-radius: 12px; /* Softer rounded corners */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+    color: #333; /* Darker text */
+  }
+  
+  .seller-details-container h1 {
+    text-align: center;
+    margin-bottom: 30px; /* More space below the heading */
+    color: #283747; /* Darker heading */
+    font-size: 2.4em;
+  }
+  
+  /* Top Content Layout */
+  .top-content-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow sections to wrap on smaller screens */
+    justify-content: space-around; /* Distribute sections evenly */
+    margin-bottom: 30px;
+  }
+  
+  /* Individual Section Styling */
+  .product-info-section,
+  .seller-media-container {
+    flex: 1 1 45%; /* Each section takes up 45% of the container width */
+    min-width: 300px; /* Minimum width to prevent content collapse */
+    padding: 25px; /* Increase padding */
+    border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.order-header {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for sections */
+    margin-bottom: 20px;
+  }
+  
+  .seller-media-container {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
-.order-status {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-h1 {
+    flex-direction: column; /* Stack media sections vertically */
+    align-items: center; /* Center media items horizontally */
+  }
+  
+  /* Media Section Styling */
+  .product-media-section {
     text-align: center;
     margin-bottom: 20px;
-    color: #2c3e50;
-}
-
-.order-details-container h2 {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+  }
+  
+  .image-container {
     margin-bottom: 15px;
-    color: #34495e;
-}
-
-.content-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-}
-
-.buyer-product-info {
-    display: flex;
-    justify-content: space-between;
-    flex-basis: calc(100% - 20px);
-    margin: 10px;
-}
-
-.product-info, .seller-info {
-    flex: 1;
-    padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    margin: 10px;
-}
-
-.order-details-container p {
-    margin-bottom: 8px;
-}
-
-.order-details-container strong {
-    font-weight: bold;
-    color: #566573;
+  }
+  
+  .image-container h3 {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .seller-image {
+    max-width: 100; /* Make images responsive */
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Subtle shadow for images */
+  }
+  
+  /* Product Information Card */
+  .product-information-card {
+    line-height: 1.6;
+  }
+  
+  .product-information-card p {
+    margin-bottom: 12px;
+  }
+  
+  .product-information-card strong {
+    font-weight: 600; /* Semi-bold */
+    color: #444;
     margin-right: 5px;
-}
-
-.back-button {
+  }
+  
+  /* Contact Info Styling */
+  .contact-info p {
+    margin-bottom: 8px;
+  }
+  
+  /* Action Buttons Styling */
+  .action-button {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .action-button button {
+    padding: 12px 24px;
+    font-size: 1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin: 0 10px;
+  }
+  
+  .approve-button {
+    background-color: #4CAF50; /* Green */
+    color: #fff;
+  }
+  
+  .approve-button:hover {
+    background-color: #45a049;
+  }
+  
+  .reject-button {
+    background-color: #f44336; /* Red */
+    color: #fff;
+  }
+  
+  .reject-button:hover {
+    background-color: #da190b;
+  }
+  
+  /* Back Button Styling */
+  .back-button {
     display: block;
-    background-color: #95a5a6;
+    background-color: #607d8b; /* Slate Gray */
     color: #fff;
     border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
+    padding: 12px 24px;
+    border-radius: 6px;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
-}
-
-.back-button:hover {
-    background-color: #7f8c8d;
-}
-
-.product-image {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-    margin-bottom: 10px;
-    border: 1px solid #eee;
-}
-.status-badge {
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-.status-badge.pending {
-    color: #ffc107; /* Amber/orange color */
-}
+    transition: background-color 0.2s ease;
+    margin-top: 30px;
+    width: fit-content; /* Adjust to content width */
+    margin-left: auto;
+    margin-right: auto;
+  }
   
-.status-badge.shipped {
-    color: #17a2b8; /* Teal/cyan color */
-}
+  .back-button:hover {
+    background-color: #455a64;
+  }
   
-.status-badge.delivered,
-.status-badge.confirmed {
-    color: #28a745; /* Green color */
-}
-.status-badge.cancelled{
-     color: #dc3545; /* Red color */
-}
-.delivery-actions{
-    margin-top: 20px;
-     text-align: center;
-}
-.cancel-btn{
-     background-color: #e74c3c;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-        font-size: 1.1em;
-       transition: background-color 0.3s ease, transform 0.3s ease;
-          white-space: nowrap;
-}
- .cancel-btn:hover{
-     background-color: #c0392b;
-      transform: translateY(-2px);
-}
+  /* Responsiveness */
+  @media (max-width: 768px) {
+    .seller-details-container {
+      margin: 10px;
+      padding: 20px;
+    }
+  
+    .top-content-container {
+      flex-direction: column; /* Stack sections vertically */
+    }
+  
+    .product-info-section,
+    .seller-media-container {
+      flex: 1 1 100%; /* Each section takes up full width */
+      min-width: auto; /* Allow sections to shrink */
+    }
+  
+    .seller-image {
+      max-width: 80%;
+    }
+  }

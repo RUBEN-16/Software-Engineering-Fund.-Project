@@ -8,18 +8,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<div class="msg">
-    {% with messages = get_flashed_messages(with_categories=true) %}
+{% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
+        <div class="msg">
         {% for category, message in messages %}
           <div class="alert alert-{{ category }}">
             <span>{{ message }}</span>
             <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
           </div>
         {% endfor %}
+        </div> 
       {% endif %}
     {% endwith %}
-</div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const alertMessages = document.querySelectorAll('.alert');
+
+    alertMessages.forEach(function(alert) {
+      setTimeout(function() {
+        alert.classList.add('fade-out');
+        setTimeout(function() {
+          alert.style.display = 'none';
+        }, 500); // Match the transition duration
+      }, 1500); // 3 seconds delay
+    });
+  });
+  </script>
 <body>
   <div class="login-container">
     <div class="login-box">

@@ -356,7 +356,7 @@ def submit_comment(product_id):
        
        # Construct notification message
        message = f"Buyer {buyer_name} left a comment and rating on your product {product_name}."
-       send_notification(seller_id, "New Comment", message)
+       send_notification(con, seller_id, "New Comment", message)
        
        flash("Comment submitted successfully!", "success")
    except Exception as e:

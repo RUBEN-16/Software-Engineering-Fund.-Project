@@ -1,16 +1,14 @@
 /* General Styles */
 html, body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: #fff8e1;    
+    color: #333; /* Dark text for readability */
 }
 
 /* Category Section */
 .category-section {
-    padding: 20px;
-    background-color: #fff;
+    background-color: #008304; /* White background */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
@@ -19,24 +17,40 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
 }
 
 .category-dropdown label {
     font-size: 16px;
     margin-right: 10px;
+    color: #000; /* White text for contrast */
+    font-weight: bold;
+    margin-left: 20px;
 }
 
 .category-dropdown select {
     padding: 8px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 3px solid #ffffff00;
     border-radius: 4px;
+    background-color: #ffffff;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+.category-dropdown select:focus {
+    border-color: #4CAF50; /* Green border on focus */
 }
 
 .search-box {
     display: flex;
     align-items: center;
-    width: 105  0px;
+    width: 100%;
+    max-width: 300px; /* Adjust as needed */
+    background-color: #ffffff00;
+    padding: 8px;
+    border-radius: 4px;
 }
 
 .search-box input[type="text"] {
@@ -45,13 +59,18 @@ html, body {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-right: 10px;
-    width: 1000px;
+    width: 120%;
+    transition: border-color 0.3s ease;
 }
+
+
 
 .search-btn {
     background: none;
     border: none;
     cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-left: 60px;
 }
 
 .search-btn img {
@@ -64,13 +83,13 @@ html, body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
-    padding: 50px 100px;
-    min-height: calc(100vh - 530px); /* Adjust based on your header/footer height */
+    padding: 20px;
+    min-height: calc(100vh - 530px); /* Adjust based on header/footer height */
     align-content: start; /* Align items to the top */
 }
 
 .product-item {
-    background-color: #fff;
+    background-color: #fff; /* White background */
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
@@ -93,27 +112,25 @@ html, body {
     display: block;
     padding: 10px;
     font-size: 18px;
-    color: #333;
+    color: #003102; /* Dark green for product names */
     text-decoration: none;
     text-align: center;
+    transition: color 0.3s ease;
+}
+
+.product-item a:hover {
+    color: #4CAF50; /* Green on hover */
 }
 
 .product-item p {
     padding: 0 10px;
     font-size: 14px;
-    color: #666;
+    color: #666; /* Gray for text */
     text-align: center;
-}
-
-.rating {
-    text-align: center;
-    padding: 10px;
-    font-size: 14px;
-    color: #f39c12;
 }
 
 .product-item p span {
-    color: #e74c3c;
+    color: #e74c3c; /* Red for discounted price */
     font-weight: bold;
 }
 
@@ -138,11 +155,16 @@ html, body {
     margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+.hover-options input[type="number"]:focus {
+    border-color: #4CAF50; /* Green border on focus */
 }
 
 .hover-options button {
     padding: 8px 16px;
-    background-color: #3498db;
+    background-color: #4CAF50; /* Green button */
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -151,5 +173,5 @@ html, body {
 }
 
 .hover-options button:hover {
-    background-color: #2980b9;
+    background-color: #337736; /* Darker green on hover */
 }

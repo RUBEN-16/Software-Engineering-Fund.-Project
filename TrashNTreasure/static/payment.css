@@ -1,34 +1,39 @@
 .payment-content {
-    margin: 20px 100px;
-    padding: 30px;
-    background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    border-radius: 10px;
+  margin: 20px 100px; /* Center the content horizontally */
+  padding: 30px;
+  background-color: #ffffff; /* White background for a clean look */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 
 .payment-content h1,
 .payment-content h2 {
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
+  color: #003102; /* Dark green for headings */
+  margin-bottom: 20px;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.cart-summary {
+  margin-bottom: 30px; /* Add spacing below the cart summary */
 }
 
 .cart-summary table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 .cart-summary th,
 .cart-summary td {
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    text-align: left;
+  padding: 12px 15px; /* Slightly increase padding for better spacing */
+  border: 1px solid #ddd;
+  text-align: left;
 }
 
 .cart-summary th {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0; /* Light grey for table headers */
+  font-weight: 600; /* Make headers bold */
 }
 
 .cart-summary img {
@@ -37,76 +42,107 @@
   display: block;
   margin: 0 auto;
 }
-.total{
+
+.total {
   font-size: 1.2em;
-    text-align: right;
-    margin: 10px 0;
+  text-align: right;
+  margin: 20px 0; /* Add more spacing around the total */
 }
-#total-price{
-    font-weight: bold;
-  color: #0074D9;
+
+#total-price {
+  font-weight: bold;
+  color: #FFD700; /* Gold for the total price */
 }
+
 .payment-options {
-    margin-top: 20px;
-    text-align: center;
+  margin-top: 30px; /* Add more spacing above payment options */
+  text-align: center;
   display: flex;
   flex-direction: column;
-    align-items: center;
+  align-items: center;
 }
-.payment-method{
-      margin-bottom: 10px;
+
+.payment-method {
+  margin-bottom: 15px; /* Increase spacing between payment methods */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 400px; /* Limit width for better alignment */
+  background-color: #f9f9f9; /* Light grey background for each payment method */
 }
+
 .payment-options label {
-    display: inline-flex;
-      align-items: center;
-    cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  color: #003102; /* Dark green for text */
+  font-size: 1em;
 }
-.payment-options input[type="radio"]{
-  margin-right: 8px;
-    }
+
+.payment-options input[type="radio"] {
+  margin-right: 10px; /* Increase spacing between radio button and label */
+}
 
 .confirm-payment-btn {
-        background-color: #0074D9;
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1.2em;
-        transition: background-color 0.3s ease, transform 0.3s ease;
+  background-color: #FFD700; /* Gold for the primary button */
+  color: #003102; /* Dark green text for contrast */
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 20px; /* Add spacing above the button */
 }
+
 .back-btn {
-        background-color: #8d8d8d;
-        color: rgb(0, 0, 0);
-        border: none;
-        padding: 15px 30px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1.2em;
-          transition: background-color 0.3s ease, transform 0.3s ease;
+  background-color: #8d8d8d; /* Grey for the secondary button */
+  color: #fff; /* White text for contrast */
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 10px; /* Add spacing above the button */
 }
-.back-btn:hover, .back-btn:focus {
-  background-color: #5c5c5c;
-    transform: translateY(-2px);
+
+.back-btn:hover,
+.back-btn:focus {
+  background-color: #5c5c5c; /* Darker grey on hover */
+  transform: translateY(-2px);
 }
-.confirm-payment-btn:hover, .confirm-payment-btn:focus {
-  background-color: #0056A3;
-    transform: translateY(-2px);
+
+.confirm-payment-btn:hover,
+.confirm-payment-btn:focus {
+  background-color: #E6C200; /* Darker gold on hover */
+  transform: translateY(-2px);
 }
+
 @media (max-width: 768px) {
   .payment-content {
-    padding: 15px;
+    padding: 20px;
     margin: 10px;
-    }
-    .cart-summary table{
-      font-size: 0.9em;
-    }
-    .cart-summary th,
-    .cart-summary td {
-      padding: 8px;
-      }
-        .confirm-payment-btn {
-              padding: 12px 20px;
-          font-size: 1em;
-        }
+  }
+
+  .cart-summary table {
+    font-size: 0.9em;
+  }
+
+  .cart-summary th,
+  .cart-summary td {
+    padding: 10px;
+  }
+
+  .confirm-payment-btn,
+  .back-btn {
+    padding: 12px 20px;
+    font-size: 1em;
+    width: 100%; /* Make buttons full width on smaller screens */
+  }
+
+  .payment-method {
+    width: 90%; /* Adjust width for smaller screens */
+  }
 }

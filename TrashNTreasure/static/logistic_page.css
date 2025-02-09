@@ -227,6 +227,7 @@ body {
   text-align: left;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative; /* Allows absolute positioning for the close button */
+  transition: opacity 0.5s ease-in-out;
 }
 
 /* Success Message */
@@ -272,4 +273,8 @@ body {
 /* Close button hover effect */
 .alert .close-btn:hover {
   color: #ff0000;
+}
+
+.alert.fade-out {
+  opacity: 0;
 }

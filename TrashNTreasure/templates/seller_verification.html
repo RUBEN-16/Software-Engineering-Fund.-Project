@@ -1,18 +1,6 @@
 {% extends "index.html" %}
 {% block title %} Seller Verification {%endblock%}
 {%block content%}
-<div class="msg">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">
-            <span>{{ message }}</span>
-            <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-          </div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-  </div>
 {% if session.get("seller_status") == 1 %}
 <link rel="stylesheet" href="/static/seller_approved.css">
 <!-- Approved Seller Page Content -->
@@ -375,7 +363,7 @@
     <link rel="stylesheet" href="/static/seller_verification.css">
     <div class="content">
         <!-- Hero Section --> 
-        <section class="hero">
+        <section class="heroSeller">
             <h1>Become a Seller</h1>
             <p>Join our platform to start your selling journey and grow your business with ease.</p>
         </section>

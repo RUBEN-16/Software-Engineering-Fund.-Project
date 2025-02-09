@@ -2,7 +2,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #ffe6e6; /* Light pink */
+    background-color: #fff8e1; /* Light pink */
 }
 
 /* Hide all sections by default */
@@ -20,45 +20,15 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Vertical Navigation Bar */
-.vertical-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100%;
-    background-color: #f8bbd0; /* Soft pink */
-    padding: 20px;
-}
-
-.vertical-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.vertical-nav ul li {
-    margin-bottom: 10px;
-}
-
-.vertical-nav ul li a {
-    text-decoration: none;
-    color: #2f4f4f;
-    font-size: 18px;
-}
-
-.vertical-nav ul li a:hover {
-    color: #ff4081; /* Bright pink-red */
-}
-
 /* Form Styling */
 .form-container {
     max-width: 700px;
     margin: 50px auto;
-    padding: 20px;
-    background-color: rgba(255, 80, 80, 0.808); /* Light red background */
+    padding: 30px;
+    background: linear-gradient(180deg, #c47739, #97d644);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: white;
+    color: #000;
 }
 
 .form-container p {
@@ -106,28 +76,30 @@ html {
 .form-container button {
     width: 700px;
     padding: 10px;
-    background-color: #d32f2f; /* Darker red */
-    color: white;
+    background-color: #2fd33d; /* Darker red */
+    color: rgb(0, 0, 0);
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 16px; 
+    font-weight: bold;
+    margin-top: 70px;
 }
 
 .form-container button:hover {
-    background-color: #ff1744; /* Bright red */
+    background-color: #0eec20; /* Bright red */
 }
 
-/* Hero Section */
-.hero {
+/* heroSeller Section */
+.heroSeller {
     text-align: center;
     position: relative;
     padding: 20px;
-    background-color: #c2185b; /* Red-violet */
-    color: white;
+    background: linear-gradient(180deg, #7c4518, #c47739);
+    color: #000;
 }
 
-.hero h1 {
+.heroSeller h1 {
     margin: 0;
     font-size: 36px;
 }
@@ -151,7 +123,7 @@ html {
 
 /* Benefits Section */
 .benefits {
-    background-color: #f8bbd0; /* Soft pink */
+    background: linear-gradient(180deg, #c47739, #dbc545);
     padding: 30px 20px;
     border-radius: 10px;
     margin: 20px auto;
@@ -202,7 +174,7 @@ html {
 
 /* Guidelines Section */
 .guidelines {
-    background-color: #fff8e1; /* Soft yellow */
+    background: linear-gradient(180deg, #dbc545, #cadb7f);
     padding: 30px 20px;
     border-radius: 10px;
     margin: 20px auto;
@@ -230,8 +202,8 @@ html {
 }
 
 .guideline-item span {
-    background: #ff4081; /* Bright pink-red */
-    color: white;
+    background: #61351c; /* Bright pink-red */
+    color: #f5c541;
     font-size: 20px;
     font-weight: bold;
     padding: 10px 15px;
@@ -251,7 +223,7 @@ html {
 
 /* FAQ Section */
 .faq {
-    background-color: #f9f9f9; /* Light grey */
+    background: linear-gradient(180deg, #cadb7f, #97d644);
     padding: 30px 20px;
     border-radius: 10px;
     margin: 20px auto;

@@ -1,0 +1,210 @@
+/* General Styles */
+.seller-details-container {
+  margin: 20px 50px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  position: relative; /* For back button positioning */
+  min-height: 500px; /* Prevents content collapse if short */
+}
+
+.product-name-header h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #283747;
+  font-size: 2.4em;
+}
+
+/* Top Content Layout (User Info) */
+.top-content-container {
+  display: flex;
+  flex-direction: column; /* Stack info above pictures */
+  align-items: stretch; /* Stretch sections to fill container */
+  margin-bottom: 20px;
+}
+
+/* User Information Section */
+.product-info-section {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.product-info-section h2 {
+  margin-bottom: 10px;
+  display: flex; /* Align icon and text */
+  align-items: center;
+  color: #333;
+}
+
+.product-info-section h2 i {
+  margin-right: 8px; /* Space between icon and heading text */
+  color: #555; /* Adjust icon color */
+}
+
+/* Style individual details */
+.product-information-card {
+  display: flex;
+  flex-direction: column; /* Stack information vertically */
+}
+
+.product-information-card p {
+  margin-bottom: 8px;
+  display: flex; /* Align icon and detail text */
+  align-items: center;
+}
+
+.product-information-card p i {
+  margin-right: 8px; /* Space between icon and text */
+  color: #777; /* Grayish icon */
+}
+
+.product-information-card strong {
+  font-weight: 600;
+  color: #444;
+  margin-right: 5px;
+}
+
+/* Pictures Section Styling */
+.seller-media-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product-media-section {
+  flex: 1;
+  text-align: center;
+  position: relative; /* For separator positioning */
+}
+
+.product-media-section:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 70%;
+  background-color: #ddd;
+}
+
+.image-container h3 {
+  font-size: 1.2em;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.seller-image {
+  max-width: 300px; /* Larger image size */
+  max-height: 300px; /* Limit height */
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  margin: 0 auto; /* Center the image */
+  display: block; /* Ensures margin auto works */
+}
+
+/* Action Buttons Styling */
+.action-button {
+  text-align: center;
+  margin-top: 40px; /* Increased spacing below buttons */
+  margin-bottom: 50px; /* Increased spacing below buttons */
+}
+
+.action-button form {
+  display: inline-block; /* Ensure buttons stay side by side */
+}
+
+.action-button button {
+  padding: 12px 24px;
+  font-size: 1em;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  margin: 0 10px;
+}
+
+.approve-button {
+  background-color: #4CAF50; /* Green */
+  color: #fff;
+}
+
+.approve-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px); /* Slight raise effect on hover */
+}
+
+.reject-button {
+  background-color: #f44336; /* Red */
+  color: #fff;
+}
+
+.reject-button:hover {
+  background-color: #da190b;
+  transform: translateY(-2px); /* Slight raise effect on hover */
+}
+
+.back-button{
+  display: block;
+  background-color: #95a5a6;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .seller-details-container {
+        margin: 10px;
+        padding: 20px;
+    }
+
+    .top-content-container {
+        flex-direction: column;
+    }
+
+    .product-info-section,
+    .seller-media-container {
+        flex: 1 1 100%;
+        min-width: auto;
+    }
+
+    .seller-media-container {
+        flex-direction: row; /* Put images side by side */
+        justify-content: space-around; /* Distribute images evenly */
+    }
+
+    .product-media-section {
+        flex: 1;
+        margin: 10px; /* Adjust image margins */
+    }
+
+    .seller-image {
+        max-width: 80%;
+    }
+
+    .product-media-section:not(:last-child)::after {
+        width: 70%; /* Make the separator shorter */
+        height: 1px; /* Make the separator horizontal */
+        top: auto;
+        bottom: 0;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%); /* Center the horizontal line */
+    }
+}

@@ -3,18 +3,33 @@
 {%block content%}
 
 <link rel="stylesheet" href="../static/e-wallet.css">
-<div class="msg">
-    {% with messages = get_flashed_messages(with_categories=true) %}
+{% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
+        <div class="msg">
         {% for category, message in messages %}
           <div class="alert alert-{{ category }}">
             <span>{{ message }}</span>
             <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
           </div>
         {% endfor %}
+        </div> 
       {% endif %}
     {% endwith %}
-  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const alertMessages = document.querySelectorAll('.alert');
+
+    alertMessages.forEach(function(alert) {
+      setTimeout(function() {
+        alert.classList.add('fade-out');
+        setTimeout(function() {
+          alert.style.display = 'none';
+        }, 500); // Match the transition duration
+      }, 3000); // 3 seconds delay
+    });
+  });
+  </script>
 <section id="dashboard" class="container">
     <h2>Your Wallet</h2>
     <div class="wallet-info">

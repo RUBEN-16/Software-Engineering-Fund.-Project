@@ -30,13 +30,60 @@ def login():
 
     return render_template("adminlogin_page.html")
 
-@admin_blueprint.route("/")
-def dashboard(): 
+@admin_blueprint.route("/profile")
+def admin_profile():
     if "admin_id" in session:
-        return render_template("admin_page.html", admin = session["admin_name"])    
+        admin_id = session["admin_id"]
+        admin_name = session["admin_name"] 
+        return render_template("admin_profile.html", admin_id=admin_id, admin_name=admin_name)
     else:
         flash("Please log in to access the admin account.", "danger")
         return redirect(url_for("admin.login"))
+
+@admin_blueprint.route("/")
+def dashboard():
+    if "admin_id" not in session:
+        flash("Please log in to access the admin account.", "danger")
+        return redirect(url_for("admin.login"))
+
+    try:
+        con = get_connect_db()
+        cur = con.cursor()
+
+        # Fetch total user count
+        cur.execute("SELECT COUNT(*) FROM user")
+        total_users = cur.fetchone()[0]
+
+        # Fetch total logistics member count
+        cur.execute("SELECT COUNT(*) FROM member")
+        total_logistics = cur.fetchone()[0]
+
+        # Fetch total order count
+        cur.execute("SELECT COUNT(*) FROM orders")
+        total_orders = cur.fetchone()[0]
+
+        # Fetch pending seller approval count
+        cur.execute("SELECT COUNT(*) FROM seller_registration WHERE status = 'Pending'")
+        pending_approvals = cur.fetchone()[0]
+
+    except Exception as e:
+        flash(f"Error fetching dashboard data: {e}", "danger")
+        total_users = 0
+        total_logistics = 0
+        total_orders = 0
+        pending_approvals = 0
+    finally:
+        if con:
+            con.close()
+
+    return render_template(
+        "admin_page.html",
+        admin=session["admin_name"],
+        total_users=total_users,
+        total_logistics=total_logistics,
+        total_orders=total_orders,
+        pending_approvals=pending_approvals
+    )       
 
 @admin_blueprint.route('/hire_member', methods=["GET", "POST"])
 def hire_member():
@@ -162,14 +209,21 @@ def delete_user(id):
     try:
         con = get_connect_db()
         cur = con.cursor()
+        
         cur.execute("SELECT * FROM user WHERE pid = ?", (id,))
         user = cur.fetchone()
         if not user:
             flash("User not found.", "warning")
             return redirect(url_for("admin.user_management"))
-        cur.execute("DELETE FROM user WHERE pid = ?", (id,))
-        con.commit()
         
+        # Check if the user is a seller
+        is_seller = user["isSeller"]
+        if is_seller == 1:
+            cur.execute("DELETE FROM sellers WHERE id = ?", (id,))
+        
+        cur.execute("DELETE FROM user WHERE pid = ?", (id,))
+        
+        con.commit()
         flash("User deleted successfully!", "success")
         
     except Exception as e:
@@ -218,7 +272,7 @@ def view_seller(seller_id):
     
     if not seller_details:
         flash("Seller not found.", "danger") 
-        return redirect(url_for("admin.seller_approval"))
+        return redirect(url_for("admin.user_management"))
     
     cur.execute("SELECT * FROM products WHERE seller_id = ?", (seller_id,))
     seller_products = cur.fetchall()
@@ -235,6 +289,42 @@ def view_seller(seller_id):
 
     con.close()
     return render_template("view_seller_details.html", seller_details=seller_details, seller_products = seller_products, seller_orders=seller_orders) 
+
+@admin_blueprint.route("/view_seller_approval/<int:seller_id>", methods=["POST"])
+def view_seller_approval(seller_id):
+    if "admin_id" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("admin.login"))
+
+    con = get_connect_db()
+    cur = con.cursor() 
+    cur.execute("""
+        SELECT sr.*, u.firstName, u.lastName, u.email 
+        FROM seller_registration sr 
+        JOIN user u ON sr.id = u.pid 
+        WHERE sr.id = ?
+    """, (seller_id,))
+    seller_details = cur.fetchone()
+    
+    if not seller_details:
+        flash("Seller not found.", "danger") 
+        return redirect(url_for("admin.seller_approval"))
+    
+    cur.execute("SELECT * FROM products WHERE seller_id = ?", (seller_id,))
+    seller_products = cur.fetchall()
+
+    cur.execute("""
+        SELECT 
+            o.id,
+            o.delivery_status
+        FROM orders o
+        JOIN products p ON o.product_id = p.id
+        WHERE p.seller_id = ?
+    """, (seller_id,))
+    seller_orders = cur.fetchall()
+
+    con.close()
+    return render_template("view_seller_approval_details.html", seller_details=seller_details, seller_products = seller_products, seller_orders=seller_orders) 
 
 @admin_blueprint.route("/approve_seller/<int:seller_id>", methods=["POST"])
 def approve_seller(seller_id):

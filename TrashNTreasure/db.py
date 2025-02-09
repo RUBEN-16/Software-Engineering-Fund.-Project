@@ -78,7 +78,7 @@ con.execute("""
     CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         buyer_id INTEGER NOT NULL,
-        product_id INTEGER NOT NULL,
+        product_id INTEGER NOT NULL, 
         quantity INTEGER NOT NULL,
         date DATE NOT NULL,
         payment_method TEXT NOT NULL,
@@ -154,9 +154,6 @@ con.execute("""
         assigned_member_id INTEGER,
         status_updated_member_id INTEGER,
         FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
-        FOREIGN KEY (seller_id) REFERENCES sellers(id)
-        FOREIGN KEY (assigned_member_id) REFERENCES member(id)
-        FOREIGN KEY (status_updated_member_id) REFERENCES member(id)
     )
 """)
 
@@ -212,6 +209,7 @@ con.close()
 def get_connect_db():
     conn = sqlite3.connect(DATABASE_PATH)
     conn.row_factory = sqlite3.Row
+    
     return conn 
 
 # Save the approved seller in the sellers database

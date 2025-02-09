@@ -1,246 +1,186 @@
 body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-  }
-  
-  /* Login Container */
-  .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    padding-top: 150px;
-  }
-  
-  /* Login Box */
-  .login-box {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 40px;
-    width: 400px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
-  }
-  
-  @keyframes fadeIn {
-    from {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #292500, #493c04); /* Dark green gradient */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Login Container */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 150px;
+}
+
+/* Login Box */
+.login-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 40px;
+  width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
       opacity: 0;
       transform: translateY(-20px);
-    }
-    to {
+  }
+  to {
       opacity: 1;
       transform: translateY(0);
-    }
   }
-  
-  /* Login Header */
-  .login-header {
-    margin-bottom: 30px;
-  }
-  
-  .login-header .logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px; 
-  }
-  
-  .login-header .logo i {
-    font-size: 40px;
-    color: #fff;
-    margin-right: 10px;
-    animation: bounce 2s infinite;
-  }
-  
-  @keyframes bounce {
-    0%, 100% {
+}
+
+/* Login Header */
+.login-header {
+  margin-bottom: 30px;
+}
+
+.login-header .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.login-header .logo i {
+  font-size: 40px;
+  color: #72c019; /* Gold for logo icon */
+  margin-right: 10px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
       transform: translateY(0);
-    }
-    50% {
+  }
+  50% {
       transform: translateY(-10px);
-    }
   }
-  
-  .login-header .logo span {
-    font-size: 24px;
-    font-weight: 600;
-    color: #fff;
-  }
-  
-  .login-header h2 {
-    font-size: 22px;
-    color: #fff;
-    margin-bottom: 10px;
-  }
-  
-  .login-header p {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
-  }
-  
-  /* Login Form */
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .input-group {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    padding: 10px;
-    transition: background 0.3s ease;
-  }
-  
-  .input-group:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-  
-  .input-group i {
-    font-size: 18px;
-    color: #fff;
-    margin-right: 10px;
-  }
-  
-  .input-group input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #fff;
-    font-size: 16px;
-  }
-  
-  .input-group input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-  }
-  
-  .input-group .toggle-password {
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.7);
-    transition: color 0.3s ease;
-  }
-  
-  .input-group .toggle-password:hover {
-    color: #fff;
-  }
-  
-  /* Login Button */
-  .login-btn {
-    background: #ff6f61;
-    color: #fff;
-    border: none;
-    padding: 12px;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.3s ease;
-  }
-  
-  .login-btn:hover {
-    background: #ff4a3d;
-    transform: translateY(-2px);
-  }
-  
-  /* Login Footer */
-  .login-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-  }
-  
-  .login-footer a {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 14px;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .login-footer a:hover {
-    color: #fff;
-  }
+}
 
+.login-header .logo span {
+  font-size: 24px;
+  font-weight: 600;
+  color: #72c019; /* Gold for logo text */
+}
 
-    /* Container for flash messages */
+.login-header h2 {
+  font-size: 22px;
+  color: #fff; /* White for heading */
+  margin-bottom: 10px;
+}
+
+.login-header p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8); /* Light white for subtext */
+}
+
+/* Login Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+  transition: background 0.3s ease;
+}
+
+.input-group:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.input-group i {
+  font-size: 18px;
+  color: #fff; /* White for icons */
+  margin-right: 10px;
+}
+
+.input-group input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff; /* White for input text */
+  font-size: 16px;
+}
+
+.input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.7); /* Light white for placeholder */
+}
+
+.input-group .toggle-password {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.7); /* Light white for toggle icon */
+  transition: color 0.3s ease;
+}
+
+.input-group .toggle-password:hover {
+  color: #72c019; /* Gold on hover */
+}
+
+/* Login Button */
+.login-btn {
+  background: #579c08; /* Green for button */
+  color: #000000; /* White for text */
+  font-weight:bold;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.login-btn:hover {
+  background: #a3c42f; /* Darker green on hover */
+  transform: translateY(-2px);
+}
+
+/* Login Footer */
+.login-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.login-footer a {
+  color: rgba(255, 255, 255, 0.8); /* Light white for links */
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-footer a:hover {
+  color: #72c019; /* Gold on hover */
+}
+
+/* Container for Flash Messages */
 .msg {
-    position: fixed; /* Fixed positioning to overlap on top */
-    top: 20px; /* Distance from the top of the screen */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Adjust for exact centering */
-    z-index: 1000; /* Ensure it appears above other elements */
-    width: 100%; /* Full width */
-    max-width: 500px; /* Limit maximum width */
-    display: flex;
-    flex-direction: column; /* Stack messages vertically */
-    align-items: center; /* Center messages horizontally */
-  }
-  
-  /* General Styling for Flash Messages */
-  .alert {
-    display: flex;
-    justify-content: space-between; /* Align the message text and the close button */
-    align-items: center;
-    padding: 10px;
-    margin: 5px 0; /* Spacing between messages */
-    border-radius: 5px;
-    font-size: 16px;
-    width: 100%; /* Full width of the parent container */
-    text-align: left;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative; /* Allows absolute positioning for the close button */
-  }
-  
-  /* Success Message */
-  .alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-  }
-  
-  /* Danger/Error Message */
-  .alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-  }
-  
-  /* Info Message */
-  .alert-info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
-  }
-  
-  /* Warning Message */
-  .alert-warning {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
-  }
-  
-  /* Close button styling */
-  .alert .close-btn {
-    font-size: 20px;
-    font-weight: bold;
-    color: #000;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    padding: 0;
-    margin-left: 15px;
-  }
-  
-  /* Close button hover effect */
-  .alert .close-btn:hover {
-    color: #ff0000;
-  }
+  position: fixed; /* Fixed positioning to overlap on top */
+  top: 20px; /* Distance from the top of the screen */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for exact centering */
+  z-index: 1000; /* Ensure it appears above other elements */
+  width: 100%; /* Full width */
+  max-width: 500px; /* Limit maximum width */
+  display: flex;
+  flex-direction: column; /* Stack messages vertically */
+  align-items: center; /* Center messages horizontally */
+}

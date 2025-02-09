@@ -1,22 +1,24 @@
 .notification-container {
    margin: 50px 300px;
-   background-color: #ffffff;
+   background-color: #ffffff; /* White background */
    border-radius: 15px;
    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
    padding: 40px;
-    display: flex;
+   display: flex;
    flex-direction: column;
-       transition: transform 0.3s ease, box-shadow 0.3s ease;
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .notification-container:hover {
    transform: translateY(-5px);
    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
+
 .notification-container h1 {
-    text-align: center;
+   text-align: center;
    margin-bottom: 30px;
-    font-size: 2.2em;
-    color: #333;
+   font-size: 2.2em;
+   color: #2f4f4f; /* Dark green for headings */
 }
 
 .notifications {
@@ -27,25 +29,26 @@
 }
 
 .notification-item {
-   background-color: #f9f9f9;
+   background-color: #f9f9f9; /* Light gray background */
    border-radius: 8px;
    padding: 10px;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
    transition: all 0.3s ease;
 }
-.notification-item:hover{
+
+.notification-item:hover {
    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
    transform: translateY(-2px);
 }
-.notification-item.unread{
-    background-color: #e0f7fa; /* Brighter background for unread notifications */
-    border: 2px solid #00bcd4; /* Distinct border for unread notifications */
+
+.notification-item.unread {
+   background-color: #d1fd59; /* Light gold for unread notifications */
+   border: 2px solid #d1fd59; /* Gold border for unread notifications */
 }
 
-
 .notification-button {
-   background-color: #e0f7fa;
-   color: #444;
+   background-color: #efffe0; /* Light gold background */
+   color: #2f4f4f; /* Dark green text */
    padding: 12px 15px;
    border: none;
    border-radius: 5px;
@@ -53,54 +56,41 @@
    text-align: left;
    cursor: pointer;
    display: flex;
-    justify-content: space-between;
+   justify-content: space-between;
    align-items: center;
    transition: background-color 0.3s ease, color 0.3s ease;
 }
-.notification-button:hover{
-   background-color: #0074D9;
-   color: #fff;
+
+.notification-button:hover {
+   background-color: #d1fd59; /* Gold on hover */
+   color: #2f4f4f; /* Dark green text */
 }
+
 .notification-button::after {
    content: '\25BE'; /* Down arrow */
    font-size: 1.3em;
    transition: transform 0.3s ease;
 }
-.notification-button.active::after{
-  transform: rotate(180deg);
+
+.notification-button.active::after {
+   transform: rotate(180deg);
 }
 
 .notification-message {
- padding: 0px 15px;
+   padding: 0px 15px;
    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+   border-right: 1px solid #ddd;
    background-color: #fff;
-     border-bottom-left-radius: 5px;
-     border-bottom-right-radius: 5px;
+   border-bottom-left-radius: 5px;
+   border-bottom-right-radius: 5px;
    max-height: 0;
    overflow: hidden;
    transition: max-height 0.3s ease, padding 0.3s ease;
-   color: #555;
+   color: #555; /* Gray for text */
    line-height: 1.6;
 }
-.notification-message.show{
-  max-height: 500px;
-  padding: 10px 15px 15px 15px;
-}
-.back-button {
-   margin-top: 30px;
-   display: inline-block;
-   background-color: #95a5a6;
-   color: white;
-   padding: 10px 20px;
-   border: none;
-   border-radius: 5px;
-   cursor: pointer;
-   text-decoration: none;
-   font-size: 16px;
-   transition: background-color 0.3s ease;
-}
 
-.back-button:hover {
-   background-color: #7f8c8d;
+.notification-message.show {
+   max-height: 500px;
+   padding: 10px 15px 15px 15px;
 }

@@ -233,74 +233,79 @@ canvas{
 
 /* Container for flash messages */
 .msg {
-  position: fixed; /* Fixed positioning to overlap on top */
-  top: 20px; /* Distance from the top of the screen */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Adjust for exact centering */
-  z-index: 1000; /* Ensure it appears above other elements */
-  width: 100%; /* Full width */
-  max-width: 500px; /* Limit maximum width */
-  display: flex;
-  flex-direction: column; /* Stack messages vertically */
-  align-items: center; /* Center messages horizontally */
-}
+    position: fixed; /* Fixed positioning to overlap on top */
+    top: 20px; /* Distance from the top of the screen */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for exact centering */
+    z-index: 1000; /* Ensure it appears above other elements */
+    width: 100%; /* Full width */
+    max-width: 500px; /* Limit maximum width */
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+    align-items: center; /* Center messages horizontally */
+  }
 
-/* General Styling for Flash Messages */
-.alert {
-  display: flex;
-  justify-content: space-between; /* Align the message text and the close button */
-  align-items: center;
-  padding: 10px;
-  margin: 5px 0; /* Spacing between messages */
-  border-radius: 5px;
-  font-size: 16px;
-  width: 100%; /* Full width of the parent container */
-  text-align: left;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative; /* Allows absolute positioning for the close button */
-}
+  /* General Styling for Flash Messages */
+  .alert {
+    display: flex;
+    justify-content: space-between; /* Align the message text and the close button */
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0; /* Spacing between messages */
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%; /* Full width of the parent container */
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative; /* Allows absolute positioning for the close button */
+    transition: opacity 0.5s ease-in-out;
+  }
 
-/* Success Message */
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
+  /* Success Message */
+  .alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
 
-/* Danger/Error Message */
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
+  /* Danger/Error Message */
+  .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
 
-/* Info Message */
-.alert-info {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  border: 1px solid #bee5eb;
-}
+  /* Info Message */
+  .alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+  }
 
-/* Warning Message */
-.alert-warning {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeeba;
-}
+  /* Warning Message */
+  .alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+  }
 
-/* Close button styling */
-.alert .close-btn {
-  font-size: 20px;
-  font-weight: bold;
-  color: #000;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin-left: 15px;
-}
+  /* Close button styling */
+  .alert .close-btn {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-left: 15px;
+  }
 
-/* Close button hover effect */
-.alert .close-btn:hover {
-  color: #ff0000;
-}
+  /* Close button hover effect */
+  .alert .close-btn:hover {
+    color: #ff0000;
+  }
+
+  .alert.fade-out {
+    opacity: 0;
+  }
