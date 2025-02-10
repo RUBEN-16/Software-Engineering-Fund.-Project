@@ -47,6 +47,11 @@ h1 {
 
 }
 
+.order-details-button{
+    display: flex;
+    justify-content: space-between;
+}
+
 .product-info {
     flex: 1;
     padding: 15px;
@@ -94,6 +99,23 @@ h1 {
 
 .back-button:hover {
     background-color: #7f8c8d;
+}
+.remove-button {
+    display: block;
+    background-color: #d12b2b;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.remove-button:hover {
+    background-color: #942222;
 }
 /* delivery status*/
 .delivery-status {

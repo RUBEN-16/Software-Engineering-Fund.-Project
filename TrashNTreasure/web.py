@@ -230,6 +230,7 @@ def user_orders():
 app.jinja_env.globals.update(get_unread_notification_count=get_unread_notification_count)
 
 
+
 @app.after_request
 def add_header(response):
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0"

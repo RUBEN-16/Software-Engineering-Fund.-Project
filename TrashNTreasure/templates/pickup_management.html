@@ -20,12 +20,12 @@
                         </div>
                             {% if request.assigned_status == 'Assigned'%}
                                 {% if request.delivery_status == 'Pending'%}
-                                    <span class="assign-status" data-status="On Progress">Product: On Progress🔄</span>
+                                    <span class="assign-status" data-status="On Progress">Product: In Progress🔄</span>
                                 {% else %}
                                     <span class="assign-status" data-status="Arrived">Product: Arrived✅</span>
                                 {% endif %}
                             {% else %}
-                                <span class="assign-status" data-status="Unassign">Product: Unassign⚠️</span> 
+                                <span class="assign-status" data-status="Unassign">Product: Unassigned⚠️</span> 
                             {% endif %}
                         </div>
                         <div class="pickup-actions">

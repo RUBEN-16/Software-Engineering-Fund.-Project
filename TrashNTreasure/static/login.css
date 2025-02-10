@@ -153,6 +153,24 @@ body {
   transform: translateY(-2px);
 }
 
+.signup-btn {
+  background: #af991e; /* Green for button */
+  color: #000000; /* White for text */
+  font-weight:bold;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  text-decoration: none;
+}
+
+.signup-btn:hover {
+  background: #706211; /* Darker green on hover */
+  transform: translateY(-2px);
+}
+
 /* Login Footer */
 .login-footer {
   display: flex;

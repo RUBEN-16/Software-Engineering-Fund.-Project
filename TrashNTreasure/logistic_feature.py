@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, render_template, request, session, flash, send_file
+from flask import Blueprint, redirect, url_for, render_template, request, session, flash
 from db import get_connect_db, generate_tracking_code, send_notification
 
 logistic_blueprint = Blueprint("logistic", __name__, template_folder="templates")
@@ -24,6 +24,12 @@ def login():
             return render_template("logisticlogin_page.html")
         
     return render_template("logisticlogin_page.html")
+
+@logistic_blueprint.route("/forgot-password")
+def forgot_password():
+    flash("Contact T&T Support Team. Check out the contact page.", "info")
+    return redirect(url_for("logistic.login"))  # Redirect to the login page
+
 
 
 @logistic_blueprint.route("/profile")
@@ -762,3 +768,4 @@ def view_report(report_id):
         flash("Report not found.", "danger")
         return redirect(url_for("logistic.logistics_reports"))
     return render_template("view_report.html", report=report)
+

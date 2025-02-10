@@ -16,12 +16,12 @@
                         <div class="delivery-status">
                             {% if order.assign_delivery_condition %}
                                 {% if order.assign_delivery_condition == 'Non-Deliverable'%}
-                                    <span class="status-badge" data-status="Cancelled"><strong>Product:</strong> Order Cancelled❌ </span>
+                                    <span class="status-badge" data-status="Cancelled"><strong>Product:</strong> Cancel the Order❌ </span>
                                 {% else %}
-                                    <span class="status-badge" data-status="On Progress"><strong>Product:</strong> On Progress🔄</span>
+                                    <span class="status-badge" data-status="On Progress"><strong>Product:</strong> In Progress🔄</span>
                                 {% endif %}
                             {% else %}
-                                <span class="status-badge" data-status="Unassign"><strong>Product:</strong> Unassign⚠️</span>
+                                <span class="status-badge" data-status="Unassign"><strong>Product:</strong> Unassigned⚠️</span>
                             {% endif %}
                         </div>
                     </div>
