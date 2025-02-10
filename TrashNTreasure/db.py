@@ -1,11 +1,11 @@
 from flask import Blueprint, flash, session
-import sqlite3
+import sqlite3, os
 import random
 import string
 
 database_blueprint = Blueprint("database", __name__)
 
-DATABASE_PATH = "TrashNTreasure/database.db"
+DATABASE_PATH = os.path.join(os.path.dirname(__file__), "database.db")
 
 con=sqlite3.connect(DATABASE_PATH)
 
