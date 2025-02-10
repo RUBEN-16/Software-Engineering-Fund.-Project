@@ -31,7 +31,7 @@
         <a href="{{url_for('signup')}}" class="signup-btn">Create an Account</a>
         <div class="login-footer">
           <a href="{{url_for("logistic.login")}}">I'm a Logistic</a>
-          <a href="#">Forgot password?</a>
+          <a href="{{ url_for('user.forgot_password') }}">Forgot Password?</a>
         </div>
       </form>
     </div>

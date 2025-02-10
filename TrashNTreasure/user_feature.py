@@ -507,6 +507,11 @@ def order_details(order_id):
         
     return render_template("order_details.html", order=order)
 
+@user_blueprint.route("/forgot-password-user")
+def forgot_password():
+    flash("Future Development since we didn't state in the report.", "info")
+    return redirect(url_for("login"))  # Redirect to the login page
+
 @user_blueprint.route('/deactivate_account')
 def deactivate_account():
     buyer_id = session.get("buyer_id")
