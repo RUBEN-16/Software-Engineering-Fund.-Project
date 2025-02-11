@@ -668,7 +668,7 @@ def cancel_order(order_id):
         seller_id = order['seller_id']
         seller_status = order['seller_status']
         quantity = order['quantity']
-        product_id = order['product_id']
+        product_id = order['product_id'] 
         
         # Credit the amount back to the buyer's e-wallet
         cur.execute(
