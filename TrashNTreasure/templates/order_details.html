@@ -38,6 +38,19 @@
 
        </section>
     </div>
-       <button class="back-button" onclick="window.location.href='{{url_for("user_orders")}}'">Back to Order History</button>
+    <div class="order-details-button">
+        <button class="back-button" onclick="window.location.href='{{url_for("user_orders")}}'">Back to Order History</button>
+        {% if order.delivery_status == 'Pending' %}
+            <form action="{{ url_for('user.cancel_order', order_id=order.order_id) }}" method="POST" onsubmit="return confirmCancellation()">
+                <button type="submit" class="remove-button">Cancel Order</button>
+            </form>
+        {% endif %}
+    </div>
+       
 </div>
+<script>
+    function confirmCancellation() {
+        return confirm("Are you sure you want to cancel this order?");
+    }
+</script>
 {% endblock %}

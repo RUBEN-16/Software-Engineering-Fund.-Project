@@ -552,3 +552,86 @@ def notifications():
   con.close()
 
   return render_template("notifications.html", notifications = notifications)
+
+
+@user_blueprint.route("/cancel_order/<int:order_id>", methods=['POST'])
+def cancel_order(order_id):
+    if "buyer_id" not in session:
+        flash("Please log in to access this page.", "danger")
+        return redirect(url_for("login"))
+    
+    con = get_connect_db()
+    cur = con.cursor()
+    
+    try:
+        buyer_id = session.get("buyer_id")
+
+        # Fetch order details
+        cur.execute("""
+            SELECT 
+                o.buyer_id,
+                o.total_amount,
+                p.name AS product_name,
+                p.seller_id,
+                p.id AS product_id,
+                o.seller_status,
+                o.quantity
+            FROM orders o
+            JOIN products p ON o.product_id = p.id
+            WHERE o.id = ? AND o.buyer_id = ?
+        """, (order_id, buyer_id))
+        order = cur.fetchone()
+
+        if not order:
+            flash(f"Order with ID {order_id} not found or does not belong to you.", "danger")
+            return redirect(url_for("user_orders"))
+
+        total_amount = order['total_amount']
+        product_name = order['product_name']
+        seller_id = order['seller_id']
+        seller_status = order['seller_status']
+        quantity = order['quantity']
+        product_id = order["product_id"]
+        
+        # Credit the amount back to the buyer's e-wallet
+        cur.execute(
+          "UPDATE user SET wallet = wallet + ? WHERE pid = ?",
+            (total_amount, buyer_id)
+        )
+        
+        # Add a record in the transaction history
+        cur.execute("""
+            INSERT INTO wallet_transaction (buyer_id, date, description, amount) 
+            VALUES (?, DATE('now'), ?, ?)
+        """, (buyer_id, f"Refund for cancelled order of {product_name} (ID: {order_id})", total_amount))
+
+        # Update the order status
+        cur.execute("UPDATE orders SET delivery_status = 'Cancelled' WHERE id = ?", (order_id,))
+        
+        cur.execute("UPDATE products SET quantity = quantity + ? WHERE id = ?", (quantity, product_id))
+        
+        con.commit()
+
+        # Construct notification message for buyer
+        cancellation_reason = "by buyer request"
+        buyer_message = f"Your order of {product_name} with ID {order_id} has been cancelled {cancellation_reason}. Your refund of RM {total_amount} has been credited back to your wallet."
+        
+        # Send notification to buyer
+        send_notification(con, buyer_id, "Order Cancelled", buyer_message)
+
+        # Construct notification message for seller if seller status is confirmed
+        if seller_status == 'Confirmed':
+            seller_message = f"Your order of {product_name} with ID {order_id} has been cancelled {cancellation_reason}."
+        
+            # Send notification to seller
+            send_notification(con, seller_id, "Order Cancelled", seller_message)
+
+        flash("Order Cancelled Successfully, refund has been credited to your e-wallet.", "success")
+
+    except Exception as e:
+        flash(f"Error canceling the order: {e}", "danger")
+        con.rollback()
+    finally:
+        con.close()
+    
+    return redirect(url_for('user_orders'))

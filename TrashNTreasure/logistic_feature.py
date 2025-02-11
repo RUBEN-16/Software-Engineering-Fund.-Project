@@ -17,7 +17,7 @@ def login():
 
         if data:
             session["member_name"] = data["firstName"]  
-            session["member_id"] = data["pid"]  
+            session["member_id"] = data["pid"]   
             return redirect(url_for("logistic.dashboard"))
         else:
             flash("Invalid username or password", "danger")
@@ -646,9 +646,11 @@ def cancel_order(order_id):
         cur.execute("""
             SELECT 
                 o.buyer_id,
+                o.quantity,
                 o.total_amount,
                 p.name AS product_name,
                 p.seller_id,
+                p.id AS product_id,
                 o.seller_status
             FROM orders o
             JOIN products p ON o.product_id = p.id
@@ -665,6 +667,8 @@ def cancel_order(order_id):
         product_name = order['product_name']
         seller_id = order['seller_id']
         seller_status = order['seller_status']
+        quantity = order['quantity']
+        product_id = order['product_id']
         
         # Credit the amount back to the buyer's e-wallet
         cur.execute(
@@ -672,6 +676,9 @@ def cancel_order(order_id):
             (total_amount, buyer_id)
         )
         
+        cur.execute("UPDATE products SET quantity = quantity + ? WHERE id = ?", (quantity, product_id))
+
+
          # Add a record in the transaction history
         cur.execute("""
             INSERT INTO wallet_transaction (buyer_id, date, description, amount) 
