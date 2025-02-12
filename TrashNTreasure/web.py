@@ -126,7 +126,6 @@ def cart():
     
     # Fetch products added to the cart by the current buyer
     added_products = cur.execute("SELECT * FROM cart WHERE buyer_id = ?", (buyer_id,)).fetchall()
-    
     # Calculate the total price
     total_price = sum(product["price"] * product["quantity"] for product in added_products)
 

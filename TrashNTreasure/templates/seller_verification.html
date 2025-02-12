@@ -287,7 +287,6 @@
                         <p><strong>Name:</strong> {{session.get("selected_order").buyer_name}}</p>
                         <p><strong>Email:</strong> {{session.get("selected_order").buyer_email}}</p>
                         <p><strong>Phone:</strong> {{session.get("selected_order").buyer_phone}}</p>
-                        <p><strong>Address:</strong> {{session.get("selected_order").buyer_address}}</p>
                      </section>
 
                      <section class="order-info">
@@ -327,7 +326,7 @@
                 <input type="text" id="seller-address" name="seller-address" placeholder="Enter Seller Address" value="{% if session.get('seller_address') %}{{ session['seller_address'] }}{% endif %}" required>
 
                 <label for="buyer-address">Buyer Address:</label>
-                <input type="text" id="buyer-address" name="buyer-address" placeholder="Enter Buyer Address" value="{% if session.get('courier_order') %}{{ session['courier_order']['buyer_address'] }}{% endif %}" readonly>
+                <input type="password" id="buyer-address" name="buyer-address" placeholder="Enter Buyer Address" value="{% if session.get('courier_order') %}{{ session['courier_order']['buyer_address'] }}{% endif %}" readonly>
 
                 <label>Choose Courier Service:</label>
                 <div class="courier-options">
